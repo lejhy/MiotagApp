@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* miotagTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* miotagTests.m */; };
 		0A1BE057AF5CF52F0D343A7D /* libPods-miotag-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FEA44DEA3F6A5F3A7203E98 /* libPods-miotag-tvOS.a */; };
@@ -20,6 +19,20 @@
 		988EF19F0D53BE823CA463C1 /* libPods-miotagTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0941D968E5D34EB2B05899B8 /* libPods-miotagTests.a */; };
 		C881B8A76BB8514CC7D95348 /* libPods-miotag-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A307F44F9F3F5154135585A7 /* libPods-miotag-tvOSTests.a */; };
 		F6A76D1E823BD0790D802E17 /* libPods-miotag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B06708BD1B52260138B994 /* libPods-miotag.a */; };
+		6014B3CBD01B4A898BAF8A0D /* Muli Black Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C34EB9B8E064E1F91B6EC2F /* Muli Black Italic.ttf */; };
+		6E5DDF1CF920434A84462C6B /* Muli Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 441EB46927644342A530E16F /* Muli Black.ttf */; };
+		66D5C08817754416BC30BB08 /* Muli Bold Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B4EE3D96B7B470AB37C11F9 /* Muli Bold Italic.ttf */; };
+		908E386C63CB427E902FEF2B /* Muli Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6741C415B4149749AFCF701 /* Muli Bold.ttf */; };
+		AEA5EF7321024222885EE2A0 /* Muli Extra Bold Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 076224663B284EF98E69E741 /* Muli Extra Bold Italic.ttf */; };
+		F0D1FC27934642A4AF00695F /* Muli Extra Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AAD64F21D7334804BFE97273 /* Muli Extra Bold.ttf */; };
+		D4242EF845BD418F93D212E7 /* Muli Extra Light Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DF34EFD83F5482190E68AC9 /* Muli Extra Light Italic.ttf */; };
+		021E3E9E57DD42AF8E8768A4 /* Muli Extra Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11B9A0E8BF09412F99A11C2A /* Muli Extra Light.ttf */; };
+		0E342B1A4C864B31ACA6B2F2 /* Muli Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 20D2A96982EA45E8866C0EE6 /* Muli Italic.ttf */; };
+		78327C85150043E9B35716A5 /* Muli Light Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34D5E806B8A544DF904185F8 /* Muli Light Italic.ttf */; };
+		733B0EDCB5C1400BAEA0A37A /* Muli Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9016BAF8D4EE48FC8FB566F6 /* Muli Light.ttf */; };
+		7E80A7E243CB4D89919A76DA /* Muli Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75D3BDD5C95444CFAAF5F9C5 /* Muli Regular.ttf */; };
+		4268206645474848BD066E01 /* Muli Semi Bold Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 224747D0859548E59588770B /* Muli Semi Bold Italic.ttf */; };
+		AF6B912ABC994CCABB10C670 /* Muli Semi Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84A11CFC069E42CBB6A39821 /* Muli Semi Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +80,20 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EF86F888C03D5A0652A91FC1 /* Pods-miotagTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotagTests.debug.xcconfig"; path = "Target Support Files/Pods-miotagTests/Pods-miotagTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F30EF57F3711AA2CB98D72AD /* Pods-miotag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag.release.xcconfig"; path = "Target Support Files/Pods-miotag/Pods-miotag.release.xcconfig"; sourceTree = "<group>"; };
+		6C34EB9B8E064E1F91B6EC2F /* Muli Black Italic.ttf */ = {isa = PBXFileReference; name = "Muli Black Italic.ttf"; path = "../src/assets/fonts/Muli Black Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		441EB46927644342A530E16F /* Muli Black.ttf */ = {isa = PBXFileReference; name = "Muli Black.ttf"; path = "../src/assets/fonts/Muli Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3B4EE3D96B7B470AB37C11F9 /* Muli Bold Italic.ttf */ = {isa = PBXFileReference; name = "Muli Bold Italic.ttf"; path = "../src/assets/fonts/Muli Bold Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F6741C415B4149749AFCF701 /* Muli Bold.ttf */ = {isa = PBXFileReference; name = "Muli Bold.ttf"; path = "../src/assets/fonts/Muli Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		076224663B284EF98E69E741 /* Muli Extra Bold Italic.ttf */ = {isa = PBXFileReference; name = "Muli Extra Bold Italic.ttf"; path = "../src/assets/fonts/Muli Extra Bold Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AAD64F21D7334804BFE97273 /* Muli Extra Bold.ttf */ = {isa = PBXFileReference; name = "Muli Extra Bold.ttf"; path = "../src/assets/fonts/Muli Extra Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3DF34EFD83F5482190E68AC9 /* Muli Extra Light Italic.ttf */ = {isa = PBXFileReference; name = "Muli Extra Light Italic.ttf"; path = "../src/assets/fonts/Muli Extra Light Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		11B9A0E8BF09412F99A11C2A /* Muli Extra Light.ttf */ = {isa = PBXFileReference; name = "Muli Extra Light.ttf"; path = "../src/assets/fonts/Muli Extra Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		20D2A96982EA45E8866C0EE6 /* Muli Italic.ttf */ = {isa = PBXFileReference; name = "Muli Italic.ttf"; path = "../src/assets/fonts/Muli Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		34D5E806B8A544DF904185F8 /* Muli Light Italic.ttf */ = {isa = PBXFileReference; name = "Muli Light Italic.ttf"; path = "../src/assets/fonts/Muli Light Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9016BAF8D4EE48FC8FB566F6 /* Muli Light.ttf */ = {isa = PBXFileReference; name = "Muli Light.ttf"; path = "../src/assets/fonts/Muli Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		75D3BDD5C95444CFAAF5F9C5 /* Muli Regular.ttf */ = {isa = PBXFileReference; name = "Muli Regular.ttf"; path = "../src/assets/fonts/Muli Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		224747D0859548E59588770B /* Muli Semi Bold Italic.ttf */ = {isa = PBXFileReference; name = "Muli Semi Bold Italic.ttf"; path = "../src/assets/fonts/Muli Semi Bold Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		84A11CFC069E42CBB6A39821 /* Muli Semi Bold.ttf */ = {isa = PBXFileReference; name = "Muli Semi Bold.ttf"; path = "../src/assets/fonts/Muli Semi Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +192,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				FF12EAE5A03BEBE66C7A72F6 /* Pods */,
+				73FCA6A4D7A948D188F82EF8 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -197,6 +225,28 @@
 			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		73FCA6A4D7A948D188F82EF8 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				6C34EB9B8E064E1F91B6EC2F /* Muli Black Italic.ttf */,
+				441EB46927644342A530E16F /* Muli Black.ttf */,
+				3B4EE3D96B7B470AB37C11F9 /* Muli Bold Italic.ttf */,
+				F6741C415B4149749AFCF701 /* Muli Bold.ttf */,
+				076224663B284EF98E69E741 /* Muli Extra Bold Italic.ttf */,
+				AAD64F21D7334804BFE97273 /* Muli Extra Bold.ttf */,
+				3DF34EFD83F5482190E68AC9 /* Muli Extra Light Italic.ttf */,
+				11B9A0E8BF09412F99A11C2A /* Muli Extra Light.ttf */,
+				20D2A96982EA45E8866C0EE6 /* Muli Italic.ttf */,
+				34D5E806B8A544DF904185F8 /* Muli Light Italic.ttf */,
+				9016BAF8D4EE48FC8FB566F6 /* Muli Light.ttf */,
+				75D3BDD5C95444CFAAF5F9C5 /* Muli Regular.ttf */,
+				224747D0859548E59588770B /* Muli Semi Bold Italic.ttf */,
+				84A11CFC069E42CBB6A39821 /* Muli Semi Bold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -285,7 +335,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -338,6 +388,20 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				6014B3CBD01B4A898BAF8A0D /* Muli Black Italic.ttf in Resources */,
+				6E5DDF1CF920434A84462C6B /* Muli Black.ttf in Resources */,
+				66D5C08817754416BC30BB08 /* Muli Bold Italic.ttf in Resources */,
+				908E386C63CB427E902FEF2B /* Muli Bold.ttf in Resources */,
+				AEA5EF7321024222885EE2A0 /* Muli Extra Bold Italic.ttf in Resources */,
+				F0D1FC27934642A4AF00695F /* Muli Extra Bold.ttf in Resources */,
+				D4242EF845BD418F93D212E7 /* Muli Extra Light Italic.ttf in Resources */,
+				021E3E9E57DD42AF8E8768A4 /* Muli Extra Light.ttf in Resources */,
+				0E342B1A4C864B31ACA6B2F2 /* Muli Italic.ttf in Resources */,
+				78327C85150043E9B35716A5 /* Muli Light Italic.ttf in Resources */,
+				733B0EDCB5C1400BAEA0A37A /* Muli Light.ttf in Resources */,
+				7E80A7E243CB4D89919A76DA /* Muli Regular.ttf in Resources */,
+				4268206645474848BD066E01 /* Muli Semi Bold Italic.ttf in Resources */,
+				AF6B912ABC994CCABB10C670 /* Muli Semi Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
