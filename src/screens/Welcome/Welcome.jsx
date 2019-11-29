@@ -53,7 +53,7 @@ const Welcome = ({ navigation }: NavigationScreenProps) => {
   return (
     <Container>
       <BackgroundVectorContainer>
-        <BackgroundVector width="100%" />
+        <BackgroundVector width="100%" height="100%" />
       </BackgroundVectorContainer>
       <RunnerVectorContainer>
         <RunnerVector width="100%" height="100%" />

@@ -4,7 +4,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import Welcome from './screens/Welcome';
-import SignIn from './screens/SignIn';
+import SignIn from './screens/Auth/SignIn';
 
 const AppNavigator = createStackNavigator({
   Welcome: {
