@@ -46,8 +46,12 @@ const ButtonContainer = styled.View`
   padding: 5%;
 `;
 
+type Props = {
+  navigation: NavigationScreenProps
+}
 
-const Welcome = ({ navigation }: NavigationScreenProps) => {
+
+const Welcome = ({ navigation }: Props) => {
   const goToSignIn = () => navigation.navigate('SignIn');
 
   return (

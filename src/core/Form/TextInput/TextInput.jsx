@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
+import type { ThemeProps } from 'styled-components';
 
 import { PRIMARY as PRIMARY_FONT, REGULAR as REGULAR_SIZE } from '@styles/fonts';
 import { PRIMARY as PRIMARY_COLOR, GRAY } from '@styles/colors';
@@ -28,11 +29,7 @@ type Props = {
   onChange: (text) => void,
   label: string,
   mt?: string,
-  theme: {
-    colors: {
-      [GRAY]: string,
-    }
-  }
+  theme: ThemeProps,
 };
 
 export default function TextInput({

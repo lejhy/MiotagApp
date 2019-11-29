@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
+import type { NavigationScreenProps } from 'react-navigation';
 
 import { Button, Form, Text } from '@core';
 import ScreenHeader from '../ScreenHeader';
@@ -16,9 +17,17 @@ const ButtonContainer = styled.View`
   padding-top: 40px;
 `;
 
-const SignIn = () => {
+type Props = {
+  navigation: NavigationScreenProps
+}
+
+const SignIn = ({ navigation }: Props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const goToDashboard = () => navigation.navigate('App');
+  const goToProfileTypeSelection = () => navigation.navigate('ProfileTypeSelection');
+
   return (
     <SafeAreaView>
       <ScreenHeader title="Sign In" />
@@ -38,13 +47,13 @@ const SignIn = () => {
           secureTextEntry
         />
         <ButtonContainer>
-          <Button>
+          <Button onPress={goToDashboard}>
             Sign In
           </Button>
           <Text align="center" color="gray" mt="15px" mb="15px">
             - OR -
           </Text>
-          <Button variant="secondary">
+          <Button variant="secondary" onPress={goToProfileTypeSelection}>
             Create new account
           </Button>
         </ButtonContainer>

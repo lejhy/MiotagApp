@@ -1,24 +1,7 @@
 // @flow
 
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
 
-import Welcome from './screens/Welcome';
-import SignIn from './screens/Auth/SignIn';
+import RootNavigator from './screens/RootNavigator';
 
-const AppNavigator = createStackNavigator({
-  Welcome: {
-    screen: Welcome,
-  },
-  SignIn: {
-    screen: SignIn,
-    navigationOptions: {
-      gesturesEnabled: false,
-    },
-  },
-}, {
-  initialRouteName: 'Welcome',
-  headerMode: 'none',
-});
-
-export default createAppContainer(AppNavigator);
+export default createAppContainer(RootNavigator);
