@@ -2,19 +2,45 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import type { NavigationScreenProps } from 'react-navigation';
+
+import { Button, Text } from '@core';
+
+import ScreenHeader from '../ScreenHeader';
+
+const SafeAreaView = styled.SafeAreaView`
+  flex: 1;
+`;
 
 const Container = styled.View`
-
+  padding: 0 10%;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 type Props = {
+  navigation: NavigationScreenProps
+}
 
-};
+export default function ProfileTypeSelection({ navigation }: Props) {
+  const proceedAsRehabilitant = () => navigation.navigate('CreateNewAccount');
+  const proceedAsTherapist = () => navigation.navigate('CreateNewAccount');
 
-export default function ProfileTypeSelection(props: Props) {
   return (
-    <Container>
-      ProfileTypeSelection
-    </Container>
+    <SafeAreaView>
+      <ScreenHeader title="Select Account Type" />
+      <Container>
+        <Button onPress={proceedAsRehabilitant}>
+          Rehabilitant
+        </Button>
+        <Text align="center" color="gray" mt="15px" mb="15px">
+          - OR -
+        </Text>
+        <Button variant="secondary" onPress={proceedAsTherapist}>
+          Therapist
+        </Button>
+      </Container>
+    </SafeAreaView>
   );
 }

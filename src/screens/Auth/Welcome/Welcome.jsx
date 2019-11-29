@@ -51,7 +51,7 @@ type Props = {
 }
 
 
-const Welcome = ({ navigation }: Props) => {
+export default function Welcome({ navigation }: Props) {
   const goToSignIn = () => navigation.navigate('SignIn');
 
   return (
@@ -81,6 +81,4 @@ const Welcome = ({ navigation }: Props) => {
       </ContentContainer>
     </Container>
   );
-};
-
-export default Welcome;
+}

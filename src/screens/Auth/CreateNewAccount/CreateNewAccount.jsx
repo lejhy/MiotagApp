@@ -21,40 +21,49 @@ type Props = {
   navigation: NavigationScreenProps
 }
 
-export default function SignIn({ navigation }: Props) {
-  const [username, setUsername] = useState('');
+export default function CreateNewAccount({ navigation }: Props) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
 
   const goToDashboard = () => navigation.navigate('App');
-  const goToProfileTypeSelection = () => navigation.navigate('ProfileTypeSelection');
+  const returnToSignIn = () => navigation.navigate('SignIn');
 
   return (
     <SafeAreaView>
-      <ScreenHeader title="Sign In" />
+      <ScreenHeader title="Create New Account" />
       <FormContainer>
         <Form.TextInput
-          value={username}
-          onChange={setUsername}
-          placeholder="Username"
-          label="Username"
+          value={email}
+          onChange={setEmail}
+          placeholder="Email"
+          label="Email"
         />
         <Form.TextInput
           mt="15px"
           value={password}
           onChange={setPassword}
-          placeholder="Username"
-          label="Username"
+          placeholder="Password"
+          label="Password"
+          secureTextEntry
+        />
+        <Form.TextInput
+          mt="15px"
+          value={repeatPassword}
+          onChange={setRepeatPassword}
+          placeholder="Password"
+          label="Repeat Password"
           secureTextEntry
         />
         <ButtonContainer>
           <Button onPress={goToDashboard}>
-            Sign In
+            Create new account
           </Button>
           <Text align="center" color="gray" mt="15px" mb="15px">
             - OR -
           </Text>
-          <Button variant="secondary" onPress={goToProfileTypeSelection}>
-            Create new account
+          <Button variant="secondary" onPress={returnToSignIn}>
+            Return to sign In
           </Button>
         </ButtonContainer>
       </FormContainer>
