@@ -19,7 +19,7 @@ const fonts = {
     [HEADER]: RFValue(BASE_VALUE * 2.5),
     [SUB_HEADER]: RFValue(BASE_VALUE * 2),
     [LARGE]: RFValue(BASE_VALUE * 1.8),
-    [REGULAR]: RFValue(BASE_VALUE * 1.5),
+    [REGULAR]: RFValue(BASE_VALUE * 1.4),
     [SMALL]: RFValue(BASE_VALUE),
   },
 };
