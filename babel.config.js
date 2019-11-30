@@ -4,12 +4,18 @@ const MODULE_RESOLVER = [
     extensions: ['.js', '.jsx'],
     alias: {
       '@core': './src/core',
+      '@hooks': './src/hooks',
       '@screens': './src/screens',
+      '@services': './src/services',
       '@styles': './src/styles',
+      '@utils': './src/utils',
     },
   },
 ];
 module.exports = {
   plugins: [MODULE_RESOLVER],
-  presets: ['module:metro-react-native-babel-preset'],
+  presets: [
+    'module:metro-react-native-babel-preset',
+    'module:react-native-dotenv'
+  ],
 };

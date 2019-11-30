@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
 
+import useUser from '@hooks/useUser';
 import { Button, Form, Text } from '@core';
 import ScreenHeader from '../ScreenHeader';
 
@@ -26,8 +27,21 @@ export default function CreateNewAccount({ navigation }: Props) {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
 
+  const [user, { register, login }] = useUser();
+
   const goToDashboard = () => navigation.navigate('App');
   const returnToSignIn = () => navigation.navigate('SignIn');
+
+  const handleRegister = async () => {
+    try {
+      await register(email, password);
+      await login(email, password);
+    } catch (err) {
+      console.log(err.response);
+      console.log(err.response.data.message);
+      console.log(JSON.stringify(err));
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -38,6 +52,9 @@ export default function CreateNewAccount({ navigation }: Props) {
           onChange={setEmail}
           placeholder="Email"
           label="Email"
+          autoCapitalize="none"
+          autoCompleteType="email"
+          autoCorrect={false}
         />
         <Form.TextInput
           mt="15px"
@@ -46,6 +63,9 @@ export default function CreateNewAccount({ navigation }: Props) {
           placeholder="Password"
           label="Password"
           secureTextEntry
+          autoCapitalize="none"
+          autoCompleteType="password"
+          autoCorrect={false}
         />
         <Form.TextInput
           mt="15px"
@@ -54,9 +74,12 @@ export default function CreateNewAccount({ navigation }: Props) {
           placeholder="Password"
           label="Repeat Password"
           secureTextEntry
+          autoCapitalize="none"
+          autoCompleteType="password"
+          autoCorrect={false}
         />
         <ButtonContainer>
-          <Button onPress={goToDashboard}>
+          <Button onPress={handleRegister}>
             Create new account
           </Button>
           <Text align="center" color="gray" mt="15px" mb="15px">

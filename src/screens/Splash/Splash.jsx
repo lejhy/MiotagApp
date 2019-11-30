@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
+import useUser from '@hooks/useUser';
 import { Text } from '@core';
 
 const Container = styled.View`
@@ -15,8 +16,23 @@ type Props = {
 
 
 const Splash = ({ navigation }: Props) => {
+  const [, { init: initUser }] = useUser();
+
+  const initializeApp = async () => {
+    try {
+      const user = await initUser();
+      if (user) {
+        navigation.navigate('Dashboard');
+      } else {
+        navigation.navigate('Auth');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
   useEffect(() => {
-    navigation.navigate('Auth');
+    initializeApp();
   }, []);
   return (
     <Container>
