@@ -34,11 +34,25 @@ export default function useUser() {
     console.log(response.data);
   };
 
+  const update = async (user) => {
+    const newUser = {
+      ...state,
+      ...user,
+    };
+    await UserService.update(newUser);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
+    setState(newUser);
+  };
+
+  const getFullName = () => (state ? `${state.firstName} ${state.lastName}` : '');
+
 
   const methods = {
     init,
     register,
     login,
+    update,
+    getFullName,
   };
   return [state, methods];
 }

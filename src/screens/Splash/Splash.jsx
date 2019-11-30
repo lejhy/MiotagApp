@@ -21,8 +21,10 @@ const Splash = ({ navigation }: Props) => {
   const initializeApp = async () => {
     try {
       const user = await initUser();
-      if (user) {
+      if (user && user.firstName && user.lastName) {
         navigation.navigate('Dashboard');
+      } else if (user && !user.firstName && !user.lastName) {
+        navigation.navigate('ProfileCreation');
       } else {
         navigation.navigate('Auth');
       }

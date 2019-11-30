@@ -4,9 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
 
-import { Button, Text } from '@core';
-
-import ScreenHeader from '../ScreenHeader';
+import { Button, ScreenHeader, Text } from '@core';
 
 const SafeAreaView = styled.SafeAreaView`
   flex: 1;

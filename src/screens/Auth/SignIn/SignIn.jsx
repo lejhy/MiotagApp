@@ -5,8 +5,9 @@ import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
 
-import { Button, Form, Text } from '@core';
-import ScreenHeader from '../ScreenHeader';
+import {
+  Button, Form, ScreenHeader, Text,
+} from '@core';
 
 const FormContainer = styled.View`
   padding: 0 10%;
