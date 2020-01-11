@@ -3,26 +3,42 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import type { NavigationScreenProps } from 'react-navigation';
 
-import { Text } from '@core';
+import { BACKGROUND_WHITE } from '@styles/colors';
 
 import UserInfo from './UserInfo';
+import TilesNavigation from './TilesNavigation';
 
-const Container = styled.View`
-
+const ScreenContainer = styled.View``;
+const Content = styled.ScrollView`
+  height: 100%
+  background: ${({ theme }) => theme.colors[BACKGROUND_WHITE]};
 `;
 
 type Props = {
-
+  navigation: NavigationScreenProps
 };
 
-export default function Dashboard(props: Props) {
+export default function Dashboard({ navigation }: Props) {
+  const navigateToGenerator = (location) => () => navigation.navigate(location);
+  const navigationItems = [
+    { label: 'Activities', icon: 'child', onPress: navigateToGenerator('dupa') },
+    { label: 'Progress', icon: 'chart-line', onPress: navigateToGenerator('dupa') },
+    { label: 'Messages', icon: 'envelope', onPress: navigateToGenerator('dupa') },
+    { label: 'Alerts', icon: 'bell', onPress: navigateToGenerator('dupa') },
+    { label: 'Friends', icon: 'user-friends', onPress: navigateToGenerator('dupa') },
+    { label: 'Settings', icon: 'cog', onPress: navigateToGenerator('dupa') },
+  ];
+
   return (
     <SafeAreaView>
-      <Container>
+      <ScreenContainer>
         <UserInfo />
-      </Container>
+        <Content>
+          <TilesNavigation items={navigationItems} />
+        </Content>
+      </ScreenContainer>
     </SafeAreaView>
 
   );

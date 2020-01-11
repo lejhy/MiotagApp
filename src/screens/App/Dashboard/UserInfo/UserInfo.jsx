@@ -5,24 +5,31 @@ import styled from 'styled-components';
 
 import useUser from '@hooks/useUser';
 import { PRIMARY } from '@styles/colors';
+import { Text } from '@core';
 
 import DefaultImage from './default-img.svg';
 
 const Container = styled.View`
-  height: 75px;
   background-color: ${({ theme }) => theme.colors[PRIMARY]};
   flex-direction: row;
 `;
 
 const ImageContainer = styled.View`
-  flex: 1;
+  height: 75px;
+  width: 75px;
+  border-radius: 37.5px;
+  margin: 10px;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentContainer = styled.View`
-  flex: 9;
+  flex: 1;
+  justify-content: center;
+  align-items: flex-end;
+  padding-right: 10%;
 `;
-
-const Text = styled.Text``;
 
 export default function UserInfo() {
   const [, { getFullName }] = useUser();
@@ -30,10 +37,10 @@ export default function UserInfo() {
   return (
     <Container>
       <ImageContainer>
-        <DefaultImage />
+        <DefaultImage width="90%" height="90%" />
       </ImageContainer>
       <ContentContainer>
-        <Text>{ getFullName() }</Text>
+        <Text color="textInverted" size="large">{ getFullName() }</Text>
       </ContentContainer>
     </Container>
   );
