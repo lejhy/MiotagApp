@@ -3,9 +3,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Text } from '@core';
+import { PRIMARY_LIGHT } from '@styles/colors';
+import { Button, Text } from '@core';
 
 import ScreenHeaderSvg from './screen-header.svg';
+
+const BackButtonWrapper = styled.View`
+  padding: 10px 25%;
+  background-color: ${({ theme }) => theme.colors[PRIMARY_LIGHT]};
+`;
 
 const Container = styled.View`
   position: relative;
@@ -34,19 +40,33 @@ const TextContainer = styled(SvgContainer)`
 
 type Props = {
   title: string,
+  onBackPress?: () => any,
 };
 
-export default function ScreenHeader({ title }: Props) {
+export default function ScreenHeader({ title, onBackPress }: Props) {
   return (
-    <Container>
-      <SvgContainer>
-        <ScreenHeaderSvg width="100%" height="100%" />
-      </SvgContainer>
-      <TextContainer>
-        <Text size="header" align="center" color="textInverted" bold>
-          { title }
-        </Text>
-      </TextContainer>
-    </Container>
+    <>
+      { onBackPress && (
+        <BackButtonWrapper>
+          <Button icon="arrow-left" onPress={onBackPress}>
+            Back
+          </Button>
+        </BackButtonWrapper>
+      )}
+      <Container>
+        <SvgContainer>
+          <ScreenHeaderSvg width="100%" height="100%" />
+        </SvgContainer>
+        <TextContainer>
+          <Text size="header" align="center" color="textInverted" bold>
+            { title }
+          </Text>
+        </TextContainer>
+      </Container>
+    </>
   );
 }
+
+ScreenHeader.defaultProps = {
+  onBackPress: null,
+};

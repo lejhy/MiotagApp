@@ -28,19 +28,19 @@ export default function CreateNewAccount({ navigation }: Props) {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
 
-  const [user, { register, login }] = useUser();
+  const [_, { register }] = useUser();
 
-  const goToDashboard = () => navigation.navigate('App');
+  const goToProfileCreation = () => navigation.navigate('ProfileCreation');
   const returnToSignIn = () => navigation.navigate('SignIn');
 
   const handleRegister = async () => {
     try {
       await register(email, password);
-      await login(email, password);
+      goToProfileCreation();
     } catch (err) {
+      console.log(JSON.stringify(err));
       console.log(err.response);
       console.log(err.response.data.message);
-      console.log(JSON.stringify(err));
     }
   };
 

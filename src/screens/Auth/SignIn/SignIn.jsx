@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
+import useUser from '@hooks/useUser';
 
 import {
   Button, Form, ScreenHeader, Text,
@@ -23,32 +24,51 @@ type Props = {
 }
 
 export default function SignIn({ navigation }: Props) {
-  const [username, setUsername] = useState('');
+  const [_, { login }] = useUser();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const goToDashboard = () => navigation.navigate('App');
+  const goToProfileCreation = () => navigation.navigate('ProfileCreation');
   const goToProfileTypeSelection = () => navigation.navigate('ProfileTypeSelection');
+
+  const handleSignIn = async () => {
+    try {
+      const user = await login(email, password);
+      if (user.firstName && user.lastName) {
+        goToDashboard();
+      } else {
+        goToProfileCreation();
+      }
+    } catch (err) {
+      // TODO: error handling here
+      console.warn('error');
+    }
+  };
 
   return (
     <SafeAreaView>
       <ScreenHeader title="Sign In" />
       <FormContainer>
         <Form.TextInput
-          value={username}
-          onChange={setUsername}
-          placeholder="Username"
-          label="Username"
+          value={email}
+          onChange={setEmail}
+          placeholder="E-mail"
+          label="E-mail"
+          autoCapitalize="none"
+          autoCompleteType="email"
+          autoCorrect={false}
         />
         <Form.TextInput
           mt="15px"
           value={password}
           onChange={setPassword}
-          placeholder="Username"
-          label="Username"
+          placeholder="Password"
+          label="Password"
           secureTextEntry
         />
         <ButtonContainer>
-          <Button onPress={goToDashboard}>
+          <Button onPress={handleSignIn}>
             Sign In
           </Button>
           <Text align="center" color="gray" mt="15px" mb="15px">

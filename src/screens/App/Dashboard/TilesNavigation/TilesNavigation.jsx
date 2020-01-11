@@ -26,7 +26,7 @@ export default function TilesNavigation({ items }: Props) {
   return (
     <Container>
       { items.map((item) => (
-        <TileContainer key={item.name}>
+        <TileContainer key={item.label}>
           <IconTile
             label={item.label}
             icon={item.icon}

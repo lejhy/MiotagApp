@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import UserService from '@services/api/UserService';
 
-const STORAGE_KEY = 'user';
+export const STORAGE_KEY = 'user';
 
 
 export default function useUser() {
@@ -27,11 +27,20 @@ export default function useUser() {
     };
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     setState(user);
+    return user;
+  };
+
+  const clearUserData = async () => {
+    await AsyncStorage.removeItem(STORAGE_KEY);
   };
 
   const login = async (email, password) => {
     const response = await UserService.login(email, password);
-    console.log(response.data);
+    const user = response.data;
+    await clearUserData();
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    setState(user);
+    return user;
   };
 
   const update = async (user) => {
@@ -42,9 +51,12 @@ export default function useUser() {
     await UserService.update(newUser);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
     setState(newUser);
+    return newUser;
   };
 
   const getFullName = () => (state ? `${state.firstName} ${state.lastName}` : '');
+
+  const getAuth = () => ({ username: state.email, password: state.password });
 
 
   const methods = {
@@ -53,6 +65,8 @@ export default function useUser() {
     login,
     update,
     getFullName,
+    getAuth,
+    clearUserData,
   };
   return [state, methods];
 }

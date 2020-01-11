@@ -34,9 +34,10 @@ module.exports = {
         "strict": false,
       }
     ],
-  "flowtype/newline-after-flow-annotation": [
+    "flowtype/newline-after-flow-annotation": [
       2,
       "always"
-    ]
+    ],
+    "import/no-cycle": 0
   },
 };
