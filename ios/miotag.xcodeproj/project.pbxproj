@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* miotagTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* miotagTests.m */; };
 		021E3E9E57DD42AF8E8768A4 /* Muli Extra Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11B9A0E8BF09412F99A11C2A /* Muli Extra Light.ttf */; };
@@ -57,9 +58,9 @@
 		00E356EE1AD99517003FC87E /* miotagTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = miotagTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* miotagTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = miotagTests.m; sourceTree = "<group>"; };
-		076224663B284EF98E69E741 /* Muli Extra Bold Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Bold Italic.ttf"; path = "../src/assets/fonts/Muli Extra Bold Italic.ttf"; sourceTree = "<group>"; };
+		076224663B284EF98E69E741 /* Muli Extra Bold Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Bold Italic.ttf"; path = "../src/assets/fonts/Muli Extra Bold Italic.ttf"; sourceTree = "<group>"; };
 		0941D968E5D34EB2B05899B8 /* libPods-miotagTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-miotagTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		11B9A0E8BF09412F99A11C2A /* Muli Extra Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Light.ttf"; path = "../src/assets/fonts/Muli Extra Light.ttf"; sourceTree = "<group>"; };
+		11B9A0E8BF09412F99A11C2A /* Muli Extra Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Light.ttf"; path = "../src/assets/fonts/Muli Extra Light.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* miotag.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = miotag.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = miotag/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = miotag/AppDelegate.m; sourceTree = "<group>"; };
@@ -68,32 +69,32 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = miotag/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = miotag/main.m; sourceTree = "<group>"; };
 		190FBDF3F063392931FA332E /* Pods-miotag-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag-tvOS.release.xcconfig"; path = "Target Support Files/Pods-miotag-tvOS/Pods-miotag-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		20D2A96982EA45E8866C0EE6 /* Muli Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Italic.ttf"; path = "../src/assets/fonts/Muli Italic.ttf"; sourceTree = "<group>"; };
-		224747D0859548E59588770B /* Muli Semi Bold Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Semi Bold Italic.ttf"; path = "../src/assets/fonts/Muli Semi Bold Italic.ttf"; sourceTree = "<group>"; };
+		20D2A96982EA45E8866C0EE6 /* Muli Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Italic.ttf"; path = "../src/assets/fonts/Muli Italic.ttf"; sourceTree = "<group>"; };
+		224747D0859548E59588770B /* Muli Semi Bold Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Semi Bold Italic.ttf"; path = "../src/assets/fonts/Muli Semi Bold Italic.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* miotag-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "miotag-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* miotag-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "miotag-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		34D5E806B8A544DF904185F8 /* Muli Light Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Light Italic.ttf"; path = "../src/assets/fonts/Muli Light Italic.ttf"; sourceTree = "<group>"; };
-		3B4EE3D96B7B470AB37C11F9 /* Muli Bold Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Bold Italic.ttf"; path = "../src/assets/fonts/Muli Bold Italic.ttf"; sourceTree = "<group>"; };
-		3DF34EFD83F5482190E68AC9 /* Muli Extra Light Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Light Italic.ttf"; path = "../src/assets/fonts/Muli Extra Light Italic.ttf"; sourceTree = "<group>"; };
-		441EB46927644342A530E16F /* Muli Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Black.ttf"; path = "../src/assets/fonts/Muli Black.ttf"; sourceTree = "<group>"; };
+		34D5E806B8A544DF904185F8 /* Muli Light Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Light Italic.ttf"; path = "../src/assets/fonts/Muli Light Italic.ttf"; sourceTree = "<group>"; };
+		3B4EE3D96B7B470AB37C11F9 /* Muli Bold Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Bold Italic.ttf"; path = "../src/assets/fonts/Muli Bold Italic.ttf"; sourceTree = "<group>"; };
+		3DF34EFD83F5482190E68AC9 /* Muli Extra Light Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Light Italic.ttf"; path = "../src/assets/fonts/Muli Extra Light Italic.ttf"; sourceTree = "<group>"; };
+		441EB46927644342A530E16F /* Muli Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Black.ttf"; path = "../src/assets/fonts/Muli Black.ttf"; sourceTree = "<group>"; };
 		5E0A6DA8C673118005308331 /* Pods-miotagTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotagTests.release.xcconfig"; path = "Target Support Files/Pods-miotagTests/Pods-miotagTests.release.xcconfig"; sourceTree = "<group>"; };
-		6C34EB9B8E064E1F91B6EC2F /* Muli Black Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Black Italic.ttf"; path = "../src/assets/fonts/Muli Black Italic.ttf"; sourceTree = "<group>"; };
+		6C34EB9B8E064E1F91B6EC2F /* Muli Black Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Black Italic.ttf"; path = "../src/assets/fonts/Muli Black Italic.ttf"; sourceTree = "<group>"; };
 		6FEA44DEA3F6A5F3A7203E98 /* libPods-miotag-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-miotag-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		70BBD599DBE656831751EF16 /* Pods-miotag-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-miotag-tvOSTests/Pods-miotag-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		75D3BDD5C95444CFAAF5F9C5 /* Muli Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Regular.ttf"; path = "../src/assets/fonts/Muli Regular.ttf"; sourceTree = "<group>"; };
+		75D3BDD5C95444CFAAF5F9C5 /* Muli Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Regular.ttf"; path = "../src/assets/fonts/Muli Regular.ttf"; sourceTree = "<group>"; };
 		837A2BDCFC42209FEBBF0D18 /* Pods-miotag.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag.debug.xcconfig"; path = "Target Support Files/Pods-miotag/Pods-miotag.debug.xcconfig"; sourceTree = "<group>"; };
-		84A11CFC069E42CBB6A39821 /* Muli Semi Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Semi Bold.ttf"; path = "../src/assets/fonts/Muli Semi Bold.ttf"; sourceTree = "<group>"; };
-		9016BAF8D4EE48FC8FB566F6 /* Muli Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Light.ttf"; path = "../src/assets/fonts/Muli Light.ttf"; sourceTree = "<group>"; };
+		84A11CFC069E42CBB6A39821 /* Muli Semi Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Semi Bold.ttf"; path = "../src/assets/fonts/Muli Semi Bold.ttf"; sourceTree = "<group>"; };
+		9016BAF8D4EE48FC8FB566F6 /* Muli Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Light.ttf"; path = "../src/assets/fonts/Muli Light.ttf"; sourceTree = "<group>"; };
 		A307F44F9F3F5154135585A7 /* libPods-miotag-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-miotag-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A378A92CE71301607458D416 /* Pods-miotag-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-miotag-tvOSTests/Pods-miotag-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		AAD64F21D7334804BFE97273 /* Muli Extra Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Bold.ttf"; path = "../src/assets/fonts/Muli Extra Bold.ttf"; sourceTree = "<group>"; };
+		AAD64F21D7334804BFE97273 /* Muli Extra Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Extra Bold.ttf"; path = "../src/assets/fonts/Muli Extra Bold.ttf"; sourceTree = "<group>"; };
 		B98EFB8E850D20999F7D51C7 /* Pods-miotag-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-miotag-tvOS/Pods-miotag-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E2B06708BD1B52260138B994 /* libPods-miotag.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-miotag.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EF86F888C03D5A0652A91FC1 /* Pods-miotagTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotagTests.debug.xcconfig"; path = "Target Support Files/Pods-miotagTests/Pods-miotagTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F30EF57F3711AA2CB98D72AD /* Pods-miotag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag.release.xcconfig"; path = "Target Support Files/Pods-miotag/Pods-miotag.release.xcconfig"; sourceTree = "<group>"; };
-		F6741C415B4149749AFCF701 /* Muli Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Bold.ttf"; path = "../src/assets/fonts/Muli Bold.ttf"; sourceTree = "<group>"; };
+		F6741C415B4149749AFCF701 /* Muli Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Bold.ttf"; path = "../src/assets/fonts/Muli Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,7 +196,6 @@
 				84A11CFC069E42CBB6A39821 /* Muli Semi Bold.ttf */,
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -244,7 +244,6 @@
 				EF86F888C03D5A0652A91FC1 /* Pods-miotagTests.debug.xcconfig */,
 				5E0A6DA8C673118005308331 /* Pods-miotagTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -341,7 +340,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = F3BQYE7K87;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = F3BQYE7K87;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -359,6 +363,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -696,6 +701,7 @@
 			baseConfigurationReference = EF86F888C03D5A0652A91FC1 /* Pods-miotagTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = F3BQYE7K87;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -720,6 +726,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = F3BQYE7K87;
 				INFOPLIST_FILE = miotagTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -739,8 +746,11 @@
 			baseConfigurationReference = 837A2BDCFC42209FEBBF0D18 /* Pods-miotag.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = F3BQYE7K87;
 				INFOPLIST_FILE = miotag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -750,6 +760,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = miotag;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -759,7 +770,10 @@
 			baseConfigurationReference = F30EF57F3711AA2CB98D72AD /* Pods-miotag.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F3BQYE7K87;
 				INFOPLIST_FILE = miotag/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -769,6 +783,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = miotag;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
