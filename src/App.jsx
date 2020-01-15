@@ -8,6 +8,10 @@ import { UserProvider } from '@hooks/useUser/provider';
 import { theme } from '@styles';
 import AppContainer from './AppContainer';
 
+if (__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+
 const App = () => (
   <>
     <ThemeProvider theme={theme}>
