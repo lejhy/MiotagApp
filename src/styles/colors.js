@@ -6,8 +6,8 @@ export const SECONDARY = 'secondary';
 export const BACKGROUND_WHITE = 'backgroundWhite';
 export const TEXT = 'text';
 export const TEXT_INVERTED = 'textInverted';
-
 export const GRAY = 'gray';
+export const LIGHT_GRAY = 'lightGray';
 
 const COLORS = {
   [PRIMARY]: '#0CC2CC',
@@ -17,6 +17,7 @@ const COLORS = {
   [TEXT]: '#333333',
   [TEXT_INVERTED]: '#FEFEFE',
   [GRAY]: '#828282',
+  [LIGHT_GRAY]: '#cdcdcd',
 };
 
 export default COLORS;

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import type { NavigationScreenProps } from 'react-navigation';
 
 import { PRIMARY_LIGHT } from '@styles/colors';
 import { Button, Text } from '@core';
@@ -40,15 +41,18 @@ const TextContainer = styled(SvgContainer)`
 
 type Props = {
   title: string,
-  onBackPress?: () => any,
+  includeBackButton?: () => any,
+  navigation: NavigationScreenProps,
 };
 
-export default function ScreenHeader({ title, onBackPress }: Props) {
+export default function ScreenHeader({ title, includeBackButton, navigation }: Props) {
+  const handleBackPress = () => navigation.goBack();
+
   return (
     <>
-      { onBackPress && (
+      { includeBackButton && (
         <BackButtonWrapper>
-          <Button icon="arrow-left" onPress={onBackPress}>
+          <Button icon="arrow-left" onPress={handleBackPress}>
             Back
           </Button>
         </BackButtonWrapper>
@@ -68,5 +72,5 @@ export default function ScreenHeader({ title, onBackPress }: Props) {
 }
 
 ScreenHeader.defaultProps = {
-  onBackPress: null,
+  includeBackButton: false,
 };

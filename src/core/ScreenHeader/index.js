@@ -1,5 +1,7 @@
 // @flow
 
+import { withNavigation } from 'react-navigation';
+
 import ScreenHeader from './ScreenHeader';
 
-export default ScreenHeader;
+export default withNavigation(ScreenHeader);

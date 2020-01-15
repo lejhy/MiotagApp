@@ -3,6 +3,8 @@ const MODULE_RESOLVER = [
   {
     extensions: ['.js', '.jsx'],
     alias: {
+      '@assets': './src/assets',
+      '@constants': './src/constants',
       '@core': './src/core',
       '@hooks': './src/hooks',
       '@screens': './src/screens',

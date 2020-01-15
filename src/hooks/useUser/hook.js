@@ -36,7 +36,10 @@ export default function useUser() {
 
   const login = async (email, password) => {
     const response = await UserService.login(email, password);
-    const user = response.data;
+    const user = {
+      ...response.data,
+      password,
+    };
     await clearUserData();
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     setState(user);

@@ -3,24 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, RefreshControl } from 'react-native';
 import styled from 'styled-components';
-import type { NavigationScreenProps } from 'react-navigation';
 
 import useActivities from '@hooks/useActivities';
 import { ScreenHeader } from '@core';
 
+import ActivityItem from './ActivityItem';
+
 const ScrollContainer = styled.ScrollView`
   height: 100%;
+  padding: 5%;
 `;
 
 const Text = styled.Text``;
 
-type Props = {
-  navigation: NavigationScreenProps,
-};
-
-export default function Activities({ navigation }: Props) {
+export default function Activities() {
   const [refreshing, setRefreshing] = useState(true);
-  const [activities, { refresh }] = useActivities();
+  const [{ activities }, { refresh }] = useActivities();
 
   const refreshActivities = async () => {
     setRefreshing(true);
@@ -32,11 +30,9 @@ export default function Activities({ navigation }: Props) {
     refreshActivities();
   }, []);
 
-  const handleBackPress = () => navigation.goBack();
-
   return (
     <SafeAreaView>
-      <ScreenHeader title="Activities" onBackPress={handleBackPress} />
+      <ScreenHeader title="Activities" includeBackButton />
       <ScrollContainer
         refreshControl={(
           <RefreshControl
@@ -49,9 +45,7 @@ export default function Activities({ navigation }: Props) {
           <Text align="center">No activities to show</Text>
         ) }
         { (activities && activities.length > 0) && activities.map((a) => (
-          <Text>
-            { JSON.stringify(a) }
-          </Text>
+          <ActivityItem activity={a} key={a.id} />
         ))}
       </ScrollContainer>
     </SafeAreaView>

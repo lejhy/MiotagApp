@@ -41,7 +41,7 @@ export default function Button({
           bold
           pt="10px"
           pb="10px"
-          ml="10px"
+          ml={icon ? '10px' : '0px'}
         >
           { children.toString().toUpperCase() }
         </Text>
