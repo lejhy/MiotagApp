@@ -27,7 +27,7 @@ export default function Dashboard({ navigation }: Props) {
     { label: 'Progress', icon: 'chart-line', onPress: navigateToGenerator('dupa') },
     { label: 'Messages', icon: 'envelope', onPress: navigateToGenerator('Messages') },
     { label: 'Alerts', icon: 'bell', onPress: navigateToGenerator('dupa') },
-    { label: 'Friends', icon: 'user-friends', onPress: navigateToGenerator('dupa') },
+    { label: 'Friends', icon: 'user-friends', onPress: navigateToGenerator('Friends') },
     { label: 'Settings', icon: 'cog', onPress: navigateToGenerator('Settings') },
   ];
 

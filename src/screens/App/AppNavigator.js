@@ -6,6 +6,7 @@ import Dashboard from './Dashboard';
 import Activities from './Activities';
 import Settings from './Settings';
 import Messages from './Messages';
+import Friends from './Friends';
 
 const AppNavigator = createStackNavigator({
   Dashboard: {
@@ -19,6 +20,9 @@ const AppNavigator = createStackNavigator({
   },
   Messages: {
     screen: Messages,
+  },
+  Friends: {
+    screen: Friends,
   },
 }, {
   initialRouteName: 'Dashboard',
