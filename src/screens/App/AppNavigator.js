@@ -8,7 +8,9 @@ import Settings from './Settings';
 import Messages from './Messages';
 import Friends from './Friends';
 
+import Profile from './Profile';
 import UserSearch from './UserSearch';
+
 const AppNavigator = createStackNavigator({
   Dashboard: {
     screen: Dashboard,
@@ -24,6 +26,9 @@ const AppNavigator = createStackNavigator({
   },
   Friends: {
     screen: Friends,
+  },
+  Profile: {
+    screen: Profile,
   },
   UserSearch: {
     screen: UserSearch,
