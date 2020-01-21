@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 
 import ActivitiesService from '@services/api/ActivitiesService';
-import DATE_FORMAT from '@constants/dateFormat';
 
 export const STORAGE_KEY = 'activities_cache';
 
@@ -33,16 +32,25 @@ export default function useActivities() {
     const activitiesResponse = await ActivitiesService.getAll();
     const logsResponse = await ActivitiesService.getAllLogs();
 
-    const logs = logsResponse.data;
-    const activities = activitiesResponse.data
-      .filter((a) => a.enabled)
-      .map((a) => {
-        const lastLog = getLastLog(logs, a.id);
-        return {
-          ...a,
-          lastPlayed: lastLog ? moment(lastLog.date).fromNow() : 'never',
-        };
-      });
+    let logs = [...logsResponse.data];
+    let activities = [];
+    let disabledActivities = [];
+    // eslint-disable-next-line
+    for (const activity of activitiesResponse.data) {
+      if (activity.enabled) {
+        activities = [...activities, activity];
+      } else {
+        disabledActivities = [...disabledActivities, activity];
+        logs = logs.filter((l) => l.activity.id !== activity.id);
+      }
+    }
+    activities = activities.map((a) => {
+      const lastLog = getLastLog(logs, a.id);
+      return {
+        ...a,
+        lastPlayed: lastLog ? moment(lastLog.date).fromNow() : 'never',
+      };
+    });
 
     const newState = { activities, logs };
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
