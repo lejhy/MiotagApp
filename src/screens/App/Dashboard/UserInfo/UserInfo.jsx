@@ -5,9 +5,8 @@ import styled from 'styled-components';
 
 import useUser from '@hooks/useUser';
 import { PRIMARY } from '@styles/colors';
+import DefaultImage from '@assets/img/default-img.svg';
 import { Text } from '@core';
-
-import DefaultImage from './default-img.svg';
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.colors[PRIMARY]};
