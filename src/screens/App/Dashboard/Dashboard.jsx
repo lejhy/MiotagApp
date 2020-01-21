@@ -24,7 +24,7 @@ export default function Dashboard({ navigation }: Props) {
   const navigateToGenerator = (location) => () => navigation.navigate(location);
   const navigationItems = [
     { label: 'Activities', icon: 'child', onPress: navigateToGenerator('Activities') },
-    { label: 'Progress', icon: 'chart-line', onPress: navigateToGenerator('dupa') },
+    { label: 'Progress', icon: 'chart-line', onPress: navigateToGenerator('Progress') },
     { label: 'Messages', icon: 'envelope', onPress: navigateToGenerator('Messages') },
     { label: 'Alerts', icon: 'bell', onPress: navigateToGenerator('dupa') },
     { label: 'Friends', icon: 'user-friends', onPress: navigateToGenerator('Friends') },

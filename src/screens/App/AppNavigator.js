@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Dashboard from './Dashboard';
 import Activities from './Activities';
+import Progress from './Progress';
 import Settings from './Settings';
 import Messages from './Messages';
 import Friends from './Friends';
@@ -17,6 +18,9 @@ const AppNavigator = createStackNavigator({
   },
   Activities: {
     screen: Activities,
+  },
+  Progress: {
+    screen: Progress,
   },
   Settings: {
     screen: Settings,
