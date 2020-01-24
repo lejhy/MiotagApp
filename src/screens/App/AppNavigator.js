@@ -11,13 +11,14 @@ import Friends from './Friends';
 
 import Profile from './Profile';
 import UserSearch from './UserSearch';
+import FreeMode from './Activities/FreeMode/FreeMode';
 
 const AppNavigator = createStackNavigator({
   Dashboard: {
     screen: Dashboard,
   },
   Activities: {
-    screen: Activities,
+    screen: FreeMode,
   },
   Progress: {
     screen: Progress,
