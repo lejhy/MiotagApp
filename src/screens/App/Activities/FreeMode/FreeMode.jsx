@@ -21,7 +21,7 @@ import Renderer from 'expo-three/build/Renderer';
 
 export default class FreeMode extends PureComponent {
   timeout: any;
-  entities: [] = [];
+  cubes: [] = [];
   raycaster = new Raycaster();
   pixelRatio = PixelRatio.get();
 
@@ -34,7 +34,7 @@ export default class FreeMode extends PureComponent {
   }
 
   update() {
-    this.entities.forEach((cube) => {
+    this.cubes.forEach((cube) => {
       cube.rotation.y += 0.05;
       cube.rotation.x += 0.025;
     });
@@ -57,7 +57,8 @@ export default class FreeMode extends PureComponent {
     const scene = new Scene();
     this.scene = scene;
     scene.fog = new Fog(sceneColor, 1, 10000);
-    scene.add(new GridHelper(10, 10));
+    this.grid = new GridHelper(10, 10);
+    scene.add(this.grid);
 
     const ambientLight = new AmbientLight(0x101010);
     scene.add(ambientLight);
@@ -73,7 +74,7 @@ export default class FreeMode extends PureComponent {
 
     const cube = new IconMesh();
     scene.add(cube);
-    this.entities.push(cube);
+    this.cubes.push(cube);
 
     camera.lookAt(cube.position);
 
@@ -90,17 +91,28 @@ export default class FreeMode extends PureComponent {
   touchStart(event: SyntheticEvent) {
     let position = new Vector2();
     position.x = (event.nativeEvent.pageX * this.pixelRatio / this.renderer.domElement.width) * 2 - 1;
-    position.y = (event.nativeEvent.pageY * this.pixelRatio / this.renderer.domElement.height) * 2 - 1;
+    position.y = - (event.nativeEvent.pageY * this.pixelRatio / this.renderer.domElement.height) * 2 + 1;
     console.log(event.nativeEvent.touches[0].touches);
     console.log(position);
     this.raycaster.setFromCamera( position, this.camera );
-    let intersects = this.raycaster.intersectObjects( this.scene.children );
-    for ( let i = 0; i < intersects.length; i++ ) {
-      console.log("intersect");
-      let color = intersects[ i ].object.material.color;
-      color.r = Math.random();
-      color.g = Math.random();
-      color.b = Math.random();
+    let cubeIntersect = this.raycaster.intersectObjects( this.cubes );
+    if (cubeIntersect.length > 0) {
+      for ( let i = 0; i < cubeIntersect.length; i++ ) {
+        console.log("intersect");
+        let color = cubeIntersect[ i ].object.material.color;
+        color.r = Math.random();
+        color.g = Math.random();
+        color.b = Math.random();
+      }
+    } else {
+      let gridIntersect = this.raycaster.intersectObject(this.grid);
+      for( let i = 0; i < gridIntersect.length; i++ ) {
+        const cube = new IconMesh();
+
+        cube.position.copy( gridIntersect[i].point );
+        this.scene.add(cube);
+        this.cubes.push(cube);
+      }
     }
   }
 
