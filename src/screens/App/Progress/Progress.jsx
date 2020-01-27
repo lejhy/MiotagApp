@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 import styled from 'styled-components';
 
 import useActivities from '@hooks/useActivities';
@@ -9,6 +9,10 @@ import { ScreenHeader, Text } from '@core';
 
 import ProgressView from './ProgressView';
 import getSummary from './getSummary';
+
+const SafeAreaView = styled.SafeAreaView`
+  flex: 1;
+`;
 
 const ScrollContainer = styled.ScrollView`
   height: 100%;
