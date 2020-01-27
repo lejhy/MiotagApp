@@ -63,7 +63,7 @@ const buildActivityFilter = (activityId) => (el) => {
 
 export default function ProgressView({ logs, activities, theme }: Props) {
   const [activity, setActivity] = useState(activities[0]);
-  const [graphData, setGraphData] = useState([{ date: '01/01', score: 0, time: 0 }]);
+  const [graphData, setGraphData] = useState([]);
 
   useEffect(() => {
     // pick data for graphs
@@ -74,7 +74,7 @@ export default function ProgressView({ logs, activities, theme }: Props) {
         score: l.score,
         time: l.length,
       }));
-    // sort data by date
+      // sort data by date
     graphData.sort((a, b) => a.date - b.date);
     setGraphData(newGraphData);
   }, [activity]);
@@ -99,50 +99,50 @@ export default function ProgressView({ logs, activities, theme }: Props) {
 
   return (
     <Container>
-      <TopContainer>
-        <Text bold size="subHeader">
-          Activity:
-        </Text>
-        <Dropdown onPress={togglePicker}>
-          <Text pt="10px" pb="10px" mr="10px">
-            { activity.name }
+      { activity && (
+        <TopContainer>
+          <Text bold size="subHeader">
+            Activity:
           </Text>
-          { activities.length > 1 && (
-            <Icon name="chevron-down" color={theme.colors.primary} size={24} />
-          )}
-        </Dropdown>
-        <SelectPicker
-          style={pickerSelectStyles}
-          onValueChange={onActivityPickerChange}
-          items={activityItems}
-          value={activity.id}
-          ref={(selectPicker) => { activityPicker = selectPicker; }}
-        />
-      </TopContainer>
-      <Text size="subHeader" align="center">
-        Score
-      </Text>
-      <LineChart
-        width={chartSize}
-        data={graphData.map((d) => ({
-          date: d.date,
-          score: d.score,
-        }))}
-        xField="date"
-        yField="score"
-      />
-      <Text size="subHeader" align="center">
-        Time
-      </Text>
-      <LineChart
-        width={chartSize}
-        data={graphData.map((d) => ({
-          date: d.date,
-          time: d.time,
-        }))}
-        xField="date"
-        yField="time"
-      />
+          <Dropdown onPress={togglePicker}>
+            <Text pt="10px" pb="10px" mr="10px">
+              { activity.name }
+            </Text>
+            { activities.length > 1 && (
+              <Icon name="chevron-down" color={theme.colors.primary} size={24} />
+            )}
+          </Dropdown>
+          <SelectPicker
+            style={pickerSelectStyles}
+            onValueChange={onActivityPickerChange}
+            items={activityItems}
+            value={activity.id}
+            ref={(selectPicker) => { activityPicker = selectPicker; }}
+          />
+        </TopContainer>
+      )}
+      { graphData.length > 0 && (
+        <>
+          <Text size="subHeader" align="center">
+            Score
+          </Text>
+          <LineChart
+            width={chartSize}
+            data={graphData}
+            xField="date"
+            yField="score"
+          />
+          <Text size="subHeader" align="center">
+            Time
+          </Text>
+          <LineChart
+            width={chartSize}
+            data={graphData}
+            xField="date"
+            yField="time"
+          />
+        </>
+      )}
     </Container>
 
   );

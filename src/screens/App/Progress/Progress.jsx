@@ -5,9 +5,10 @@ import { SafeAreaView, RefreshControl } from 'react-native';
 import styled from 'styled-components';
 
 import useActivities from '@hooks/useActivities';
-import { ScreenHeader } from '@core';
+import { ScreenHeader, Text } from '@core';
 
 import ProgressView from './ProgressView';
+import getSummary from './getSummary';
 
 const ScrollContainer = styled.ScrollView`
   height: 100%;
@@ -50,15 +51,18 @@ export default function Progress() {
           />
         )}
       >
-        { Array.isArray(logs)
-          && logs.length > 0
-          && Array.isArray(activitiesFromLogs)
-          && activitiesFromLogs.length > 0 && (
+        { Array.isArray(activitiesFromLogs) && activitiesFromLogs.length > 0 && (
           <ProgressView
-            activities={activitiesFromLogs}
             logs={logs}
+            activities={activitiesFromLogs}
           />
         )}
+        <Text size="subHeader" align="center">
+          Summary
+        </Text>
+        <Text mr="20px" ml="20px">
+          { getSummary(logs) }
+        </Text>
       </ScrollContainer>
     </SafeAreaView>
   );
