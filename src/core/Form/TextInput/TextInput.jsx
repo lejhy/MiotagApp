@@ -12,6 +12,12 @@ const Container = styled.View`
   ${({ mt }) => mt && css`
     margin-top: ${mt};
   `}
+  ${({ ml }) => ml && css`
+    margin-left: ${ml};
+  `}
+  ${({ mr }) => mr && css`
+    margin-right: ${mr};
+  `}
 `;
 
 const StyledTextInput = styled.TextInput`
@@ -29,11 +35,13 @@ type Props = {
   onChange: (text) => void,
   label: string,
   mt?: string,
+  ml?: string,
+  mr?: string,
   theme: ThemeProps,
 };
 
 export default function TextInput({
-  value, onChange, label, mt, theme, ...rest
+  value, onChange, label, mt, ml, mr, theme, ...rest
 }: Props) {
   const [isFocused, setFocus] = useState(false);
 
@@ -41,7 +49,7 @@ export default function TextInput({
   const setBlur = () => setFocus(false);
 
   return (
-    <Container mt={mt}>
+    <Container mt={mt} ml={ml} mr={mr}>
       <Text color="primary" bold mb="3px" ml="5px">{ label }</Text>
       <StyledTextInput
         value={value}
@@ -58,4 +66,6 @@ export default function TextInput({
 
 TextInput.defaultProps = {
   mt: null,
+  ml: null,
+  mr: null,
 };
