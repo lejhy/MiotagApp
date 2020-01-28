@@ -22,8 +22,8 @@ type Props = {
 }
 
 export default function ProfileTypeSelection({ navigation }: Props) {
-  const proceedAsRehabilitant = () => navigation.navigate('CreateNewAccount');
-  const proceedAsTherapist = () => navigation.navigate('CreateNewAccount');
+  const proceedAsRehabilitant = () => navigation.navigate('CreateNewAccount', { isTherapist: false });
+  const proceedAsTherapist = () => navigation.navigate('CreateNewAccount', { isTherapist: true });
 
   return (
     <SafeAreaView>

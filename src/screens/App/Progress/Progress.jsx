@@ -1,32 +1,48 @@
 // @flow
 
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 import styled from 'styled-components';
 
 import useActivities from '@hooks/useActivities';
-import { ScreenHeader } from '@core';
+import { ScreenHeader, Text } from '@core';
 
 import ProgressView from './ProgressView';
+import getSummary from './getSummary';
+
+const SafeAreaView = styled.SafeAreaView`
+  flex: 1;
+`;
 
 const ScrollContainer = styled.ScrollView`
   height: 100%;
-  padding: 5%;
 `;
 
-export default function Activities() {
+export default function Progress() {
   const [refreshing, setRefreshing] = useState(true);
-  const [{ activities }, { refresh }] = useActivities();
+  const [activitiesFromLogs, setActivitiesFromLogs] = useState([]);
+  const [{ logs }, { refresh }] = useActivities();
 
-  const refreshActivities = async () => {
+  const refreshLogs = async () => {
     setRefreshing(true);
     await refresh();
     setRefreshing(false);
   };
 
   useEffect(() => {
-    refreshActivities();
+    refreshLogs();
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(logs) && logs.length > 0) {
+      const newActivitiesFromLogs = logs.reduce((acc, item) => {
+        const existingActivity = acc.find((a) => a.id === item.activity.id);
+        if (!existingActivity) return [...acc, item.activity];
+        return acc;
+      }, []);
+      setActivitiesFromLogs(newActivitiesFromLogs);
+    }
+  }, [logs]);
 
   return (
     <SafeAreaView>
@@ -35,11 +51,22 @@ export default function Activities() {
         refreshControl={(
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={refreshActivities}
+            onRefresh={refreshLogs}
           />
         )}
       >
-        <ProgressView />
+        { Array.isArray(activitiesFromLogs) && activitiesFromLogs.length > 0 && (
+          <ProgressView
+            logs={logs}
+            activities={activitiesFromLogs}
+          />
+        )}
+        <Text size="subHeader" align="center">
+          Summary
+        </Text>
+        <Text mr="20px" ml="20px">
+          { getSummary(logs) }
+        </Text>
       </ScrollContainer>
     </SafeAreaView>
   );
