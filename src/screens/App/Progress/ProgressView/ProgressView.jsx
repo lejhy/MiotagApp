@@ -30,14 +30,8 @@ type Log = {
   score: Number,
 }
 
-type Activity = {
-  id: Number,
-  name: String,
-}
-
 type Props = {
   logs: Array<Log>,
-  activities: Array<Activity>,
   theme: {
     colors: {
       primary: String,
@@ -61,22 +55,39 @@ const buildActivityFilter = (activityId) => (el) => {
   return true;
 };
 
-export default function ProgressView({ logs, activities, theme }: Props) {
-  const [activity, setActivity] = useState(activities[0]);
+export default function ProgressView({ logs, theme }: Props) {
+  const [activity, setActivity] = useState(null);
+  const [activities, setActivities] = useState([]);
   const [graphData, setGraphData] = useState([]);
 
   useEffect(() => {
-    // pick data for graphs
-    const newGraphData = logs
-      .filter(buildActivityFilter(activity.id))
-      .map((l) => ({
-        date: moment(l.date).format('DD/MM'),
-        score: l.score,
-        time: l.length,
-      }));
-      // sort data by date
-    graphData.sort((a, b) => a.date - b.date);
-    setGraphData(newGraphData);
+    if (Array.isArray(logs) && logs.length > 0) {
+      const newActivitiesFromLogs = logs.reduce((acc, item) => {
+        const existingActivity = acc.find((a) => a.id === item.activity.id);
+        if (!existingActivity) return [...acc, item.activity];
+        return acc;
+      }, []);
+      setActivities(newActivitiesFromLogs);
+      if (activity === null) {
+        setActivity(newActivitiesFromLogs[0]);
+      }
+    }
+  }, [logs]);
+
+  useEffect(() => {
+    if (activity !== null) {
+      // pick data for graphs
+      const newGraphData = logs
+        .filter(buildActivityFilter(activity.id))
+        .map((l) => ({
+          date: moment(l.date).format('DD/MM'),
+          score: l.score,
+          time: l.length,
+        }));
+        // sort data by date
+      graphData.sort((a, b) => a.date - b.date);
+      setGraphData(newGraphData);
+    }
   }, [activity]);
   // activities to pick
   let activityPicker = null;
@@ -142,6 +153,11 @@ export default function ProgressView({ logs, activities, theme }: Props) {
             yField="time"
           />
         </>
+      )}
+      { Array.isArray(logs) && logs.length === 0 && (
+        <Text align="center">
+          No recorded activities
+        </Text>
       )}
     </Container>
 

@@ -20,7 +20,6 @@ const ScrollContainer = styled.ScrollView`
 
 export default function Progress() {
   const [refreshing, setRefreshing] = useState(true);
-  const [activitiesFromLogs, setActivitiesFromLogs] = useState([]);
   const [{ logs }, { refresh }] = useActivities();
 
   const refreshLogs = async () => {
@@ -33,17 +32,6 @@ export default function Progress() {
     refreshLogs();
   }, []);
 
-  useEffect(() => {
-    if (Array.isArray(logs) && logs.length > 0) {
-      const newActivitiesFromLogs = logs.reduce((acc, item) => {
-        const existingActivity = acc.find((a) => a.id === item.activity.id);
-        if (!existingActivity) return [...acc, item.activity];
-        return acc;
-      }, []);
-      setActivitiesFromLogs(newActivitiesFromLogs);
-    }
-  }, [logs]);
-
   return (
     <SafeAreaView>
       <ScreenHeader title="Progress" includeBackButton />
@@ -55,12 +43,7 @@ export default function Progress() {
           />
         )}
       >
-        { Array.isArray(activitiesFromLogs) && activitiesFromLogs.length > 0 && (
-          <ProgressView
-            logs={logs}
-            activities={activitiesFromLogs}
-          />
-        )}
+        <ProgressView logs={logs} />
         <Text size="subHeader" align="center">
           Summary
         </Text>

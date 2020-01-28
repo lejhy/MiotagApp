@@ -1,6 +1,6 @@
 // @flow
 
-const NO_LOGS = 'No recorded activities';
+const NO_LOGS = '';
 
 const HEALTHY = 'You’re doing very well! You show a very healthy progress.';
 
