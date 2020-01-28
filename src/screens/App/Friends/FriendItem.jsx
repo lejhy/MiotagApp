@@ -17,6 +17,7 @@ const TouchableContainer = styled.TouchableOpacity`
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.colors[GRAY]};
   padding: 15px;
+  margin-bottom: 15px;
 `;
 
 const ProfileImageContainer = styled.View`
