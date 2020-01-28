@@ -11,6 +11,7 @@ import Friends from './Friends';
 
 import Profile from './Profile';
 import UserSearch from './UserSearch';
+import Chat from './Chat';
 
 const AppNavigator = createStackNavigator({
   Dashboard: {
@@ -36,6 +37,9 @@ const AppNavigator = createStackNavigator({
   },
   UserSearch: {
     screen: UserSearch,
+  },
+  Chat: {
+    screen: Chat,
   },
 }, {
   initialRouteName: 'Dashboard',
