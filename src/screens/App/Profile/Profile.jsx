@@ -3,6 +3,7 @@
 import React from 'react';
 import { RefreshControl } from 'react-native';
 import styled from 'styled-components';
+import type { NavigationScreenProps } from 'react-navigation';
 
 import useProfile from '@hooks/useProfile';
 import DefaultImage from '@assets/img/default-img.svg';
