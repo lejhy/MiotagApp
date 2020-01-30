@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { AppRegistry, PixelRatio } from 'react-native';
+import { AppRegistry, PixelRatio, StyleSheet, View } from 'react-native';
 import { GLView } from 'expo-gl';
 import {
   AmbientLight,
@@ -21,6 +21,7 @@ import {
 import Renderer from 'expo-three/build/Renderer';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Asset } from 'expo-asset';
+import Button from '@core/Button/Button';
 
 export default class FreeMode extends PureComponent {
   renderer: Renderer;
@@ -28,6 +29,10 @@ export default class FreeMode extends PureComponent {
   scene: Scene;
 
   loaded = false;
+
+  state = {
+    mocking: false
+  };
 
   timeout: any;
   raycaster = new Raycaster();
@@ -59,7 +64,6 @@ export default class FreeMode extends PureComponent {
   }
 
   update() {
-    this.mockValues();
     if (this.loaded) {
       this.handScene.rotation.y += 0.025;
 
@@ -68,6 +72,9 @@ export default class FreeMode extends PureComponent {
         this.fingers[i][1].rotation.z = rotation;
         this.fingers[i][2].rotation.z = rotation;
       }
+    }
+    if (this.state.mocking) {
+      this.mockValues();
     }
   }
 
@@ -188,14 +195,33 @@ export default class FreeMode extends PureComponent {
 
   render() {
     return(
-      <GLView
-        style={{ flex: 1 }}
-        onContextCreate={this.onContextCreate}
-        onStartShouldSetResponder={(event) => true}
-        onResponderGrant={(event) => this.touchStart(event)}
-      />
+      <View style={styles.container}>
+        <Button
+          style={styles.button}
+          onPress={() => this.setState({mocking: !this.state.mocking})}
+        >
+          {this.state.mocking ? "Stop Mock" : "Mock"}
+        </Button>
+        <GLView
+          style={{ flex: 1 }}
+          onContextCreate={this.onContextCreate}
+          onStartShouldSetResponder={(event) => true}
+          onResponderGrant={(event) => this.touchStart(event)}
+        />
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  button: {
+    width: '50%',
+    position: 'absolute',
+    zIndex: 999
+  }
+});
 
 AppRegistry.registerComponent("FreeMode", () => FreeMode);
