@@ -4,31 +4,51 @@ import React, { PureComponent } from 'react';
 import { AppRegistry, PixelRatio } from 'react-native';
 import { GLView } from 'expo-gl';
 import {
-  AmbientLight, AnimationMixer,
-  BoxBufferGeometry, Clock,
+  AmbientLight,
   Fog,
   GridHelper,
-  Mesh,
-  MeshStandardMaterial,
+  Math,
+  MeshPhongMaterial,
   PerspectiveCamera,
   PointLight,
   Raycaster,
   Scene,
+  SkinnedMesh,
   SpotLight,
   Vector2,
-  AnimationClip
+  Vector3,
 } from 'three';
 import Renderer from 'expo-three/build/Renderer';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Asset } from 'expo-asset';
 
 export default class FreeMode extends PureComponent {
+  renderer: Renderer;
+  camera: PerspectiveCamera;
+  scene: Scene;
+
+  loaded = false;
+
   timeout: any;
-  cubes: [] = [];
   raycaster = new Raycaster();
   pixelRatio = PixelRatio.get();
-  clock = new Clock();
-  mixer: any;
+
+  grid: GridHelper;
+  handScene: any;
+  handMesh: SkinnedMesh;
+  fingers = [[],[],[],[],[]];
+
+  values = [0,0,0,0,0];
+
+  mockState = [0.05, 0.04, 0.03, 0.02, 0.01];
+  mockValues() {
+    for(let i = 0; i < 5; i++) {
+      if(this.values[i] > 1 || this.values[i] < 0) {
+        this.mockState[i] *= -1;
+      }
+      this.values[i] += this.mockState[i];
+    }
+  }
 
   constructor() {
     super();
@@ -39,53 +59,48 @@ export default class FreeMode extends PureComponent {
   }
 
   update() {
-    this.cubes.forEach((cube) => {
-      // cube.rotation.y += 0.05;
-      // cube.rotation.x += 0.025;
-      // cube.rotation.z += 0.025;
-      if(this.mixer) {
-        this.mixer.update(this.clock.getDelta());
+    this.mockValues();
+    if (this.loaded) {
+      this.handScene.rotation.y += 0.025;
+
+      for(let i = 0; i < 5; i++) {
+        let rotation = this.values[i] * Math.degToRad(-90);
+        this.fingers[i][1].rotation.z = rotation;
+        this.fingers[i][2].rotation.z = rotation;
       }
-    });
+    }
   }
 
   onContextCreate = gl => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
-    const sceneColor = 0x6ad6f0;
+    const sceneColor = 0x101010;
 
     // Create a WebGLRenderer without a DOM element
-    const renderer = new Renderer({ gl });
-    this.renderer = renderer;
-    renderer.setSize(width, height);
-    renderer.setClearColor(sceneColor);
+    this.renderer = new Renderer({ gl });
+    this.renderer.setSize(width, height);
+    this.renderer.setClearColor(sceneColor);
 
-    const camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
-    this.camera = camera;
-    camera.position.set(2, 5, 5);
+    this.camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
+    this.camera.position.set(0, 2, 4);
+    this.camera.lookAt(new Vector3(0, 1.5, 0));
 
-    const scene = new Scene();
-    this.scene = scene;
-    scene.fog = new Fog(sceneColor, 1, 10000);
-    this.grid = new GridHelper(10, 10);
-    scene.add(this.grid);
+
+    this.scene = new Scene();
+    this.scene.fog = new Fog(sceneColor, 1, 10000);
+    this.grid = new GridHelper(50, 50);
+    this.scene.add(this.grid);
 
     const ambientLight = new AmbientLight(0x101010);
-    scene.add(ambientLight);
+    this.scene.add(ambientLight);
 
     const pointLight = new PointLight(0xffffff, 2, 1000, 1);
     pointLight.position.set(0, 200, 200);
-    scene.add(pointLight);
+    this.scene.add(pointLight);
 
     const spotLight = new SpotLight(0xffffff, 0.5);
     spotLight.position.set(0, 500, 100);
-    spotLight.lookAt(scene.position);
-    scene.add(spotLight);
-
-    // const cube = new IconMesh();
-    // scene.add(cube);
-    // this.cubes.push(cube);
-    //
-    // camera.lookAt(cube.position);
+    spotLight.lookAt(this.scene.position);
+    this.scene.add(spotLight);
 
     const MODEL_PATH = Asset.fromModule(require('@assets/models/RiggedHand.glb')).uri;
 
@@ -93,31 +108,54 @@ export default class FreeMode extends PureComponent {
     loader.load(
       MODEL_PATH,
       (gltf) => {
-        // A lot is going to happen here
         let model = gltf.scene;
-        let fileAnimations = gltf.animations;
-        console.log(fileAnimations);
-        scene.add(model);
+        this.scene.add(model);
+        this.handScene = model;
         model.traverse(o => {
-          if (o.isMesh) {
-            o.castShadow = true;
-            o.receiveShadow = true;
+          if (o.isBone) {
+            switch (o.name.slice(0, o.name.length - 1)) {
+              case "Thumb":
+                this.fingers[0].push(o);
+                break;
+              case "Index":
+                this.fingers[1].push(o);
+                break;
+              case "Middle":
+                this.fingers[2].push(o);
+                break;
+              case "Ring":
+                this.fingers[3].push(o);
+                break;
+              case "Pinkie":
+                this.fingers[4].push(o);
+                break;
+            }
+          } else if (o.isMesh) {
+
+          }
+          if (o.type === "SkinnedMesh") {
+            console.log(o);
+            this.handMesh = o;
+            o.material = new MeshPhongMaterial({
+              color: 0xff0000,
+              skinning: true
+            });
           }
         });
 
-        model.scale.set(1, 1, 1);
-        model.rotation.y += 3.14;
-        // model.rotation.x += 1.5;
-        this.cubes.push(model);
-        camera.lookAt(model.position);
+        model.rotation.y += Math.degToRad(180);
 
-        this.mixer = new AnimationMixer(model);
-        let anim = AnimationClip.findByName(fileAnimations, 'index');
-        let clip = this.mixer.clipAction(anim);
-        clip.play();
+        this.loaded = true
+
       },
-      undefined, // We don't need this function
-      function(error) {
+      (xhr) => {
+          if(xhr.lengthConputable) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+          } else {
+            console.log(xhr.loaded + ' loaded');
+          }
+      },
+      (error) => {
         console.log(error);
         console.error(error);
       }
@@ -127,8 +165,8 @@ export default class FreeMode extends PureComponent {
     const render = () => {
       this.timeout = requestAnimationFrame(render);
       this.update();
-      renderer.render(scene, camera);
-      gl.endFrameEXP(); //todo investigate
+      this.renderer.render(this.scene, this.camera);
+      gl.endFrameEXP();
     };
     render();
   };
@@ -137,27 +175,14 @@ export default class FreeMode extends PureComponent {
     let position = new Vector2();
     position.x = (event.nativeEvent.pageX * this.pixelRatio / this.renderer.domElement.width) * 2 - 1;
     position.y = - (event.nativeEvent.pageY * this.pixelRatio / this.renderer.domElement.height) * 2 + 1;
-    console.log(event.nativeEvent.touches[0].touches);
-    console.log(position);
-    this.raycaster.setFromCamera( position, this.camera );
-    let cubeIntersect = this.raycaster.intersectObjects( this.cubes );
-    if (cubeIntersect.length > 0) {
-      for ( let i = 0; i < cubeIntersect.length; i++ ) {
-        console.log("intersect");
-        let color = cubeIntersect[ i ].object.material.color;
-        color.r = Math.random();
-        color.g = Math.random();
-        color.b = Math.random();
-      }
-    } else {
-      let gridIntersect = this.raycaster.intersectObject(this.grid);
-      for( let i = 0; i < gridIntersect.length; i++ ) {
-        const cube = new IconMesh();
 
-        cube.position.copy( gridIntersect[i].point );
-        this.scene.add(cube);
-        this.cubes.push(cube);
-      }
+    this.raycaster.setFromCamera( position, this.camera );
+    let handIntersects = this.raycaster.intersectObjects( [this.handMesh] );
+    if (handIntersects.length > 0) {
+      let color = this.handMesh.material.color;
+      color.r = Math.randFloat(0, 1);
+      color.g = Math.randFloat(0, 1);
+      color.b = Math.randFloat(0, 1);
     }
   }
 
@@ -170,18 +195,6 @@ export default class FreeMode extends PureComponent {
         onResponderGrant={(event) => this.touchStart(event)}
       />
     )
-  }
-}
-
-class IconMesh extends Mesh {
-  constructor() {
-    super(
-      new BoxBufferGeometry(1.0, 1.0, 1.0),
-      new MeshStandardMaterial({
-        // map: new TextureLoader().load(require('./assets/icon.png')),
-        color: 0xff0000
-      }),
-    );
   }
 }
 
