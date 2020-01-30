@@ -10,9 +10,10 @@ import { BACKGROUND_WHITE } from '@styles/colors';
 import UserInfo from './UserInfo';
 import TilesNavigation from './TilesNavigation';
 
-const ScreenContainer = styled.View``;
+const ScreenContainer = styled.View`
+  height: 100%;
+`;
 const Content = styled.ScrollView`
-  height: 100%
   background: ${({ theme }) => theme.colors[BACKGROUND_WHITE]};
 `;
 
