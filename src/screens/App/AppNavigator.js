@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Dashboard from './Dashboard';
 import Activities from './Activities';
+import FreeMode from './Activities/FreeMode';
 import Progress from './Progress';
 import Settings from './Settings';
 import Messages from './Messages';
@@ -18,6 +19,9 @@ const AppNavigator = createStackNavigator({
   },
   Activities: {
     screen: Activities,
+  },
+  FreeMode: {
+    screen: FreeMode,
   },
   Progress: {
     screen: Progress,
