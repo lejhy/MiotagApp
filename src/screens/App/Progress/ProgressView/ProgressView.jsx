@@ -1,62 +1,149 @@
 // @flow
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components';
-import {
-  YAxis, AreaChart, Grid, XAxis,
-} from 'react-native-svg-charts';
-import * as shape from 'd3-shape';
+import moment from 'moment';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import SelectPicker from 'react-native-picker-select';
+
+import { LineChart, Text } from '@core';
 
 const Container = styled.View`
-  flex-direction: row;
-  height: 200px;
-`;
-
-const Inner = styled.View`
+  display: flex;
   flex: 1;
-  margin-left: 16px;
+  padding: 20px;
 `;
 
-const Text = styled.Text``;
+const TopContainer = styled.View`
+  flex-direction: column;
+`;
+
+const Dropdown = styled.TouchableOpacity`
+  align-items: center;
+  flex-direction: row;
+`;
+
+type Log = {
+  date: String,
+  length: Number,
+  score: Number,
+}
+
+type Activity = {
+  id: Number,
+  name: String,
+}
 
 type Props = {
-
+  logs: Array<Log>,
+  activities: Array<Activity>,
+  theme: {
+    colors: {
+      primary: String,
+    }
+  }
 };
 
-export default function ProgressView(props: Props) {
-  const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
-  const contentInset = { top: 20, bottom: 20 };
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    height: 0,
+  },
+  inputAndroid: {
+    height: 0,
+  },
+});
+
+const buildActivityFilter = (activityId) => (el) => {
+  if (activityId) {
+    return el.activity.id === activityId;
+  }
+  return true;
+};
+
+export default function ProgressView({ logs, activities, theme }: Props) {
+  const [activity, setActivity] = useState(activities[0]);
+  const [graphData, setGraphData] = useState([]);
+
+  useEffect(() => {
+    // pick data for graphs
+    const newGraphData = logs
+      .filter(buildActivityFilter(activity.id))
+      .map((l) => ({
+        date: moment(l.date).format('DD/MM'),
+        score: l.score,
+        time: l.length,
+      }));
+      // sort data by date
+    graphData.sort((a, b) => a.date - b.date);
+    setGraphData(newGraphData);
+  }, [activity]);
+  // activities to pick
+  let activityPicker = null;
+  const activityItems = activities.map((a) => ({
+    label: a.name,
+    value: a.id,
+  }));
+  // handle change
+  const onActivityPickerChange = (id) => {
+    setActivity(activities.find((a) => a.id === id));
+  };
+  // handle toggle
+  const togglePicker = () => {
+    if (activities.length > 1) {
+      activityPicker.togglePicker();
+    }
+  };
+  // set chart size
+  const chartSize = Dimensions.get('window').width - 40;
 
   return (
     <Container>
-      <YAxis
-        data={data}
-        contentInset={contentInset}
-        svg={{
-          fill: 'grey',
-          fontSize: 10,
-        }}
-        numberOfTicks={10}
-        formatLabel={(value) => `${value}ºC`}
-      />
-      <Inner>
-        <AreaChart
-          style={{ flex: 1 }}
-          data={data}
-          contentInset={contentInset}
-          curve={shape.curveNatural}
-          svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-          animate
-        >
-          <Grid />
-        </AreaChart>
-        <XAxis
-          data={data}
-          formatLabel={(value, index) => index}
-          contentInset={{ left: 10, right: 10 }}
-          svg={{ fontSize: 10, fill: 'black' }}
-        />
-      </Inner>
+      { activity && (
+        <TopContainer>
+          <Text bold size="subHeader">
+            Activity:
+          </Text>
+          <Dropdown onPress={togglePicker}>
+            <Text pt="10px" pb="10px" mr="10px">
+              { activity.name }
+            </Text>
+            { activities.length > 1 && (
+              <Icon name="chevron-down" color={theme.colors.primary} size={24} />
+            )}
+          </Dropdown>
+          <SelectPicker
+            style={pickerSelectStyles}
+            onValueChange={onActivityPickerChange}
+            items={activityItems}
+            value={activity.id}
+            ref={(selectPicker) => { activityPicker = selectPicker; }}
+          />
+        </TopContainer>
+      )}
+      { graphData.length > 0 && (
+        <>
+          <Text size="subHeader" align="center">
+            Score
+          </Text>
+          <LineChart
+            width={chartSize}
+            data={graphData}
+            xField="date"
+            yField="score"
+          />
+          <Text size="subHeader" align="center">
+            Time
+          </Text>
+          <LineChart
+            width={chartSize}
+            data={graphData}
+            xField="date"
+            yField="time"
+          />
+        </>
+      )}
     </Container>
+
   );
 }

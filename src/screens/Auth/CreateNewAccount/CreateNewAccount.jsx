@@ -23,19 +23,20 @@ type Props = {
   navigation: NavigationScreenProps
 }
 
-export default function CreateNewAccount({ navigation }: Props) {
+export default function CreateNewAccount({ navigation: { navigate, state } }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
 
   const [_, { register }] = useUser();
 
-  const goToProfileCreation = () => navigation.navigate('ProfileCreation');
-  const returnToSignIn = () => navigation.navigate('SignIn');
+  const goToProfileCreation = () => navigate('ProfileCreation');
+  const returnToSignIn = () => navigate('SignIn');
 
   const handleRegister = async () => {
+    const { isTherapist } = state.params;
     try {
-      await register(email, password);
+      await register(email, password, isTherapist);
       goToProfileCreation();
     } catch (err) {
       console.log(JSON.stringify(err));

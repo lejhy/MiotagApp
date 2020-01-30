@@ -9,7 +9,7 @@ import ActivitiesService from '@services/api/ActivitiesService';
 export const STORAGE_KEY = 'activities_cache';
 
 export default function useActivities() {
-  const [state, setState] = useState([]);
+  const [state, setState] = useState({ activities: [], logs: [] });
 
   const init = async () => {
     const str = await AsyncStorage.getItem(STORAGE_KEY);
@@ -33,6 +33,7 @@ export default function useActivities() {
     const logsResponse = await ActivitiesService.getAllLogs();
 
     let logs = [...logsResponse.data];
+    logs.sort((a, b) => new Date(a.date) - new Date(b.date));
     let activities = [];
     let disabledActivities = [];
     // eslint-disable-next-line

@@ -11,16 +11,33 @@ export const STORAGE_KEY = 'user';
 export default function useUser() {
   const [state, setState] = useState(null);
 
+  const clearUserData = async () => {
+    await AsyncStorage.removeItem(STORAGE_KEY);
+  };
+
   const init = async () => {
     const userStr = await AsyncStorage.getItem(STORAGE_KEY);
     if (userStr === null) return null;
-    const user = JSON.parse(userStr);
+    let user = JSON.parse(userStr);
+    const { email, password } = user;
+    try {
+      await UserService.login(email, password);
+    } catch (err) {
+      if (err.message === 'Network Error') {
+        console.warn('Could not connect to the server!');
+      } else if ((err.response || {}).status === 401) {
+        user = null;
+        await clearUserData();
+      } else {
+        console.warn(err);
+      }
+    }
     setState(user);
     return user;
   };
 
-  const register = async (email, password) => {
-    const response = await UserService.register({ email, password });
+  const register = async (email, password, therapist = false) => {
+    const response = await UserService.register({ email, password, therapist });
     const user = {
       ...response.data,
       password,
@@ -28,10 +45,6 @@ export default function useUser() {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     setState(user);
     return user;
-  };
-
-  const clearUserData = async () => {
-    await AsyncStorage.removeItem(STORAGE_KEY);
   };
 
   const login = async (email, password) => {
