@@ -41,6 +41,8 @@ export default function SignIn({ navigation }: Props) {
         goToProfileCreation();
       }
     } catch (err) {
+      console.log(err);
+      console.log(err.response);
       // TODO: error handling here
       console.warn('error');
     }
