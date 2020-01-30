@@ -4,8 +4,8 @@ import React, { PureComponent } from 'react';
 import { AppRegistry, PixelRatio } from 'react-native';
 import { GLView } from 'expo-gl';
 import {
-  AmbientLight,
-  BoxBufferGeometry,
+  AmbientLight, AnimationMixer,
+  BoxBufferGeometry, Clock,
   Fog,
   GridHelper,
   Mesh,
@@ -15,15 +15,20 @@ import {
   Raycaster,
   Scene,
   SpotLight,
-  Vector2
+  Vector2,
+  AnimationClip
 } from 'three';
 import Renderer from 'expo-three/build/Renderer';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Asset } from 'expo-asset';
 
 export default class FreeMode extends PureComponent {
   timeout: any;
   cubes: [] = [];
   raycaster = new Raycaster();
   pixelRatio = PixelRatio.get();
+  clock = new Clock();
+  mixer: any;
 
   constructor() {
     super();
@@ -35,8 +40,12 @@ export default class FreeMode extends PureComponent {
 
   update() {
     this.cubes.forEach((cube) => {
-      cube.rotation.y += 0.05;
-      cube.rotation.x += 0.025;
+      // cube.rotation.y += 0.05;
+      // cube.rotation.x += 0.025;
+      // cube.rotation.z += 0.025;
+      if(this.mixer) {
+        this.mixer.update(this.clock.getDelta());
+      }
     });
   }
 
@@ -72,18 +81,54 @@ export default class FreeMode extends PureComponent {
     spotLight.lookAt(scene.position);
     scene.add(spotLight);
 
-    const cube = new IconMesh();
-    scene.add(cube);
-    this.cubes.push(cube);
+    // const cube = new IconMesh();
+    // scene.add(cube);
+    // this.cubes.push(cube);
+    //
+    // camera.lookAt(cube.position);
 
-    camera.lookAt(cube.position);
+    const MODEL_PATH = Asset.fromModule(require('@assets/models/RiggedHand.glb')).uri;
+
+    let loader = new GLTFLoader();
+    loader.load(
+      MODEL_PATH,
+      (gltf) => {
+        // A lot is going to happen here
+        let model = gltf.scene;
+        let fileAnimations = gltf.animations;
+        console.log(fileAnimations);
+        scene.add(model);
+        model.traverse(o => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
+          }
+        });
+
+        model.scale.set(1, 1, 1);
+        model.rotation.y += 3.14;
+        // model.rotation.x += 1.5;
+        this.cubes.push(model);
+        camera.lookAt(model.position);
+
+        this.mixer = new AnimationMixer(model);
+        let anim = AnimationClip.findByName(fileAnimations, 'index');
+        let clip = this.mixer.clipAction(anim);
+        clip.play();
+      },
+      undefined, // We don't need this function
+      function(error) {
+        console.log(error);
+        console.error(error);
+      }
+    );
 
     // Setup an animation loop
     const render = () => {
       this.timeout = requestAnimationFrame(render);
       this.update();
       renderer.render(scene, camera);
-      gl.endFrameEXP();
+      gl.endFrameEXP(); //todo investigate
     };
     render();
   };
