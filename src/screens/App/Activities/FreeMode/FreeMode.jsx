@@ -1,20 +1,20 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { AppRegistry, PixelRatio, StyleSheet, View } from 'react-native';
+import { AppRegistry, PixelRatio, StyleSheet, SyntheticEvent, View } from 'react-native';
 import { GLView } from 'expo-gl';
 import {
   AmbientLight,
+  DirectionalLight,
+  Euler,
   Fog,
   GridHelper,
-  Math,
+  MathUtils,
   MeshPhongMaterial,
   PerspectiveCamera,
-  PointLight,
   Raycaster,
   Scene,
   SkinnedMesh,
-  SpotLight,
   Vector2,
   Vector3,
 } from 'three';
@@ -22,38 +22,31 @@ import Renderer from 'expo-three/build/Renderer';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Asset } from 'expo-asset';
 import Button from '@core/Button/Button';
+import { Device, Fingers } from '@core/Device/Device';
+
+const maxFingerRotation = MathUtils.degToRad(-90);
+const pixelRatio = PixelRatio.get();
 
 export default class FreeMode extends PureComponent {
-  renderer: Renderer;
-  camera: PerspectiveCamera;
-  scene: Scene;
-
-  loaded = false;
-
   state = {
-    mocking: false
+    mocking: false,
+    loaded: false
   };
 
-  timeout: any;
-  raycaster = new Raycaster();
-  pixelRatio = PixelRatio.get();
+  timeout: Number;
+  rayCaster = new Raycaster();
+  device = new Device();
 
+  renderer: Renderer;
+  camera: PerspectiveCamera;
+  cameraTarget = new Vector3();
+  scene: Scene;
   grid: GridHelper;
-  handScene: any;
-  handMesh: SkinnedMesh;
-  fingers = [[],[],[],[],[]];
-
-  values = [0,0,0,0,0];
-
-  mockState = [0.05, 0.04, 0.03, 0.02, 0.01];
-  mockValues() {
-    for(let i = 0; i < 5; i++) {
-      if(this.values[i] > 1 || this.values[i] < 0) {
-        this.mockState[i] *= -1;
-      }
-      this.values[i] += this.mockState[i];
-    }
-  }
+  hand = {
+    scene: (null: any),
+    mesh: (null: SkinnedMesh),
+    fingers: new Fingers(() => [])
+  };
 
   constructor() {
     super();
@@ -64,18 +57,40 @@ export default class FreeMode extends PureComponent {
   }
 
   update() {
-    if (this.loaded) {
-      this.handScene.rotation.y += 0.025;
-
-      for(let i = 0; i < 5; i++) {
-        let rotation = this.values[i] * Math.degToRad(-90);
-        this.fingers[i][1].rotation.z = rotation;
-        this.fingers[i][2].rotation.z = rotation;
+    if (this.state.loaded) {
+      if (this.state.mocking) {
+        this.device.mockAll();
       }
+
+      this.updateFingers();
+      this.updateAcc();
+      this.updateGyro();
+
+      this.camera.lookAt(this.cameraTarget.lerp(this.hand.scene.position, 0.1));
     }
-    if (this.state.mocking) {
-      this.mockValues();
+  }
+
+  updateFingers() {
+    for(const fingerName in this.device.fingers) {
+      let rotation = this.device.fingers[fingerName] * maxFingerRotation;
+      let finger = this.hand.fingers[fingerName];
+      finger[1].rotation.z = rotation;
+      finger[2].rotation.z = rotation;
     }
+  }
+
+  updateAcc() {
+    this.hand.scene.position.copy(this.device.acc).clampLength(0, 10);
+    this.hand.scene.position.multiplyScalar(0.1);
+  }
+
+  updateGyro() {
+    let alpha = MathUtils.degToRad( this.device.gyro.x );
+    let beta = MathUtils.degToRad( this.device.gyro.y );
+    let gamma = MathUtils.degToRad( this.device.gyro.z );
+    let euler = new Euler();
+    euler.set(alpha, beta, gamma);
+    this.hand.scene.quaternion.setFromEuler(euler);
   }
 
   onContextCreate = gl => {
@@ -88,26 +103,23 @@ export default class FreeMode extends PureComponent {
     this.renderer.setClearColor(sceneColor);
 
     this.camera = new PerspectiveCamera(70, width / height, 0.01, 1000);
-    this.camera.position.set(0, 2, 4);
-    this.camera.lookAt(new Vector3(0, 1.5, 0));
+    this.camera.position.set(0, 0.5, 5);
+    this.camera.far = 10;
+    this.camera.lookAt(this.cameraTarget);
 
 
     this.scene = new Scene();
     this.scene.fog = new Fog(sceneColor, 1, 10000);
     this.grid = new GridHelper(50, 50);
+    this.grid.position.set(0, -3, 0);
     this.scene.add(this.grid);
 
-    const ambientLight = new AmbientLight(0x101010);
+    const ambientLight = new AmbientLight(0x666666);
     this.scene.add(ambientLight);
 
-    const pointLight = new PointLight(0xffffff, 2, 1000, 1);
-    pointLight.position.set(0, 200, 200);
-    this.scene.add(pointLight);
-
-    const spotLight = new SpotLight(0xffffff, 0.5);
-    spotLight.position.set(0, 500, 100);
-    spotLight.lookAt(this.scene.position);
-    this.scene.add(spotLight);
+    const directionalLight = new DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(2, 1, 1);
+    this.scene.add(directionalLight);
 
     const MODEL_PATH = Asset.fromModule(require('@assets/models/RiggedHand.glb')).uri;
 
@@ -115,45 +127,28 @@ export default class FreeMode extends PureComponent {
     loader.load(
       MODEL_PATH,
       (gltf) => {
-        let model = gltf.scene;
-        this.scene.add(model);
-        this.handScene = model;
-        model.traverse(o => {
+        this.hand.scene = gltf.scene;
+        this.scene.add(this.hand.scene);
+        this.hand.scene.traverse(o => {
           if (o.isBone) {
-            switch (o.name.slice(0, o.name.length - 1)) {
-              case "Thumb":
-                this.fingers[0].push(o);
-                break;
-              case "Index":
-                this.fingers[1].push(o);
-                break;
-              case "Middle":
-                this.fingers[2].push(o);
-                break;
-              case "Ring":
-                this.fingers[3].push(o);
-                break;
-              case "Pinkie":
-                this.fingers[4].push(o);
-                break;
+            let name = o.name.slice(0, o.name.length - 1).toLowerCase();
+            for (const fingerName in this.hand.fingers) {
+              if (fingerName === name) {
+                this.hand.fingers[fingerName].push(o);
+              }
             }
-          } else if (o.isMesh) {
-
           }
           if (o.type === "SkinnedMesh") {
-            console.log(o);
-            this.handMesh = o;
+            this.hand.mesh = o;
+            o.castShadow = true;
+            o.receiveShadow = true;
             o.material = new MeshPhongMaterial({
-              color: 0xff0000,
+              color: 0x0CC2CC,
               skinning: true
             });
           }
         });
-
-        model.rotation.y += Math.degToRad(180);
-
-        this.loaded = true
-
+        this.state.loaded = true
       },
       (xhr) => {
           if(xhr.lengthConputable) {
@@ -180,16 +175,16 @@ export default class FreeMode extends PureComponent {
 
   touchStart(event: SyntheticEvent) {
     let position = new Vector2();
-    position.x = (event.nativeEvent.pageX * this.pixelRatio / this.renderer.domElement.width) * 2 - 1;
-    position.y = - (event.nativeEvent.pageY * this.pixelRatio / this.renderer.domElement.height) * 2 + 1;
+    position.x = (event.nativeEvent.pageX * pixelRatio / this.renderer.domElement.width) * 2 - 1;
+    position.y = - (event.nativeEvent.pageY * pixelRatio / this.renderer.domElement.height) * 2 + 1;
 
-    this.raycaster.setFromCamera( position, this.camera );
-    let handIntersects = this.raycaster.intersectObjects( [this.handMesh] );
+    this.rayCaster.setFromCamera( position, this.camera );
+    let handIntersects = this.rayCaster.intersectObjects( [this.hand.mesh] );
     if (handIntersects.length > 0) {
-      let color = this.handMesh.material.color;
-      color.r = Math.randFloat(0, 1);
-      color.g = Math.randFloat(0, 1);
-      color.b = Math.randFloat(0, 1);
+      let color = this.hand.mesh.material.color;
+      color.r = MathUtils.randFloat(0, 1);
+      color.g = MathUtils.randFloat(0, 1);
+      color.b = MathUtils.randFloat(0, 1);
     }
   }
 
@@ -220,6 +215,8 @@ const styles = StyleSheet.create({
   button: {
     width: '50%',
     position: 'absolute',
+    left: '25%',
+    bottom: '1%',
     zIndex: 999
   }
 });
