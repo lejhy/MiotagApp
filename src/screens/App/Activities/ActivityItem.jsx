@@ -50,9 +50,10 @@ type Props = {
     description: String,
     lastPlayed: String,
   },
+  onPlay: (any) => any,
 };
 
-export default function ActivityItem({ activity }: Props) {
+export default function ActivityItem({ activity, onPlay }: Props) {
   return (
     <Container>
       <TitleContainer>
@@ -69,7 +70,7 @@ export default function ActivityItem({ activity }: Props) {
         </LastPlayedContainer>
         <ButtonContainer>
           <View>
-            <Button variant="secondary">
+            <Button variant="secondary" onPress={onPlay}>
               Play
             </Button>
           </View>
