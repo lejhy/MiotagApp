@@ -34,6 +34,7 @@
 		D4242EF845BD418F93D212E7 /* Muli Extra Light Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DF34EFD83F5482190E68AC9 /* Muli Extra Light Italic.ttf */; };
 		F0D1FC27934642A4AF00695F /* Muli Extra Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AAD64F21D7334804BFE97273 /* Muli Extra Bold.ttf */; };
 		F6A76D1E823BD0790D802E17 /* libPods-miotag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B06708BD1B52260138B994 /* libPods-miotag.a */; };
+		FD774B5A23E1B96E00CDEAC0 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD774B5923E1B96E00CDEAC0 /* Bluetooth.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,8 @@
 		EF86F888C03D5A0652A91FC1 /* Pods-miotagTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotagTests.debug.xcconfig"; path = "Target Support Files/Pods-miotagTests/Pods-miotagTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F30EF57F3711AA2CB98D72AD /* Pods-miotag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-miotag.release.xcconfig"; path = "Target Support Files/Pods-miotag/Pods-miotag.release.xcconfig"; sourceTree = "<group>"; };
 		F6741C415B4149749AFCF701 /* Muli Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Muli Bold.ttf"; path = "../src/assets/fonts/Muli Bold.ttf"; sourceTree = "<group>"; };
+		FD774B5823E1B96E00CDEAC0 /* miotag-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "miotag-Bridging-Header.h"; sourceTree = "<group>"; };
+		FD774B5923E1B96E00CDEAC0 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +211,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				FD774B5923E1B96E00CDEAC0 /* Bluetooth.swift */,
 				13B07FAE1A68108700A75B9A /* miotag */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* miotagTests */,
@@ -215,6 +219,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				FF12EAE5A03BEBE66C7A72F6 /* Pods */,
 				73FCA6A4D7A948D188F82EF8 /* Resources */,
+				FD774B5823E1B96E00CDEAC0 /* miotag-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = F3BQYE7K87;
+						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -647,6 +653,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				FD774B5A23E1B96E00CDEAC0 /* Bluetooth.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -700,6 +707,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EF86F888C03D5A0652A91FC1 /* Pods-miotagTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = F3BQYE7K87;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -724,6 +732,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5E0A6DA8C673118005308331 /* Pods-miotagTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = F3BQYE7K87;
@@ -746,6 +755,7 @@
 			baseConfigurationReference = 837A2BDCFC42209FEBBF0D18 /* Pods-miotag.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -761,6 +771,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = miotag;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "miotag-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -770,6 +783,7 @@
 			baseConfigurationReference = F30EF57F3711AA2CB98D72AD /* Pods-miotag.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -784,6 +798,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = miotag;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "miotag-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
