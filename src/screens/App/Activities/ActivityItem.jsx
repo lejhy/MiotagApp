@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { GRAY, LIGHT_GRAY } from '@styles/colors';
 import { SUB_HEADER } from '@styles/fonts';
 import { Button, Text } from '@core';
+import type { NavigationScreenProps } from "react-navigation";
+import { withNavigation } from 'react-navigation';
 
 const Container = styled.View`
   display: flex;
@@ -50,10 +52,10 @@ type Props = {
     description: String,
     lastPlayed: String,
   },
-  onPlay: (any) => any,
+  navigation: NavigationScreenProps
 };
 
-export default function ActivityItem({ activity, onPlay }: Props) {
+function ActivityItem({ activity, navigation }: Props) {
   return (
     <Container>
       <TitleContainer>
@@ -70,7 +72,10 @@ export default function ActivityItem({ activity, onPlay }: Props) {
         </LastPlayedContainer>
         <ButtonContainer>
           <View>
-            <Button variant="secondary" onPress={onPlay}>
+            <Button
+              variant="secondary"
+              onPress={() => navigation.navigate(activity.name)}
+            >
               Play
             </Button>
           </View>
@@ -79,3 +84,5 @@ export default function ActivityItem({ activity, onPlay }: Props) {
     </Container>
   );
 }
+
+export default withNavigation(ActivityItem);

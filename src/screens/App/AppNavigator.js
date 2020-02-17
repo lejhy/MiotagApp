@@ -13,6 +13,7 @@ import Friends from './Friends';
 import Profile from './Profile';
 import UserSearch from './UserSearch';
 import Chat from './Chat';
+import Debug from './Activities/Debug';
 
 const AppNavigator = createStackNavigator({
   Dashboard: {
@@ -21,8 +22,11 @@ const AppNavigator = createStackNavigator({
   Activities: {
     screen: Activities,
   },
-  FreeMode: {
+  "Free Mode": {
     screen: FreeMode,
+  },
+  "BLE Debug": {
+    screen: Debug,
   },
   Progress: {
     screen: Progress,
