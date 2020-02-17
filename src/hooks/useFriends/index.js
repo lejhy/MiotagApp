@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import UserService from '@services/api/UserService';
+import RelationService from '@services/api/RelationService';
 
 export const STORAGE_KEY = 'friends_cache';
 
@@ -19,7 +19,7 @@ export default function useFriends() {
   };
 
   const refresh = async () => {
-    const followResponse = await UserService.getUsersFollowed();
+    const followResponse = await RelationService.getUsersFollowed();
 
     const newState = followResponse.data;
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newState));

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import UserService from '@services/api/UserService';
+import RelationService from '@services/api/RelationService';
 import ActivitiesService from '@services/api/ActivitiesService';
 
 import useFriends from '../useFriends';
@@ -27,8 +28,8 @@ export default function useProfile(id: Number) {
 
   const toggleFriend = async () => {
     const method = isFriend
-      ? UserService.unfollowUser(user)
-      : UserService.followUser(user);
+      ? RelationService.unfollowUser(id)
+      : RelationService.followUser(id);
 
     setFriend(undefined);
     await method;
