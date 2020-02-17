@@ -178,7 +178,11 @@ android {
     }
 }
 
+apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
+
 dependencies {
+    addUnimodulesDependencies()
+
     implementation project(':react-native-ble-plx')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
