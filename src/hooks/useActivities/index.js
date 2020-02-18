@@ -23,7 +23,7 @@ export default function useActivities() {
     if (!logs) {
       return null;
     }
-    const logsFiltered = logs.filter((l) => l.id === id);
+    const logsFiltered = logs.filter((l) => l.activity.id === id);
     logsFiltered.sort((a, b) => new Date(b.date) - new Date(a.date));
     return logsFiltered[0];
   };
@@ -59,6 +59,21 @@ export default function useActivities() {
     return newState;
   };
 
+  const newLog = async (activityId, length, score) => {
+    const log = {
+      activity: activityId,
+      length: length,
+      score: score
+    };
+    const newLogResponse = await ActivitiesService.newLog(log);
+    const logs = [...logs, newLogResponse];
+
+    const newState = { activities, logs };
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+    setState(newState);
+    return newState;
+  };
+
   useEffect(() => {
     init();
   }, []);
@@ -67,6 +82,7 @@ export default function useActivities() {
   const methods = {
     init,
     refresh,
+    newLog,
   };
   return [state, methods];
 }
