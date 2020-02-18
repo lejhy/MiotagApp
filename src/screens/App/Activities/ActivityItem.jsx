@@ -74,7 +74,7 @@ function ActivityItem({ activity, navigation }: Props) {
           <View>
             <Button
               variant="secondary"
-              onPress={() => navigation.navigate(activity.name)}
+              onPress={() => navigation.navigate(activity.name, {id: activity.id})}
             >
               Play
             </Button>

@@ -26,17 +26,20 @@ import { Device, Fingers } from '@core/Device/Device';
 import { readAsStringAsync } from 'expo-file-system';
 import { FileSystem } from 'react-native-unimodules';
 import { decode } from 'base64-arraybuffer';
+import ActivitiesService from '@services/api/ActivitiesService';
 
 const maxFingerRotation = MathUtils.degToRad(-90);
 const pixelRatio = PixelRatio.get();
 
 export default class FreeMode extends PureComponent {
+
   state = {
     mocking: false,
     loaded: false
   };
 
-  timeout: Number;
+  createdAt = new Date();
+  renderTimeout: Number;
   rayCaster = new Raycaster();
   device = new Device();
 
@@ -51,12 +54,19 @@ export default class FreeMode extends PureComponent {
     fingers: new Fingers(() => [])
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeout);
+    clearTimeout(this.renderTimeout);
+    ActivitiesService.newLog({
+      activity: {
+        id: this.props.navigation.getParam('id')
+      },
+      length: new Date() - this.createdAt,
+      score: 0
+    });
   }
 
   update() {
@@ -167,7 +177,7 @@ export default class FreeMode extends PureComponent {
 
     // Setup an animation loop
     const render = () => {
-      this.timeout = requestAnimationFrame(render);
+      this.renderTimeout = requestAnimationFrame(render);
       this.update();
       this.renderer.render(this.scene, this.camera);
       gl.endFrameEXP();
