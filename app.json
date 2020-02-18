@@ -1,4 +1,9 @@
 {
   "name": "miotag",
-  "displayName": "miotag"
+  "displayName": "miotag",
+  "expo": {
+    "packagerOpts": {
+      "config": "metro.config.js"
+    }
+  }
 }

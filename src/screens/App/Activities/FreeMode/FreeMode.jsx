@@ -23,6 +23,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Asset } from 'expo-asset';
 import Button from '@core/Button/Button';
 import { Device, Fingers } from '@core/Device/Device';
+import { readAsStringAsync } from 'expo-file-system';
+import { FileSystem } from 'react-native-unimodules';
+import { decode } from 'base64-arraybuffer';
 
 const maxFingerRotation = MathUtils.degToRad(-90);
 const pixelRatio = PixelRatio.get();
@@ -93,7 +96,7 @@ export default class FreeMode extends PureComponent {
     this.hand.scene.quaternion.setFromEuler(euler);
   }
 
-  onContextCreate = gl => {
+  onContextCreate = async gl => {
     const { drawingBufferWidth: width, drawingBufferHeight: height } = gl;
     const sceneColor = 0x101010;
 
@@ -121,11 +124,17 @@ export default class FreeMode extends PureComponent {
     directionalLight.position.set(2, 1, 1);
     this.scene.add(directionalLight);
 
-    const MODEL_PATH = Asset.fromModule(require('@assets/models/RiggedHand.glb')).uri;
+    const asset = Asset.fromModule(require('@assets/models/RiggedHand.glb'));
+    if (!asset.localUri) {
+      await asset.downloadAsync();
+    }
+    const assetBase64 = await readAsStringAsync(asset.localUri, {encoding: FileSystem.EncodingType.Base64});
+    let assetArrayBuffer = decode(assetBase64);
 
-    let loader = new GLTFLoader();
-    loader.load(
-      MODEL_PATH,
+    const loader = new GLTFLoader();
+    loader.parse(
+      assetArrayBuffer,
+      null,
       (gltf) => {
         this.hand.scene = gltf.scene;
         this.scene.add(this.hand.scene);
@@ -150,14 +159,7 @@ export default class FreeMode extends PureComponent {
         });
         this.state.loaded = true
       },
-      (xhr) => {
-          if(xhr.lengthConputable) {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-          } else {
-            console.log(xhr.loaded + ' loaded');
-          }
-      },
-      (error) => {
+    (error) => {
         console.log(error);
         console.error(error);
       }
