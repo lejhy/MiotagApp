@@ -19,6 +19,7 @@ export default function Model() {
         ["piq_307048.png", "Mario Mushroom", "mrskittens2003", "piq.codeus.net", "http://piq.codeus.net/picture/307048/mario_mushroom", "Creative Commons"]
     ];
 
+    var running = false;
     var currentLevel;
     var aR = 9/16; // aspectRatio, how many times is normalized x smaller that normalized y
     var paddle = [];
@@ -26,13 +27,13 @@ export default function Model() {
     var walls = [];
     var bricks = [];
     var physics = new Physics();
-    const substeps = 10;
+    const maxSubstepDeltaTime = 3;
 
     function restart() {
         paddle = new Paddle(new Rectangle(new Vector2(0.35*aR, 0.95), new Vector2(0.7*aR, 0.97)), 0, aR);
         createWalls();
         loadLevel();
-        balls = [new Ball(new Circle(new Vector2(0.5*aR, 0.5), 0.02), new Vector2(-0.0002, -0.0002))];
+        balls = [new Ball(new Circle(new Vector2(0.5*aR, 0.5), 0.02), new Vector2(-0.002, -0.002))];
         notify();
     }
 
@@ -52,7 +53,6 @@ export default function Model() {
                 bricks.push(new Brick(new Rectangle(new Vector2(j*a, (14+i)*a), new Vector2((j+1)*a, (14+i+1)*a)), colours[i]));
             }
         }
-        notify();
     }
 
     function newGame() {
@@ -60,34 +60,51 @@ export default function Model() {
         restart();
     }
 
+    function startGame() {
+        running = true;
+    }
+
     function nextLevel() {
         currentLevel++;
         if (currentLevel === levels.length) {
-            notify("GAME_WON");
+            gameWon();
         } else {
             restart();
         }
     }
 
     function gameOver() {
-        currentLevel = 0;
+        running = false;
         notify("GAME_OVER");
+    }
+
+    function gameWon() {
+        running = false;
+        notify("GAME_WON");
     }
 
     function getLevels() {
         return levels;
     }
 
-    function tick(dTime, input) {
-        for (var i = 1; i <= substeps; i++) {
-            var subDTime = dTime/substeps;
-            var scaledInput = input*subDTime;
-            scaledInput *= 0.0004;
-            paddle.move(scaledInput);
-            var collisions = physics.resolve(subDTime, balls, getObstacles());
-            resolveCollisions(collisions);
+    function tick(dTime) {
+        if (running) {
+            while (dTime > maxSubstepDeltaTime) {
+                subTick(maxSubstepDeltaTime);
+                dTime -= maxSubstepDeltaTime;
+            }
+            subTick(dTime);
         }
-        notify();
+        notify()
+    }
+
+    function subTick(subDTime) {
+        var input = 0; //TODO
+        var scaledInput = input * subDTime;
+        scaledInput *= 0.0004;
+        paddle.move(scaledInput);
+        var collisions = physics.resolve(subDTime, balls, getObstacles());
+        resolveCollisions(collisions);
     }
 
     function resolveCollisions(collisions) {
@@ -153,6 +170,7 @@ export default function Model() {
 
     return {
         newGame : newGame,
+        startGame: startGame,
         tick : tick,
         getLevels : getLevels,
         getPaddle : getPaddle,

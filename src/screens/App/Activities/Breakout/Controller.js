@@ -5,7 +5,6 @@ export default function Controller(model, view) {
         MENU : {
             onEnter : function() {
                 model.newGame();
-                renderGame();
                 view.addHeader("MENU");
                 view.addButton("Singleplayer", transition, states.SP_RUNNING);
                 view.addButton("Attributions", transition, states.ATTRIBUTIONS);
@@ -19,7 +18,7 @@ export default function Controller(model, view) {
         },
         SP_RUNNING : {
             onEnter : function() {
-                startSpLoop();
+                model.startGame();
             },
             onUpdate : function(args) {
                 if (args === "GAME_OVER") {
@@ -31,7 +30,7 @@ export default function Controller(model, view) {
                 }
             },
             onLeave : function() {
-                stopLoop();
+                // nothing
             }
         },
         GAME_OVER : {
@@ -105,8 +104,8 @@ export default function Controller(model, view) {
 
     function init() {
         model.addObserver(this);
+        view.app.ticker.add(deltaTime => model.tick(deltaTime));
         state.onEnter();
-        renderGame();
     }
 
     function transition(nextState) {
@@ -121,18 +120,6 @@ export default function Controller(model, view) {
 
     function update(args) {
         state.onUpdate(args);
-    }
-
-    function spTick() {
-        model.tick(dTime, view.getTilt());
-    }
-
-    function startSpLoop() {
-        intervalID = setInterval(spTick, dTime);
-    }
-
-    function stopLoop() {
-        clearInterval(intervalID);
     }
 
     function renderGame() {
