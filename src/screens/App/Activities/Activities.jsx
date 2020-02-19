@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 import styled from 'styled-components';
 
 import useActivities from '@hooks/useActivities';
@@ -9,8 +9,12 @@ import { ScreenHeader } from '@core';
 
 import ActivityItem from './ActivityItem';
 
-const ScrollContainer = styled.ScrollView`
-  height: 100%;
+const SafeAreaView = styled.SafeAreaView`
+  flex: 1;
+`;
+
+const ScrollView = styled.ScrollView`
+  flex: 1;
   padding: 5%;
 `;
 
@@ -33,7 +37,7 @@ export default function Activities() {
   return (
     <SafeAreaView>
       <ScreenHeader title="Activities" includeBackButton />
-      <ScrollContainer
+      <ScrollView
         refreshControl={(
           <RefreshControl
             refreshing={refreshing}
@@ -47,7 +51,7 @@ export default function Activities() {
         { (activities && activities.length > 0) && activities.map((a) => (
           <ActivityItem activity={a} key={a.id} />
         ))}
-      </ScrollContainer>
+      </ScrollView>
     </SafeAreaView>
   );
 }
