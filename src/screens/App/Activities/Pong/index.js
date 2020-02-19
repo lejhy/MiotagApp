@@ -1,5 +1,6 @@
 // @flow
 
 import Pong from './Pong';
+import withMiotag from '../withMiotag';
 
-export default Pong;
+export default withMiotag()(Pong);
