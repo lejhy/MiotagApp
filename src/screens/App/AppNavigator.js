@@ -23,10 +23,10 @@ const AppNavigator = createStackNavigator({
   Activities: {
     screen: Activities,
   },
-  "Free Mode": {
+  'Free Mode': {
     screen: FreeMode,
   },
-  "BLE Debug": {
+  'BLE Debug': {
     screen: Debug,
   },
   "Breakout": {
