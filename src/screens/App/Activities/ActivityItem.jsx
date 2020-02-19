@@ -56,6 +56,8 @@ type Props = {
 };
 
 function ActivityItem({ activity, navigation }: Props) {
+  const onPressHandler = () => navigation.navigate(activity.name, { id: activity.id });
+
   return (
     <Container>
       <TitleContainer>
@@ -74,7 +76,7 @@ function ActivityItem({ activity, navigation }: Props) {
           <View>
             <Button
               variant="secondary"
-              onPress={() => navigation.navigate(activity.name, {id: activity.id})}
+              onPress={onPressHandler}
             >
               Play
             </Button>
