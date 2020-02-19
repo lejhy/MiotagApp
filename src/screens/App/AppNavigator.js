@@ -5,6 +5,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Dashboard from './Dashboard';
 import Activities from './Activities';
 import FreeMode from './Activities/FreeMode';
+import Breakout from './Activities/Breakout';
 import Progress from './Progress';
 import Settings from './Settings';
 import Messages from './Messages';
@@ -27,6 +28,9 @@ const AppNavigator = createStackNavigator({
   },
   "BLE Debug": {
     screen: Debug,
+  },
+  "Breakout": {
+    screen: Breakout,
   },
   Progress: {
     screen: Progress,
