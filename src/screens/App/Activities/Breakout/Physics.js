@@ -19,18 +19,28 @@ export function Physics() {
             var nearestX = Math.max(obstacle.position.x, Math.min(ball.position.x, obstacle.position.x + obstacle.width));
             var nearestY = Math.max(obstacle.position.y, Math.min(ball.position.y, obstacle.position.y + obstacle.height));
 
-            const distX = nearestX - ball.position.x;
-            const distY = nearestY - ball.position.y;
-            const distance = Math.sqrt((distX*distX) + (distY*distY));
+            const distanceX = nearestX - ball.position.x;
+            const distanceY = nearestY - ball.position.y;
+            const distanceMagnitude = Math.sqrt((distanceX*distanceX) + (distanceY*distanceY));
+            const radius = ball.width / 2;
 
-            if (distance <= (ball.width / 2)) {
+            if (distanceMagnitude <= radius) {
                 console.log("COLLISION");
-                var normX = distX / distance;
-                var normY = distY / distance;
-                var dot = ball.velocity.x * normX + ball.velocity.y * normY;
+                var normalisedDistanceX = distanceX / distanceMagnitude;
+                var normalisedDistanceY = distanceY / distanceMagnitude;
 
-                ball.velocity.x -= 2 * dot * normX;
-                ball.velocity.y -= 2 * dot * normY;
+                var velocityMagnitude = Math.sqrt((ball.velocity.x*ball.velocity.x) + (ball.velocity.y*ball.velocity.y));
+                var normalisedVelocityX = ball.velocity.x / velocityMagnitude;
+                var normalisedVelocityY = ball.velocity.y / velocityMagnitude;
+
+                var penetrationDepth = radius - distanceMagnitude;
+                ball.position.x -= normalisedVelocityX * penetrationDepth;
+                ball.position.y -= normalisedVelocityY * penetrationDepth;
+
+                var dot = ball.velocity.x * normalisedDistanceX + ball.velocity.y * normalisedDistanceY;
+
+                ball.velocity.x -= 2 * dot * normalisedDistanceX;
+                ball.velocity.y -= 2 * dot * normalisedDistanceY;
 
                 collisions.push(new Collision(ball, obstacle))
             }
