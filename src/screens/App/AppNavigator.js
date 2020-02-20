@@ -17,12 +17,6 @@ import UserSearch from './UserSearch';
 import Chat from './Chat';
 
 const AppNavigator = createStackNavigator({
-  Dashboard: {
-    screen: Dashboard,
-  },
-  Activities: {
-    screen: Activities,
-  },
   // games
   'Free Mode': {
     screen: FreeMode,
@@ -44,6 +38,16 @@ const AppNavigator = createStackNavigator({
   },
   Breakout: {
     screen: Breakout,
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+  },
+  // rest of the screens
+  Dashboard: {
+    screen: Dashboard,
+  },
+  Activities: {
+    screen: Activities,
   },
   Progress: {
     screen: Progress,
