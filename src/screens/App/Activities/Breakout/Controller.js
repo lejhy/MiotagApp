@@ -10,7 +10,7 @@ export default function Controller(model, view) {
                 view.addButton("Attributions", transition, states.ATTRIBUTIONS);
             },
             onUpdate : function(args) {
-                renderGame();
+                // nothing
             },
             onLeave : function() {
                 view.eraseMenu();
@@ -25,8 +25,6 @@ export default function Controller(model, view) {
                     transition(states.GAME_OVER);
                 } else if (args === "GAME_WON") {
                     transition(states.GAME_WON);
-                } else {
-                    renderGame();
                 }
             },
             onLeave : function() {
@@ -39,7 +37,7 @@ export default function Controller(model, view) {
                 view.addButton("Back", transition, states.MENU);
             },
             onUpdate : function(args) {
-                renderGame();
+                // nothing
             },
             onLeave : function() {
                 view.eraseMenu();
@@ -51,7 +49,7 @@ export default function Controller(model, view) {
                 view.addButton("Back", transition, states.MENU);
             },
             onUpdate : function(args) {
-                renderGame();
+                // nothing
             },
             onLeave : function() {
                 view.eraseMenu();
@@ -64,14 +62,14 @@ export default function Controller(model, view) {
                 for (var i = 0; i < levels.length; i++) {
                     view.addParagraph("Level "+i+": "+levels[i][1]);
                     view.addParagraph("by "+levels[i][2]);
-                    view.addParagraph("from <a href='"+levels[i][4]+"'>"+levels[i][3]+"</a>");
+                    view.addParagraph("from "+levels[i][3]);
                     view.addParagraph("under "+levels[i][5]);
                     view.addParagraph("~~~~~~~~~~~~~")
                 }
                 view.addButton("Back", transition, states.MENU);
             },
             onUpdate : function(args) {
-                renderGame();
+                // nothing
             },
             onLeave : function() {
                 view.eraseMenu();
@@ -79,40 +77,17 @@ export default function Controller(model, view) {
         }
     };
 
-    // Transition table must be implemented after states declaration
-    states.MENU.transitions = [
-        states.SP_RUNNING, states.ATTRIBUTIONS
-    ];
-    states.SP_RUNNING.transitions = [
-        states.GAME_OVER, states.GAME_WON
-    ];
-    states.GAME_OVER.transitions = [
-        states.MENU
-    ];
-    states.GAME_WON.transitions = [
-        states.MENU
-    ];
-    states.ATTRIBUTIONS.transitions = [
-        states.MENU
-    ];
-
     // Initial state
     var state = states.MENU;
-
-    var intervalID;
-    var dTime = 1000/60;
 
     function init() {
         model.addObserver(this);
         view.app.ticker.add(deltaTime => model.tick(deltaTime));
+        view.app.stage.addChild(model.scene);
         state.onEnter();
     }
 
     function transition(nextState) {
-        // Check that the transition is valid
-        if (state.transitions.indexOf(nextState) < 0) {
-            throw "Illegal state exception";
-        }
         state.onLeave();
         state = nextState;
         state.onEnter();
@@ -120,21 +95,6 @@ export default function Controller(model, view) {
 
     function update(args) {
         state.onUpdate(args);
-    }
-
-    function renderGame() {
-        var currentModel = model;
-        view.drawBackground();
-        view.drawPaddle(currentModel.getPaddle().getRect());
-        currentModel.getBalls().forEach(function(ball) {
-            view.drawBall(ball.getCirc());
-        });
-        currentModel.getWalls().forEach(function(wall) {
-            view.drawWall(wall.getRect(), wall.getColour());
-        });
-        currentModel.getBricks().forEach(function(brick) {
-            view.drawBrick(brick.getRect(), brick.getColour());
-        });
     }
 
     return {

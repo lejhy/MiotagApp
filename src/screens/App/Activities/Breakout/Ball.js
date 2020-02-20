@@ -1,43 +1,33 @@
 /* jshint -W097 */
 "use strict";
 
-import { Rectangle, Vector2 } from './Physics';
+import { PIXI } from 'expo-pixi';
 
-export default function Ball (circ, vel) {
+export default class Ball extends PIXI.Graphics {
 
-    function move(dTime) {
-        circ.o = circ.o.add(vel.mult(dTime));
-        return new Vector2()
+    constructor(x, y, radius, velocity) {
+        super();
+        this.beginFill(0x006344);
+        this.drawCircle(0, 0, radius);
+        this.endFill();
+
+        this.position.x = x;
+        this.position.y = y;
+
+        this.velocity = velocity
     }
 
-    function flipHorizontally() {
-        vel = vel.flip("x");
+    move(dTime) {
+        const distance = this.velocity.mult(dTime);
+        position.x += distance.x;
+        position.y += distance.y;
     }
 
-    function flipVertically() {
-        vel = vel.flip("y");
+    flipHorizontally() {
+        this.velocity = this.velocity.flip("x");
     }
 
-    function getRect() {
-        var vMin = new Vector2(circ.o.x - circ.r, circ.o.y - circ.r);
-        var vMax = new Vector2(circ.o.x + circ.r, circ.o.y + circ.r);
-        return new Rectangle(vMin, vMax);
-    }
-
-    function getCirc() {
-        return circ;
-    }
-
-    function getVelocity() {
-        return vel;
-    }
-
-    return {
-        move : move,
-        flipHorizontally : flipHorizontally,
-        flipVertically : flipVertically,
-        getRect : getRect,
-        getCirc : getCirc,
-        getVelocity : getVelocity
+    flipVertically() {
+        this.velocity = this.velocity.flip("y");
     }
 }

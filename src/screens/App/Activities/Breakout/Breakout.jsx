@@ -20,6 +20,7 @@ export default class Breakout extends PureComponent {
   pS: Number;
   tilt = 0;
   menu = null;
+  scene = new PIXI.Container();
 
   constructor(props) {
     super(props);
@@ -29,7 +30,7 @@ export default class Breakout extends PureComponent {
     this.app = new PIXI.Application({ context });
     this.app.renderer.backgroundColor = 0xFFFFFF;
     this.pS = this.app.screen.height;
-    const model = new Model();
+    const model = new Model(this.app.screen.width, this.app.screen.height);
     const controller = new Controller(model, this);
     controller.init();
   };
@@ -42,46 +43,6 @@ export default class Breakout extends PureComponent {
       length: new Date() - this.createdAt,
       score: 0
     });
-  }
-
-  drawBackground() {
-    // var grad = bufferCtx.createLinearGradient(0,0,0,this.pS);
-    // grad.addColorStop(0,"#4087c5");
-    // grad.addColorStop(1,"#71abd6");
-    // bufferCtx.fillStyle = grad;
-    // bufferCtx.fillRect(0, 0, this.pS*aR, this.pS);
-    this.app.stage.removeChildren().forEach(child => child.destroy());
-  }
-
-  drawPaddle(rect) {
-    let rectangle = new PIXI.Graphics;
-    rectangle.beginFill(0x810F7C);
-    rectangle.lineStyle(1, 0, 0);
-    rectangle.drawRect(rect.vMin.x*this.pS, rect.vMin.y*this.pS, rect.getWidth()*this.pS, rect.getHeight()*this.pS);
-    this.app.stage.addChild(rectangle);
-  }
-
-  drawBall(circ) {
-    let circle = new PIXI.Graphics;
-    circle.beginFill(0x006344);
-    circle.drawCircle(circ.o.x*this.pS, circ.o.y*this.pS, circ.r*this.pS)
-    this.app.stage.addChild(circle);
-  }
-
-  drawWall(rect, colour) {
-    let rectangle = new PIXI.Graphics;
-    rectangle.beginFill(colour);
-    rectangle.lineStyle(1, 0, 0);
-    rectangle.drawRect(rect.vMin.x*this.pS, rect.vMin.y*this.pS, rect.getWidth()*this.pS, rect.getHeight()*this.pS);
-    this.app.stage.addChild(rectangle);
-  }
-
-  drawBrick(rect, colour) {
-    let rectangle = new PIXI.Graphics;
-    rectangle.beginFill(colour);
-    rectangle.lineStyle(1, 0, 0);
-    rectangle.drawRect(rect.vMin.x*this.pS, rect.vMin.y*this.pS, rect.getWidth()*this.pS, rect.getHeight()*this.pS);
-    this.app.stage.addChild(rectangle);
   }
 
   getTilt() {

@@ -1,19 +1,18 @@
 /* jshint -W097 */
 "use strict";
 
+import { PIXI } from 'expo-pixi';
 
-export default function Brick(rect, colour) {
+export default class Brick extends PIXI.Graphics {
 
-    function getRect() {
-        return rect;
-    }
+    constructor(x, y, width, height, colour) {
+        super();
+        this.beginFill(colour);
+        this.lineStyle(1, 0x000000, 1, 0);
+        this.drawRect(0, 0, width, height);
+        this.endFill();
 
-    function getColour() {
-        return colour
-    }
-
-    return {
-        getRect : getRect,
-        getColour : getColour
+        this.position.x = x;
+        this.position.y = y;
     }
 }

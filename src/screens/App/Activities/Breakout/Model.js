@@ -3,11 +3,11 @@
 
 import Ball from './Ball';
 import Paddle from './Paddle';
-import Wall from './Wall';
 import { Circle, Physics, Rectangle, Vector2 } from './Physics';
 import Brick from './Brick';
+import { PIXI } from 'expo-pixi';
 
-export default function Model() {
+export default function Model(width, height) {
 
     var observers = [];
 
@@ -21,7 +21,6 @@ export default function Model() {
 
     var running = false;
     var currentLevel;
-    var aR = 9/16; // aspectRatio, how many times is normalized x smaller that normalized y
     var paddle = [];
     var balls = [];
     var walls = [];
@@ -29,29 +28,36 @@ export default function Model() {
     var physics = new Physics();
     const maxSubstepDeltaTime = 3;
 
+    var scene = new PIXI.Container();
+
     function restart() {
-        paddle = new Paddle(new Rectangle(new Vector2(0.35*aR, 0.95), new Vector2(0.7*aR, 0.97)), 0, aR);
+        paddle = new Paddle(0.35*width, 0.95*height, 0.35*width, 0.02*height, 0, width);
         createWalls();
         loadLevel();
-        balls = [new Ball(new Circle(new Vector2(0.5*aR, 0.5), 0.02), new Vector2(-0.002, -0.002))];
-        notify();
+        balls = [new Ball(0.5*width, 0.5*height, 0.02*height, new Vector2(-0.002*height, -0.002*height))];
+
+        scene.addChild(paddle);
+        walls.forEach(wall => scene.addChild(wall));
+        bricks.forEach(brick => scene.addChild(brick));
+        balls.forEach(ball => scene.addChild(ball));
     }
 
     function createWalls() {
-        var bottomWall = new Wall(new Rectangle(new Vector2(-aR, 1), new Vector2(2*aR, 2)), 0x000000);
-        var leftWall = new Wall(new Rectangle(new Vector2(-aR, -1), new Vector2(0, 2)), 0x000000);
-        var topWall = new Wall(new Rectangle(new Vector2(-aR, -1), new Vector2(2*aR, 0)), 0x000000);
-        var rightWall = new Wall(new Rectangle(new Vector2(aR, -1), new Vector2(2*aR, 2)), 0x000000);
+        let bottomWall = new Brick(-width, height, 3*width, height, 0x000000);
+        let leftWall = new Brick(-width, -height, width, 3*height, 0x000000);
+        let topWall = new Brick(-width, -height, 3*width, height, 0x000000);
+        let rightWall = new Brick(width, -height, width, 3*height, 0x000000);
         walls = [bottomWall, leftWall, topWall, rightWall];
     }
 
     function loadLevel() { // TODO revert back to images
         bricks = [];
-        var a = 1/32;
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 18; j++) {
-                bricks.push(new Brick(new Rectangle(new Vector2(j*a, (14+i)*a), new Vector2((j+1)*a, (14+i+1)*a)), colours[i]));
+        var colourIndex = 0;
+        for (var i = 14/32; i < 18/32; i+=1/32) {
+            for (var j = 0; j < 1; j+=1/18) {
+                bricks.push(new Brick(j*width, i*height, 1/18*width, 1/32*height, colours[colourIndex]));
             }
+            colourIndex++;
         }
     }
 
@@ -95,13 +101,12 @@ export default function Model() {
             }
             subTick(dTime);
         }
-        notify()
     }
 
     function subTick(subDTime) {
         var input = 0; //TODO
         var scaledInput = input * subDTime;
-        scaledInput *= 0.0004;
+        scaledInput *= 0.0004*width;
         paddle.move(scaledInput);
         var collisions = physics.resolve(subDTime, balls, getObstacles());
         resolveCollisions(collisions);
@@ -127,30 +132,14 @@ export default function Model() {
     }
 
     function getObstacles() {
-        var obstacles = [paddle];
-        walls.forEach(function(wall) {
-            obstacles.push(wall);
-        });
-        bricks.forEach(function(brick) {
-            obstacles.push(brick);
-        });
+        // var obstacles = [paddle];
+        // walls.forEach(function(wall) {
+        //     obstacles.push(wall);
+        // });
+        // bricks.forEach(function(brick) {
+        //     obstacles.push(brick);
+        // });
         return obstacles;
-    }
-
-    function getPaddle() {
-        return paddle;
-    }
-
-    function getBalls() {
-        return balls;
-    }
-
-    function getWalls() {
-        return walls;
-    }
-
-    function getBricks() {
-        return bricks;
     }
 
     function addObserver(observer) {
@@ -173,11 +162,8 @@ export default function Model() {
         startGame: startGame,
         tick : tick,
         getLevels : getLevels,
-        getPaddle : getPaddle,
-        getBalls : getBalls,
-        getWalls : getWalls,
-        getBricks : getBricks,
         addObserver: addObserver,
-        removeObserver: removeObserver
+        removeObserver: removeObserver,
+        scene: scene
     }
 }
