@@ -4677,6 +4677,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+matter-js@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/matter-js/-/matter-js-0.14.2.tgz#8169af9e06fdc356ba9e72b49624eb329839883b"
+  integrity sha512-3ttVT8cJlQnGRjBa8MyVrGyvGmnmOkZ3YsyemIw+KwEEdVi70mo32FH1Eta2b3GfdDJFbMDRqyMQt4heNKBUEA==
+
 mdn-data@2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.6.tgz#852dc60fcaa5daa2e8cf6c9189c440ed3e042978"
@@ -6132,6 +6137,13 @@ react-native-dotenv@^0.2.0:
   dependencies:
     babel-plugin-dotenv "0.1.1"
 
+react-native-game-engine@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-game-engine/-/react-native-game-engine-1.1.1.tgz#5fab5637d3fbc3dc72fcccf0414e20240344ffff"
+  integrity sha512-di4swaIxt1o/zJZuJ068Y7eoCTF9GME3Mc6S5OVFUP6sLKzy4bcsE9eIQOqhCIkxoVbYk3j8mapBShokOdY6HA==
+  dependencies:
+    rxjs "^6.2.2"
+
 react-native-gesture-handler@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.5.0.tgz#df7dc5285c152e0656db70f55200fa632c4f45af"
@@ -6625,17 +6637,17 @@ rxjs@^5.4.3:
   dependencies:
     symbol-observable "1.0.1"
 
+rxjs@^6.2.2, rxjs@^6.5.4:
+  version "6.5.4"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.4.tgz#e0777fe0d184cec7872df147f303572d414e211c"
+  integrity sha512-naMQXcgEo3csAEGvw/NydRA0fuS2nDZJiw1YUWFKU7aPPAPGZEsD4Iimit96qwCieH6y614MCLYwdkrWx7z/7Q==
+  dependencies:
+    tslib "^1.9.0"
+
 rxjs@^6.4.0:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.3.tgz#510e26317f4db91a7eb1de77d9dd9ba0a4899a3a"
   integrity sha512-wuYsAYYFdWTAnAaPoKGNhfpWwKZbJW+HgAJ+mImp+Epl7BG8oNWBCTyRM8gba9k4lk8BgWdoYm21Mo/RYhhbgA==
-  dependencies:
-    tslib "^1.9.0"
-
-rxjs@^6.5.4:
-  version "6.5.4"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.4.tgz#e0777fe0d184cec7872df147f303572d414e211c"
-  integrity sha512-naMQXcgEo3csAEGvw/NydRA0fuS2nDZJiw1YUWFKU7aPPAPGZEsD4Iimit96qwCieH6y614MCLYwdkrWx7z/7Q==
   dependencies:
     tslib "^1.9.0"
 
