@@ -25,7 +25,6 @@ export function Physics() {
             const radius = ball.width / 2;
 
             if (distanceMagnitude <= radius) {
-                console.log("COLLISION");
                 var normalisedDistanceX = distanceX / distanceMagnitude;
                 var normalisedDistanceY = distanceY / distanceMagnitude;
 
@@ -36,7 +35,7 @@ export function Physics() {
                 var penetrationDepth = radius - distanceMagnitude;
                 ball.position.x -= normalisedVelocityX * penetrationDepth;
                 ball.position.y -= normalisedVelocityY * penetrationDepth;
-
+                // TODO update velocity based on all colitions combined
                 var dot = ball.velocity.x * normalisedDistanceX + ball.velocity.y * normalisedDistanceY;
 
                 ball.velocity.x -= 2 * dot * normalisedDistanceX;

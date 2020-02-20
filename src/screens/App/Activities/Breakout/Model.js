@@ -6,6 +6,9 @@ import Paddle from './Paddle';
 import { Physics, Vector2 } from './Physics';
 import Brick from './Brick';
 import { PIXI } from 'expo-pixi';
+import SumoWrestler from './SumoWrestler.json';
+import GameBug from './GameBug.json';
+import MarioMushroom from './MarioMushroom.json';
 
 export default function Model(width, height) {
 
@@ -14,9 +17,9 @@ export default function Model(width, height) {
     var colours = [0xFFFF00, 0x00FF00, 0x0000FF, 0xFF0000];
 
     var levels = [
-        ["piq_70010.png", "Sumo Wrestler", "IvoryMalinov", "piq.codeus.net", "http://piq.codeus.net/picture/70010/sumo_wrestler", "Creative Commons"],
-        ["piq_306960.png", "Game bug", "mrskittens2003", "piq.codeus.net", "http://piq.codeus.net/picture/306960/game_bug", "Creative Commons"],
-        ["piq_307048.png", "Mario Mushroom", "mrskittens2003", "piq.codeus.net", "http://piq.codeus.net/picture/307048/mario_mushroom", "Creative Commons"]
+        [SumoWrestler, "Sumo Wrestler", "IvoryMalinov", "piq.codeus.net", "http://piq.codeus.net/picture/70010/sumo_wrestler", "Creative Commons"],
+        [GameBug, "Game bug", "mrskittens2003", "piq.codeus.net", "http://piq.codeus.net/picture/306960/game_bug", "Creative Commons"],
+        [MarioMushroom, "Mario Mushroom", "mrskittens2003", "piq.codeus.net", "http://piq.codeus.net/picture/307048/mario_mushroom", "Creative Commons"]
     ];
 
     var running = false;
@@ -35,7 +38,7 @@ export default function Model(width, height) {
         paddle = new Paddle(0.35*width, 0.95*height, 0.35*width, 0.02*height, 0, width);
         createWalls();
         loadLevel();
-        balls = [new Ball(0.5*width, 0.25*height, 0.02*height, new Vector2(-0.002*height, -0.002*height))];
+        balls = [new Ball(0.5*width, 0.75*height, 0.02*height, new Vector2(-0.002*height, -0.002*height))];
 
         scene.addChild(paddle);
         walls.forEach(wall => scene.addChild(wall));
@@ -51,7 +54,27 @@ export default function Model(width, height) {
         walls = [bottomWall, leftWall, topWall, rightWall];
     }
 
-    function loadLevel() { // TODO revert back to images
+    function loadLevel() {
+        bricks = [];
+        var level = levels[currentLevel][0];
+        for (var row = 0; row < level.height; row++) {
+            for (var pixel = 0; pixel < level.width; pixel++) {
+                var index = row * level.width + pixel;
+                if (level.data[index] > 0) {
+                    var colour = level.data[index];
+                    var brick = new Brick(
+                      pixel * width / level.width,
+                      row * width / level.height,
+                      width / level.width,
+                      width / level.height,
+                      colour);
+                    bricks.push(brick);
+                }
+            }
+        }
+    }
+
+    function loadBasicLevel() {
         bricks = [];
         var colourIndex = 0;
         for (var i = 14/32; i < 18/32; i+=1/32) {
