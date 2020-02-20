@@ -2,12 +2,14 @@
 
 import Matter from 'matter-js';
 
-const Physics = (state, { time }) => {
-  console.log(state);
-  const { engine } = state.engine;
+
+const Physics = (entities, { time }) => {
+  console.log(entities);
+  const { engine } = entities.physics;
+
   Matter.Engine.update(engine, time.delta);
 
-  return state;
+  return entities;
 };
 
 export default Physics;
