@@ -1,108 +1,104 @@
+// @flow
+
 /* jshint -W097 */
-"use strict";
 
 
 export function Physics() {
+  function resolve(dTime, balls, obstacles) {
+    let collisions = [];
+    balls.forEach((ball) => {
+      collisions = collisions.concat(resolveBall(dTime, ball, obstacles));
+    });
+    return collisions;
+  }
 
-    function resolve(dTime, balls, obstacles) {
-        var collisions = [];
-        balls.forEach(function(ball){
-            collisions = collisions.concat(resolveBall(dTime, ball, obstacles));
-        });
-        return collisions;
-    }
+  function resolveBall(dTime, ball, obstacles) {
+    const collisions = [];
+    ball.move(dTime);
+    obstacles.forEach((obstacle) => {
+      const nearestX = Math.max(obstacle.position.x, Math.min(ball.position.x, obstacle.position.x + obstacle.width));
+      const nearestY = Math.max(obstacle.position.y, Math.min(ball.position.y, obstacle.position.y + obstacle.height));
 
-    function resolveBall(dTime, ball, obstacles) {
-        var collisions = [];
-        ball.move(dTime);
-        obstacles.forEach(function(obstacle) {
-            var nearestX = Math.max(obstacle.position.x, Math.min(ball.position.x, obstacle.position.x + obstacle.width));
-            var nearestY = Math.max(obstacle.position.y, Math.min(ball.position.y, obstacle.position.y + obstacle.height));
+      const distanceX = nearestX - ball.position.x;
+      const distanceY = nearestY - ball.position.y;
+      const distanceMagnitude = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
+      const radius = ball.width / 2;
 
-            const distanceX = nearestX - ball.position.x;
-            const distanceY = nearestY - ball.position.y;
-            const distanceMagnitude = Math.sqrt((distanceX*distanceX) + (distanceY*distanceY));
-            const radius = ball.width / 2;
+      if (distanceMagnitude <= radius) {
+        const normalisedDistanceX = distanceX / distanceMagnitude;
+        const normalisedDistanceY = distanceY / distanceMagnitude;
 
-            if (distanceMagnitude <= radius) {
-                var normalisedDistanceX = distanceX / distanceMagnitude;
-                var normalisedDistanceY = distanceY / distanceMagnitude;
+        const velocityMagnitude = Math.sqrt((ball.velocity.x * ball.velocity.x) + (ball.velocity.y * ball.velocity.y));
+        const normalisedVelocityX = ball.velocity.x / velocityMagnitude;
+        const normalisedVelocityY = ball.velocity.y / velocityMagnitude;
 
-                var velocityMagnitude = Math.sqrt((ball.velocity.x*ball.velocity.x) + (ball.velocity.y*ball.velocity.y));
-                var normalisedVelocityX = ball.velocity.x / velocityMagnitude;
-                var normalisedVelocityY = ball.velocity.y / velocityMagnitude;
+        const penetrationDepth = radius - distanceMagnitude;
+        ball.position.x -= normalisedVelocityX * penetrationDepth;
+        ball.position.y -= normalisedVelocityY * penetrationDepth;
+        // TODO update velocity based on all colitions combined
+        const dot = ball.velocity.x * normalisedDistanceX + ball.velocity.y * normalisedDistanceY;
 
-                var penetrationDepth = radius - distanceMagnitude;
-                ball.position.x -= normalisedVelocityX * penetrationDepth;
-                ball.position.y -= normalisedVelocityY * penetrationDepth;
-                // TODO update velocity based on all colitions combined
-                var dot = ball.velocity.x * normalisedDistanceX + ball.velocity.y * normalisedDistanceY;
+        ball.velocity.x -= 2 * dot * normalisedDistanceX;
+        ball.velocity.y -= 2 * dot * normalisedDistanceY;
 
-                ball.velocity.x -= 2 * dot * normalisedDistanceX;
-                ball.velocity.y -= 2 * dot * normalisedDistanceY;
+        collisions.push(new Collision(ball, obstacle));
+      }
+    });
+    return collisions;
+  }
 
-                collisions.push(new Collision(ball, obstacle))
-            }
-        });
-        return collisions;
-    }
-
-    return {
-        resolve : resolve
-    }
+  return {
+    resolve,
+  };
 }
 
 export function Vector2(xCoordinate, yCoordinate) {
+  this.x = xCoordinate;
+  this.y = yCoordinate;
 
-    this.x = xCoordinate;
-    this.y = yCoordinate;
+  this.add = function (vector) {
+    const x = this.x + vector.x;
+    const y = this.y + vector.y;
+    return new Vector2(x, y);
+  }.bind(this);
 
-    this.add = function(vector) {
-        var x = this.x + vector.x;
-        var y = this.y + vector.y;
-        return new Vector2(x, y);
-    }.bind(this);
+  this.sub = function (vector) {
+    const x = this.x - vector.x;
+    const y = this.y - vector.y;
+    return new Vector2(x, y);
+  }.bind(this);
 
-    this.sub = function(vector) {
-        var x = this.x - vector.x;
-        var y = this.y - vector.y;
-        return new Vector2(x, y);
-    }.bind(this);
+  this.mult = function (number) {
+    const x = this.x * number;
+    const y = this.y * number;
+    return new Vector2(x, y);
+  }.bind(this);
 
-    this.mult = function(number) {
-        var x = this.x * number;
-        var y = this.y * number;
-        return new Vector2(x, y);
-    }.bind(this);
-
-    this.flip = function(axis) {
-        if (axis === "x") {
-            return new Vector2(-this.x, this.y);
-        }
-        if (axis === "y") {
-            return new Vector2(this.x, -this.y);
-        }
-        if (axis === "both") {
-            return new Vector2(-this.x, -this.y);
-        }
-        throw "Illegal argument for 'axis'";
-    }.bind(this);
-
+  this.flip = function (axis) {
+    if (axis === 'x') {
+      return new Vector2(-this.x, this.y);
+    }
+    if (axis === 'y') {
+      return new Vector2(this.x, -this.y);
+    }
+    if (axis === 'both') {
+      return new Vector2(-this.x, -this.y);
+    }
+    throw "Illegal argument for 'axis'";
+  }.bind(this);
 }
 
 export function Collision(ball, rectangle) {
+  function getTarget() {
+    return rectangle;
+  }
 
-    function getTarget() {
-        return rectangle;
-    }
+  function getSource() {
+    return ball;
+  }
 
-    function getSource() {
-        return ball;
-    }
-
-    return {
-        getTarget : getTarget,
-        getSource : getSource
-    }
+  return {
+    getTarget,
+    getSource,
+  };
 }
-
