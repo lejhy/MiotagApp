@@ -21,7 +21,7 @@ export default function Model(width, height) {
 
     var running = false;
     var currentLevel;
-    var paddle = [];
+    var paddle = null;
     var balls = [];
     var walls = [];
     var bricks = [];
@@ -30,6 +30,8 @@ export default function Model(width, height) {
     var scene = new PIXI.Container();
 
     function restart() {
+        scene.removeChildren().forEach(child => child.destroy());
+
         paddle = new Paddle(0.35*width, 0.95*height, 0.35*width, 0.02*height, 0, width);
         createWalls();
         loadLevel();
