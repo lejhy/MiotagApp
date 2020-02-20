@@ -22,20 +22,14 @@ export default function useMiotag() {
     for (const c of characteristics) {
       const uuid = c.uuid.toUpperCase();
       const sensor = SENSORS[uuid];
-      console.log(sensor, c.isReadable)
       if (c.isReadable && sensor) {
-        console.log("here")
         try {
-          console.log("trying to read ", sensor);
           const newCharacteristic = await c.read();
           newCharacteristics = [...newCharacteristics, newCharacteristic];
         } catch (err) {
-          console.log("KURWA");
           console.log(err);
           console.log(sensor);
         }
-      } else {
-        console.log("fuck")
       }
     }
     // eslint-disable-next-line
@@ -43,7 +37,6 @@ export default function useMiotag() {
       const value = unwrapBase64Value(c.value);
       const uuid = c.uuid.toUpperCase();
       const sensor = SENSORS[uuid];
-      console.log(sensor, value);
       dispatch({ type: sensor, value });
     }
     characteristics = newCharacteristics;
