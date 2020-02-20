@@ -5,32 +5,49 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Dashboard from './Dashboard';
 import Activities from './Activities';
 import FreeMode from './Activities/FreeMode';
+import Debug from './Activities/Debug';
+import Pong from './Activities/Pong';
 import Breakout from './Activities/Breakout';
 import Progress from './Progress';
 import Settings from './Settings';
 import Messages from './Messages';
 import Friends from './Friends';
-
 import Profile from './Profile';
 import UserSearch from './UserSearch';
 import Chat from './Chat';
-import Debug from './Activities/Debug';
 
 const AppNavigator = createStackNavigator({
+  // games
+  'Free Mode': {
+    screen: FreeMode,
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+  },
+  'BLE Debug': {
+    screen: Debug,
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+  },
+  Pong: {
+    screen: Pong,
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+  },
+  Breakout: {
+    screen: Breakout,
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+  },
+  // rest of the screens
   Dashboard: {
     screen: Dashboard,
   },
   Activities: {
     screen: Activities,
-  },
-  "Free Mode": {
-    screen: FreeMode,
-  },
-  "BLE Debug": {
-    screen: Debug,
-  },
-  "Breakout": {
-    screen: Breakout,
   },
   Progress: {
     screen: Progress,

@@ -2,95 +2,97 @@
 
 import React, { PureComponent } from 'react';
 import { AppRegistry, StyleSheet, View } from 'react-native';
-import ActivitiesService from '@services/api/ActivitiesService';
-import Model from './Model';
-import Controller from './Controller';
 import { GLView } from 'expo-gl';
 import { PIXI } from 'expo-pixi';
+import Svg, {
+  Defs, LinearGradient, Rect, Stop,
+} from 'react-native-svg';
+
 import Button from '@core/Button/Button';
 import Text from '@core/Text/Text';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import ActivitiesService from '@services/api/ActivitiesService';
+
+import Controller from './Controller';
+import Model from './Model';
 
 export default class Breakout extends PureComponent {
-
   state = {
-    menu: []
+    menu: [],
   };
 
   app: PIXI.Application;
+
   tilt = 0;
+
   menu = null;
+
   scene = new PIXI.Container();
-
-  constructor(props) {
-    super(props);
-  }
-
-  onContextCreate = async context => {
-    this.app = new PIXI.Application({ context, transparent: true});
-    const model = new Model(this.app.screen.width, this.app.screen.height);
-    const controller = new Controller(model, this);
-    controller.init();
-  };
 
   componentWillUnmount() {
     this.app.destroy();
     ActivitiesService.newLog({
       activity: {
-        id: this.props.navigation.getParam('id')
+        id: this.props.navigation.getParam('id'),
       },
       length: new Date() - this.createdAt,
-      score: 0
+      score: 0,
     });
   }
 
+  onContextCreate = async (context) => {
+    this.app = new PIXI.Application({ context, transparent: true });
+    const model = new Model(this.app.screen.width, this.app.screen.height);
+    const controller = new Controller(model, this);
+    controller.init();
+  };
+
   getTilt() {
-    return this.tilt; //TODO
+    return this.tilt; // TODO
   }
 
   addHeader(text) {
-    this.setState(prev => ({
+    this.setState((prev) => ({
       menu: prev.menu.concat([
         <Text
           style={styles.header}
         >
           {text}
-        </Text>
-      ])
+        </Text>,
+      ]),
     }));
   }
 
   addParagraph(text) {
-    this.setState(prev => ({
+    this.setState((prev) => ({
       menu: prev.menu.concat([
         <Text
           style={styles.paragraph}
         >
           {text}
-        </Text>
-      ])
+        </Text>,
+      ]),
     }));
   }
 
   addButton(text, callback, argument) {
-    this.setState(prev => ({
+    this.setState((prev) => ({
       menu: prev.menu.concat([
         <Button
           style={styles.button}
-          onPress={() => {callback(argument)}}
+          onPress={() => { callback(argument); }}
         >
           {text}
-        </Button>
-      ])
+        </Button>,
+      ]),
     }));
   }
 
   eraseMenu() {
-    this.setState( {menu: []})
+    this.setState({ menu: [] });
   }
 
   render() {
-    return(
+    return (
       <View style={styles.container}>
         <View style={styles.menu}>
           {
@@ -112,13 +114,13 @@ export default class Breakout extends PureComponent {
           onStartShouldSetResponder={(event) => true}
         />
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   menu: {
     display: 'flex',
@@ -128,31 +130,31 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    zIndex: 300
+    zIndex: 300,
   },
   game: {
     width: '100%',
     height: '100%',
     position: 'absolute',
-    zIndex: 200
+    zIndex: 200,
   },
   background: {
     width: '100%',
     height: '100%',
     position: 'absolute',
-    zIndex: 100
+    zIndex: 100,
   },
   button: {
     width: '75%',
-    margin: '10%'
+    margin: '10%',
   },
   header: {
     fontSize: 30,
-    margin: '10%'
+    margin: '10%',
   },
   paragraph: {
 
-  }
+  },
 });
 
-AppRegistry.registerComponent("Breakout", () => Breakout);
+AppRegistry.registerComponent('Breakout', () => Breakout);
