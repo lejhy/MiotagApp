@@ -13,25 +13,56 @@ const setupWorld = () => {
   const { world } = engine;
   world.gravity.y = 0.0;
 
-  const plank = Matter.Bodies.rectangle(
+  const paddle = Matter.Bodies.rectangle(
     width / 2,
     height / 2,
     PADDLE_WIDTH_FRAC * width,
     PADDLE_HEIGHT,
     {
-      isStatic: true,
       label: 'plank',
       width: PADDLE_WIDTH_FRAC * width,
       height: PADDLE_HEIGHT,
     },
   );
 
+  const wallLeft = Matter.Bodies.rectangle(
+    5,
+    height / 2,
+    10,
+    height,
+    {
+      isStatic: true,
+      width: 10,
+      height,
+      color: 'orange',
+    },
+  );
 
-  Matter.World.add(world, [plank]);
+  const wallRight = Matter.Bodies.rectangle(
+    width - 5,
+    height / 2,
+    10,
+    height,
+    {
+      isStatic: true,
+      width: 10,
+      height,
+      color: 'green',
+    },
+  );
+
+
+  Matter.World.add(world, [
+    paddle,
+    wallLeft,
+    wallRight,
+  ]);
 
   return {
     physics: { engine, world },
-    plank: { body: plank, renderer: Box },
+    paddle: { body: paddle, renderer: Box },
+    wallLeft: { body: wallLeft, renderer: Box },
+    wallRight: { body: wallRight, renderer: Box },
   };
 };
 

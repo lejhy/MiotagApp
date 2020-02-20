@@ -14,13 +14,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const Pong = () => {
+const Pong = ({ miotag }) => {
   const entities = setupWorld();
 
   return (
     <GameEngine
       style={styles.container}
-      systems={[Physics]}
+      systems={[Physics(miotag.getSensors)]}
       entities={entities}
     >
       <StatusBar hidden />

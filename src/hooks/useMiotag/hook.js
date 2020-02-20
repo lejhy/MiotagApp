@@ -122,8 +122,11 @@ export default function useMiotag() {
     };
   }, []);
 
+  const getSensors = () => sensors;
+
   return {
     sensors,
+    getSensors,
     isAvailable,
   };
 }

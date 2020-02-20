@@ -18,8 +18,8 @@ type Props = {
 
 const Box = ({
   body: {
-    position, angle, width, height,
-  }, color,
+    position, angle, width, height, color,
+  },
 }: Props) => {
   const x = position.x - width / 2;
   const y = position.y - height / 2;
