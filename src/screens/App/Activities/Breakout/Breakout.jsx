@@ -9,6 +9,7 @@ import { GLView } from 'expo-gl';
 import { PIXI } from 'expo-pixi';
 import Button from '@core/Button/Button';
 import Text from '@core/Text/Text';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 export default class Breakout extends PureComponent {
 
@@ -17,7 +18,6 @@ export default class Breakout extends PureComponent {
   };
 
   app: PIXI.Application;
-  pS: Number;
   tilt = 0;
   menu = null;
   scene = new PIXI.Container();
@@ -27,9 +27,7 @@ export default class Breakout extends PureComponent {
   }
 
   onContextCreate = async context => {
-    this.app = new PIXI.Application({ context });
-    this.app.renderer.backgroundColor = 0xFFFFFF;
-    this.pS = this.app.screen.height;
+    this.app = new PIXI.Application({ context, transparent: true});
     const model = new Model(this.app.screen.width, this.app.screen.height);
     const controller = new Controller(model, this);
     controller.init();
@@ -46,7 +44,7 @@ export default class Breakout extends PureComponent {
   }
 
   getTilt() {
-    return this.tilt;
+    return this.tilt; //TODO
   }
 
   addHeader(text) {
@@ -98,8 +96,17 @@ export default class Breakout extends PureComponent {
             this.state.menu
           }
         </View>
+        <Svg viewBox="0 0 100 100" preserveAspectRatio="none" style={styles.background}>
+          <Defs>
+            <LinearGradient id="grad" x1="50%" y1="0%" x2="50%" y2="100%">
+              <Stop offset="0%" stopColor="#4087c5" />
+              <Stop offset="100%" stopColor="#71abd6" />
+            </LinearGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100" height="100" fill="url(#grad)" />
+        </Svg>
         <GLView
-          style={{ flex: 1 }}
+          style={styles.game}
           onContextCreate={this.onContextCreate}
           onStartShouldSetResponder={(event) => true}
         />
@@ -110,7 +117,7 @@ export default class Breakout extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   menu: {
     display: 'flex',
@@ -120,7 +127,19 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
-    zIndex: 999
+    zIndex: 300
+  },
+  game: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    zIndex: 200
+  },
+  background: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    zIndex: 100
   },
   button: {
     width: '75%',
