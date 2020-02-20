@@ -14,7 +14,7 @@ type Props = {
   sensors: Sensors,
 }
 
-const Debug = ({ sensors: { axes } }: Props) => (
+const Debug = ({ miotag: { sensors: { axes } } }: Props) => (
   <SafeAreaView>
     <Text>Debug screen</Text>
     <Text>Axes:</Text>

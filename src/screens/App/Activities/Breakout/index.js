@@ -1,5 +1,6 @@
 // @flow
 
 import Breakout from './Breakout';
+import withMiotag from '../withMiotag';
 
-export default Breakout;
+export default withMiotag()(Breakout);

@@ -83,7 +83,7 @@ export default function Controller(model, view) {
 
   function init() {
     model.addObserver(this);
-    view.app.ticker.add((deltaTime) => model.tick(deltaTime));
+    view.app.ticker.add((deltaTime) => model.tick(deltaTime, view.getTilt()));
     view.app.stage.addChild(model.scene);
     state.onEnter();
   }

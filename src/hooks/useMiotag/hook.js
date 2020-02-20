@@ -18,12 +18,32 @@ export default function useMiotag() {
   const [sensors, dispatch] = useReducer(reducer, initialState);
 
   const updateSensors = async () => {
-    const newCharacteristics = await Promise.all(characteristics.map((c) => c.read()));
+    let newCharacteristics = [];
+    for (const c of characteristics) {
+      const uuid = c.uuid.toUpperCase();
+      const sensor = SENSORS[uuid];
+      console.log(sensor, c.isReadable)
+      if (c.isReadable && sensor) {
+        console.log("here")
+        try {
+          console.log("trying to read ", sensor);
+          const newCharacteristic = await c.read();
+          newCharacteristics = [...newCharacteristics, newCharacteristic];
+        } catch (err) {
+          console.log("KURWA");
+          console.log(err);
+          console.log(sensor);
+        }
+      } else {
+        console.log("fuck")
+      }
+    }
     // eslint-disable-next-line
     for (const c of newCharacteristics) {
       const value = unwrapBase64Value(c.value);
       const uuid = c.uuid.toUpperCase();
       const sensor = SENSORS[uuid];
+      console.log(sensor, value);
       dispatch({ type: sensor, value });
     }
     characteristics = newCharacteristics;
@@ -31,7 +51,11 @@ export default function useMiotag() {
 
   const startUpdatingSensors = async () => {
     if (characteristics) {
-      await updateSensors();
+      try {
+        await updateSensors();
+      } catch (err) {
+        console.log(err);
+      }
     }
     setTimeout(startUpdatingSensors, 0);
   };

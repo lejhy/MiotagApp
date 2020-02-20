@@ -116,10 +116,9 @@ export default function Model(width, height) {
     return levels;
   }
 
-  function tick(dTime) {
+  function tick(dTime, tilt) {
     if (running) {
-      const input = 0; // TODO
-      let scaledInput = input * dTime;
+      let scaledInput = tilt * dTime;
       scaledInput *= 0.0004 * width;
       paddle.move(scaledInput);
       const collisions = physics.resolve(dTime, balls, getObstacles());
