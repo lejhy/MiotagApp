@@ -84,7 +84,7 @@ export function Vector2(xCoordinate, yCoordinate) {
     if (axis === 'both') {
       return new Vector2(-this.x, -this.y);
     }
-    throw "Illegal argument for 'axis'";
+    throw Error("Illegal argument for 'axis'");
   }.bind(this);
 }
 
