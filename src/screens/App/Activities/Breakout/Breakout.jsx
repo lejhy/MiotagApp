@@ -34,6 +34,7 @@ export default class Breakout extends PureComponent {
   };
 
   componentWillUnmount() {
+    this.app.destroy();
     ActivitiesService.newLog({
       activity: {
         id: this.props.navigation.getParam('id')
