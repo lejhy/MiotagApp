@@ -3,12 +3,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
+import type { NavigationScreenProps } from 'react-navigation';
 
 import { GRAY, LIGHT_GRAY } from '@styles/colors';
 import { SUB_HEADER } from '@styles/fonts';
-import { Button, Text } from '@core';
-import type { NavigationScreenProps } from "react-navigation";
 import { withNavigation } from 'react-navigation';
+import { Button, Text } from '@core';
 
 const Container = styled.View`
   display: flex;
@@ -56,6 +56,8 @@ type Props = {
 };
 
 function ActivityItem({ activity, navigation }: Props) {
+  const onPressHandler = () => navigation.navigate(activity.name, { id: activity.id });
+
   return (
     <Container>
       <TitleContainer>
@@ -74,7 +76,7 @@ function ActivityItem({ activity, navigation }: Props) {
           <View>
             <Button
               variant="secondary"
-              onPress={() => navigation.navigate(activity.name, {id: activity.id})}
+              onPress={onPressHandler}
             >
               Play
             </Button>

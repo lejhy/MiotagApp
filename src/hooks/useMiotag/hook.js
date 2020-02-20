@@ -1,8 +1,6 @@
 // @flow
 
-import {
-  useState, useEffect, useRef, useReducer,
-} from 'react';
+import { useState, useReducer, useEffect } from 'react';
 import { BleManager, ConnectionPriority } from 'react-native-ble-plx';
 // import { throttleTime } from 'rxjs/operators';
 // import { Subject } from 'rxjs';
@@ -13,119 +11,122 @@ import { unwrapBase64Value } from './utils';
 const BLE_NAME = 'MIOTAG';
 
 export default function useMiotag() {
-  const manager = useRef(null);
-  const device = useRef(null);
-  const services = useRef([]);
-  const characteristics = useRef([]);
-  const [managerState, setManagerState] = useState(null);
-  const [scanning, setScanning] = useState(false);
-  const [monitoring, setMonitoring] = useState([]);
+  let manager = null;
+  let device = null;
+  let characteristics = [];
+  const [isAvailable, setAvailable] = useState(false);
   const [sensors, dispatch] = useReducer(reducer, initialState);
 
   const updateSensors = async () => {
-    const newCharacteristics = await Promise.all(characteristics.current.map((c) => c.read()));
+    const newCharacteristics = await Promise.all(characteristics.map((c) => c.read()));
     // eslint-disable-next-line
     for (const c of newCharacteristics) {
       const value = unwrapBase64Value(c.value);
       const uuid = c.uuid.toUpperCase();
       const sensor = SENSORS[uuid];
-      console.log(sensor, value);
       dispatch({ type: sensor, value });
     }
-    characteristics.current = newCharacteristics;
-    if (monitoring) {
-      updateSensors();
+    characteristics = newCharacteristics;
+  };
+
+  const startUpdatingSensors = async () => {
+    if (characteristics) {
+      await updateSensors();
     }
+    setTimeout(startUpdatingSensors, 0);
   };
 
   const connectToDevice = async (discoveredDevice) => {
+    device = discoveredDevice;
     try {
-      device.current = await discoveredDevice.connect();
+      device = await discoveredDevice.connect();
     } catch (err) {
       console.log('connect err');
       console.warn(err);
-      // setScanning(true);
       return;
     }
-    console.log(device.name);
     try {
-      device.current = await device.current.discoverAllServicesAndCharacteristics();
+      device = await device.discoverAllServicesAndCharacteristics();
     } catch (err) {
       console.log('discover err');
       console.warn(err);
-      // setScanning(true);
       return;
     }
     try {
-      device.current = await device.current.requestConnectionPriority(ConnectionPriority.High);
+      device = await device.requestConnectionPriority(ConnectionPriority.High);
     } catch (err) {
       console.log('req priority err');
       console.warn(err);
-      // setScanning(true);
       return;
     }
+    let services = [];
     try {
-      services.current = await device.current.services();
+      services = await device.services();
     } catch (err) {
       console.log('services err');
       console.warn(err);
-      // setScanning(true);
       return;
     }
     try {
-      characteristics.current = [
-        ...await Promise.all(services.current.map((s) => s.characteristics())),
+      characteristics = [
+        ...await Promise.all(services.map((s) => s.characteristics())),
       ].flat();
-      updateSensors();
-      console.log(characteristics.current);
     } catch (err) {
       console.log('chars err');
       console.warn(err);
-      // setScanning(true);
       return;
     }
-    setMonitoring(true);
+    startUpdatingSensors();
+    setAvailable(true);
   };
 
-  const checkDevice = async (error, discoveredDevice) => {
-    if (error) return;
-    console.log(discoveredDevice);
-    if (discoveredDevice.name !== BLE_NAME) {
-      return;
-    }
-    console.log(discoveredDevice.name);
-    // found miotag!
-    setScanning(false);
-    connectToDevice(discoveredDevice);
+  const scanAndConnect = () => {
+    manager.startDeviceScan(null, null, (error, discoveredDevice) => {
+      if (error) {
+        console.warn(`SCAN_ERROR: ${error.message}`);
+        console.log(error);
+        // Handle error (scanning will be stopped automatically)
+        return;
+      }
+      if (discoveredDevice.name === BLE_NAME) {
+        // Stop scanning as it's not necessary if you are scanning for one device.
+        manager.stopDeviceScan();
+        // Proceed with connection.
+        connectToDevice(discoveredDevice);
+      }
+    });
   };
-
-  const scanAndConnect = () => setScanning(true);
 
   const init = async () => {
-    manager.current = new BleManager();
-    manager.current.onStateChange((state) => setManagerState(state));
+    manager = new BleManager();
+    const subscription = manager.onStateChange((state) => {
+      if (state === 'PoweredOn') {
+        scanAndConnect();
+        subscription.remove();
+      }
+    }, true);
   };
 
   useEffect(() => {
-    if (manager.current === null) {
-      return;
-    }
-    if (managerState === 'PoweredOn' && scanning) {
-      manager.current.startDeviceScan(null, null, checkDevice);
-    } else {
-      manager.current.stopDeviceScan();
-    }
-  }, [managerState, scanning]);
+    init();
+    return () => {
+      if (device !== null) {
+        // close connection and destroy the manager during cleanup
+        // NOTE: this return promise normally, but we don't have to deal with it
+        device.cancelConnection();
+        device = null;
+        manager.destroy();
+        manager = null;
+        characteristics = null;
+      }
+    };
+  }, []);
 
-  return [
-    {
-      managerState,
-      scanning,
-      sensors,
-    },
-    {
-      init,
-      scanAndConnect,
-    },
-  ];
+  const getSensors = () => sensors;
+
+  return {
+    sensors,
+    getSensors,
+    isAvailable,
+  };
 }

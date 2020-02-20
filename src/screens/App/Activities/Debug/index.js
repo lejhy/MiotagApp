@@ -1,5 +1,6 @@
 // @flow
 
 import Debug from './Debug';
+import withMiotag from '../withMiotag';
 
-export default Debug;
+export default withMiotag()(Debug);
