@@ -3,7 +3,7 @@
 
 import Ball from './Ball';
 import Paddle from './Paddle';
-import { Circle, Physics, Rectangle, Vector2 } from './Physics';
+import { Physics, Vector2 } from './Physics';
 import Brick from './Brick';
 import { PIXI } from 'expo-pixi';
 
@@ -26,7 +26,6 @@ export default function Model(width, height) {
     var walls = [];
     var bricks = [];
     var physics = new Physics();
-    const maxSubstepDeltaTime = 3;
 
     var scene = new PIXI.Container();
 
@@ -34,7 +33,7 @@ export default function Model(width, height) {
         paddle = new Paddle(0.35*width, 0.95*height, 0.35*width, 0.02*height, 0, width);
         createWalls();
         loadLevel();
-        balls = [new Ball(0.5*width, 0.5*height, 0.02*height, new Vector2(-0.002*height, -0.002*height))];
+        balls = [new Ball(0.5*width, 0.25*height, 0.02*height, new Vector2(-0.002*height, -0.002*height))];
 
         scene.addChild(paddle);
         walls.forEach(wall => scene.addChild(wall));
@@ -95,21 +94,13 @@ export default function Model(width, height) {
 
     function tick(dTime) {
         if (running) {
-            while (dTime > maxSubstepDeltaTime) {
-                subTick(maxSubstepDeltaTime);
-                dTime -= maxSubstepDeltaTime;
-            }
-            subTick(dTime);
+            var input = 0; //TODO
+            var scaledInput = input * dTime;
+            scaledInput *= 0.0004*width;
+            paddle.move(scaledInput);
+            var collisions = physics.resolve(dTime, balls, getObstacles());
+            resolveCollisions(collisions);
         }
-    }
-
-    function subTick(subDTime) {
-        var input = 0; //TODO
-        var scaledInput = input * subDTime;
-        scaledInput *= 0.0004*width;
-        paddle.move(scaledInput);
-        var collisions = physics.resolve(subDTime, balls, getObstacles());
-        resolveCollisions(collisions);
     }
 
     function resolveCollisions(collisions) {
@@ -122,7 +113,7 @@ export default function Model(width, height) {
             }
             var index = bricks.indexOf(target);
             if (index >= 0) {
-                bricks.splice(index, 1);
+                bricks.splice(index, 1)[0].destroy();
                 if (bricks.length === 0) {
                     nextLevel();
                     return;
@@ -132,14 +123,7 @@ export default function Model(width, height) {
     }
 
     function getObstacles() {
-        // var obstacles = [paddle];
-        // walls.forEach(function(wall) {
-        //     obstacles.push(wall);
-        // });
-        // bricks.forEach(function(brick) {
-        //     obstacles.push(brick);
-        // });
-        return obstacles;
+        return [paddle].concat(bricks, walls);
     }
 
     function addObserver(observer) {

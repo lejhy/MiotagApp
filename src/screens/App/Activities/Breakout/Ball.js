@@ -19,15 +19,7 @@ export default class Ball extends PIXI.Graphics {
 
     move(dTime) {
         const distance = this.velocity.mult(dTime);
-        position.x += distance.x;
-        position.y += distance.y;
-    }
-
-    flipHorizontally() {
-        this.velocity = this.velocity.flip("x");
-    }
-
-    flipVertically() {
-        this.velocity = this.velocity.flip("y");
+        this.position.x += distance.x;
+        this.position.y += distance.y;
     }
 }

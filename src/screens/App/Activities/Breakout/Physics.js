@@ -13,36 +13,25 @@ export function Physics() {
     }
 
     function resolveBall(dTime, ball, obstacles) {
-        // For now treat the ball as a rectangle
         var collisions = [];
         ball.move(dTime);
         obstacles.forEach(function(obstacle) {
-            // Get updated ball geometry
-            var ballRect = ball.getRect();
-            var obstacleRect = obstacle.getRect();
-            // Check for circle origin inside rectangle
-            if (ballRect.vMin.x < obstacleRect.vMax.x &&
-                ballRect.vMax.x > obstacleRect.vMin.x &&
-                ballRect.vMin.y < obstacleRect.vMax.y &&
-                ballRect.vMax.y > obstacleRect.vMin.y) {
-                // collision
-                var ballVelocity = ball.getVelocity();
-                var delta = obstacleRect.getOrigin().sub(ballRect.getOrigin());
-                var obstacleRectAspectRatio = obstacleRect.getWidth() / obstacleRect.getHeight();
-                delta.y *= obstacleRectAspectRatio;
-                if (Math.abs(delta.x) > Math.abs(delta.y)) {
-                    // Horizontal collision
-                    // Check for fly-through collisions
-                    if (ballVelocity.x < 0 && delta.x < 0 || ballVelocity.x > 0 && delta.x > 0) {
-                        ball.flipHorizontally();
-                    }
-                } else {
-                    // Vertical collision
-                    // Check for fly-through collisions
-                    if (ballVelocity.y < 0 && delta.y < 0 || ballVelocity.y > 0 && delta.y > 0) {
-                        ball.flipVertically();
-                    }
-                }
+            var nearestX = Math.max(obstacle.position.x, Math.min(ball.position.x, obstacle.position.x + obstacle.width));
+            var nearestY = Math.max(obstacle.position.y, Math.min(ball.position.y, obstacle.position.y + obstacle.height));
+
+            const distX = nearestX - ball.position.x;
+            const distY = nearestY - ball.position.y;
+            const distance = Math.sqrt((distX*distX) + (distY*distY));
+
+            if (distance <= (ball.width / 2)) {
+                console.log("COLLISION");
+                var normX = distX / distance;
+                var normY = distY / distance;
+                var dot = ball.velocity.x * normX + ball.velocity.y * normY;
+
+                ball.velocity.x -= 2 * dot * normX;
+                ball.velocity.y -= 2 * dot * normY;
+
                 collisions.push(new Collision(ball, obstacle))
             }
         });
@@ -90,41 +79,6 @@ export function Vector2(xCoordinate, yCoordinate) {
         throw "Illegal argument for 'axis'";
     }.bind(this);
 
-}
-
-export function Rectangle(vectorMin, vectorMax) {
-
-    if (vectorMin.x > vectorMax.x || vectorMin.y > vectorMax.y) {
-        throw "One of vectorMin values is bigger that vectorMax";
-    }
-
-    this.vMin = vectorMin;
-    this.vMax = vectorMax;
-
-    this.getOrigin = function() {
-        var x = (this.vMin.x + this.vMax.x) / 2;
-        var y = (this.vMin.y + this.vMax.y) / 2;
-        return new Vector2(x, y);
-    }.bind(this);
-
-    this.getWidth = function() {
-        return this.vMax.x - this.vMin.x;
-    }.bind(this);
-
-    this.getHeight = function() {
-        return this.vMax.y - this.vMin.y;
-    }.bind(this);
-
-}
-
-export function Circle(origin, radius) {
-
-    if (radius <= 0) {
-        throw "Not a circle";
-    }
-
-    this.o = origin;
-    this.r = radius;
 }
 
 export function Collision(ball, rectangle) {
