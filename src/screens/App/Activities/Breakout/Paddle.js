@@ -2,13 +2,10 @@
 
 import { PIXI } from 'expo-pixi';
 
-export default class Paddle extends PIXI.Graphics {
-  constructor(x, y, width, height, xMin, xMax) {
+export default class Paddle extends PIXI.Container {
+  constructor(x, y, xMin, xMax, texture) {
     super();
-    this.beginFill(0x810F7C);
-    this.lineStyle(1, 0, 0);
-    this.drawRect(0, 0, width, height);
-    this.endFill();
+    this.addChild(PIXI.Sprite.from(texture));
 
     this.position.x = x;
     this.position.y = y;

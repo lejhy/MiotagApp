@@ -16,15 +16,14 @@ export function Physics() {
     const collisions = [];
     ball.move(dTime);
     obstacles.forEach((obstacle) => {
-      const nearestX = Math.max(obstacle.position.x, Math.min(ball.position.x, obstacle.position.x + obstacle.width));
-      const nearestY = Math.max(obstacle.position.y, Math.min(ball.position.y, obstacle.position.y + obstacle.height));
+      const nearestX = Math.max(obstacle.position.x, Math.min(ball.center.getX(), obstacle.position.x + obstacle.width));
+      const nearestY = Math.max(obstacle.position.y, Math.min(ball.center.getY(), obstacle.position.y + obstacle.height));
 
-      const distanceX = nearestX - ball.position.x;
-      const distanceY = nearestY - ball.position.y;
+      const distanceX = nearestX - ball.center.getX();
+      const distanceY = nearestY - ball.center.getY();
       const distanceMagnitude = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
-      const radius = ball.width / 2;
 
-      if (distanceMagnitude <= radius) {
+      if (distanceMagnitude <= ball.radius) {
         const normalisedDistanceX = distanceX / distanceMagnitude;
         const normalisedDistanceY = distanceY / distanceMagnitude;
 
@@ -32,7 +31,7 @@ export function Physics() {
         const normalisedVelocityX = ball.velocity.x / velocityMagnitude;
         const normalisedVelocityY = ball.velocity.y / velocityMagnitude;
 
-        const penetrationDepth = radius - distanceMagnitude;
+        const penetrationDepth = ball.radius - distanceMagnitude;
         ball.position.x -= normalisedVelocityX * penetrationDepth;
         ball.position.y -= normalisedVelocityY * penetrationDepth;
         // TODO update velocity based on all colitions combined

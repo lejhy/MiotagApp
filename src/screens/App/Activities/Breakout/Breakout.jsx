@@ -41,7 +41,7 @@ export default class Breakout extends PureComponent {
 
   onContextCreate = async (context) => {
     this.app = new PIXI.Application({ context, transparent: true });
-    const model = new Model(this.app.screen.width, this.app.screen.height, this.app.stage);
+    const model = new Model(this.app);
     const controller = new Controller(model, this);
     controller.init();
   };

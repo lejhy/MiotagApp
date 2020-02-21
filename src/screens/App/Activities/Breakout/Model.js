@@ -4,7 +4,6 @@ import { PIXI } from 'expo-pixi';
 import Ball from './Ball';
 import Paddle from './Paddle';
 import { Physics, Vector2 } from './Physics';
-import Brick from './Brick';
 import SumoWrestler from './SumoWrestler.json';
 import GameBug from './GameBug.json';
 import MarioMushroom from './MarioMushroom.json';
@@ -14,6 +13,7 @@ export default class Model {
   width: number;
   height: number;
   stage: PIXI.Container;
+  renderer: PIXI.WebGLRenderer;
 
   observers = [];
   colours = [0xFFFF00, 0x00FF00, 0x0000FF, 0xFF0000];
@@ -22,36 +22,60 @@ export default class Model {
     [GameBug, 'Game bug', 'mrskittens2003', 'piq.codeus.net', 'http://piq.codeus.net/picture/306960/game_bug', 'Creative Commons'],
     [MarioMushroom, 'Mario Mushroom', 'mrskittens2003', 'piq.codeus.net', 'http://piq.codeus.net/picture/307048/mario_mushroom', 'Creative Commons'],
   ];
-  brickTextures: PIXI.Texture[] = [];
 
   running = false;
   currentLevel = 0;
   physics = new Physics();
+  ballTexture: PIXI.Texture;
+  wallTexture: PIXI.Texture;
+  paddleTexture: PIXI.Texture;
 
   scene = new PIXI.Container();
   balls: PIXI.Container;
   walls: PIXI.Container;
   bricks: PIXI.Container;
+  brickTextures: Map<number, PIXI.Texture>;
 
   paddle: Paddle;
-  bottomWall: Brick;
-  leftWall: Brick;
-  topWall: Brick;
-  rightWall: Brick;
+  bottomWall: PIXI.Sprite;
+  leftWall: PIXI.Sprite;
+  topWall: PIXI.Sprite;
+  rightWall: PIXI.Sprite;
 
-  constructor(width: number, height: number, stage: PIXI.Container) {
-    this.width = width;
-    this.height = height;
-    this.stage = stage;
+  constructor(app: PIXI.Application) {
+    this.width = app.screen.width;
+    this.height = app.screen.height;
+    this.stage = app.stage;
+    this.renderer = app.renderer;
+
+    const ballGraphics = new PIXI.Graphics();
+    ballGraphics.beginFill(0x006344);
+    ballGraphics.drawCircle(0, 0, 0.02 * this.height);
+    ballGraphics.endFill();
+    this.ballTexture = this.renderer.generateTexture(ballGraphics);
+
+    const wallGraphics = new PIXI.Graphics();
+    wallGraphics.beginFill(0x000000);
+    wallGraphics.lineStyle(1, 0x000000, 1, 0);
+    wallGraphics.drawRect(0, 0, this.width, this.height);
+    wallGraphics.endFill();
+    this.wallTexture = this.renderer.generateTexture(wallGraphics);
+
+    const paddleGraphics = new PIXI.Graphics();
+    paddleGraphics.beginFill(0x810F7C);
+    paddleGraphics.lineStyle(1, 0, 0);
+    paddleGraphics.drawRect(0, 0, 0.35 * this.width, 0.02 * this.height);
+    paddleGraphics.endFill();
+    this.paddleTexture = this.renderer.generateTexture(paddleGraphics);
   }
 
   restart() {
     this.stage.removeChildren();
-    this.scene.destroy(true);
+    this.scene.destroy({ children: true});
     this.scene = new PIXI.Container();
     this.stage.addChild(this.scene);
 
-    this.paddle = new Paddle(0.35 * this.width, 0.95 * this.height, 0.35 * this.width, 0.02 * this.height, 0, this.width);
+    this.paddle = new Paddle(0.35 * this.width, 0.95 * this.height, 0, this.width, this.paddleTexture);
     this.scene.addChild(this.paddle);
     this.createWalls();
     this.createBalls();
@@ -60,28 +84,45 @@ export default class Model {
 
   createWalls() {
     this.walls = new PIXI.Container();
-    this.bottomWall = this.walls.addChild(new Brick(-this.width, this.height, 3 * this.width, this.height, 0x000000));
-    this.leftWall = this.walls.addChild(new Brick(-this.width, -this.height, this.width, 3 * this.height, 0x000000));
-    this.topWall = this.walls.addChild(new Brick(-this.width, -this.height, 3 * this.width, this.height, 0x000000));
-    this.rightWall = this.walls.addChild(new Brick(this.width, -this.height, this.width, 3 * this.height, 0x000000));
+
+    this.bottomWall = this.walls.addChild(PIXI.Sprite.from(this.wallTexture));
+    this.bottomWall.position.x = 0;
+    this.bottomWall.position.y = this.height;
+
+    this.leftWall = this.walls.addChild(PIXI.Sprite.from(this.wallTexture));
+    this.leftWall.position.x = -this.width;
+    this.leftWall.position.y = 0;
+
+    this.topWall = this.walls.addChild(PIXI.Sprite.from(this.wallTexture));
+    this.topWall.position.x = 0;
+    this.topWall.position.y = -this.height;
+
+    this.rightWall = this.walls.addChild(PIXI.Sprite.from(this.wallTexture));
+    this.rightWall.position.x = this.width;
+    this.rightWall.position.y = 0;
+
     this.scene.addChild(this.walls);
   }
 
   loadLevel() {
     this.bricks = new PIXI.Container();
+    this.brickTextures = new Map<number, PIXI.Texture>();
     const level = this.levels[this.currentLevel][0];
+    let width = this.width / level.width;
+    let height = this.width / level.height;
     for (let row = 0; row < level.height; row++) {
       for (let pixel = 0; pixel < level.width; pixel++) {
         const index = row * level.width + pixel;
         if (level.data[index] > 0) {
           const colour = level.data[index];
-          const brick = new Brick(
-            pixel * this.width / level.width,
-            row * this.width / level.height,
-            this.width / level.width,
-            this.width / level.height,
-            colour,
+          const texture = this._createBrickTexture(
+            width,
+            height,
+            colour
           );
+          const brick = PIXI.Sprite.from(texture);
+          brick.position.x = pixel * this.width / level.width;
+          brick.position.y = row * this.width / level.height;
           this.bricks.addChild(brick);
         }
       }
@@ -89,9 +130,28 @@ export default class Model {
     this.scene.addChild(this.bricks);
   }
 
+  _createBrickTexture(width, height, colour): PIXI.Texture {
+    let texture = this.brickTextures.get(colour);
+    if (texture === undefined) {
+      const brickGraphics = new PIXI.Graphics();
+      brickGraphics.beginFill(colour);
+      brickGraphics.lineStyle(1, 0x000000, 1, 0);
+      brickGraphics.drawRect(0, 0, width, height);
+      brickGraphics.endFill();
+      texture = this.renderer.generateTexture(brickGraphics);
+      this.brickTextures.set(colour, texture);
+    }
+    return texture;
+  }
+
   createBalls() {
     this.balls = new PIXI.Container();
-    this.balls.addChild(new Ball(0.5 * this.width, 0.75 * this.height, 0.02 * this.height, new Vector2(-0.002 * this.height, -0.002 * this.height)));
+    this.balls.addChild(new Ball(
+      0.5 * this.width,
+      0.75 * this.height,
+      new Vector2(-0.002 * this.height, -0.002 * this.height),
+      this.ballTexture
+    ));
     this.scene.addChild(this.balls);
   }
 
@@ -158,7 +218,6 @@ export default class Model {
       }
       const removed = this.bricks.removeChild(target);
       if (removed) {
-        console.log("REMOVED", removed);
         removed.destroy();
         if (this.bricks.children.length === 0) {
           this.nextLevel();
