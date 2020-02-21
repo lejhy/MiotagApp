@@ -7,6 +7,7 @@ import { BleManager, ConnectionPriority } from 'react-native-ble-plx';
 
 import { SENSORS, reducer, initialState } from './sensors';
 import { unwrapBase64Value } from './utils';
+import type { Subscription } from 'react-native-ble-plx';
 
 const BLE_NAME = 'MIOTAG';
 
@@ -14,43 +15,30 @@ export default function useMiotag() {
   let manager = null;
   let device = null;
   let characteristics = [];
+  let subscriptions: Subscription[] = [];
   const [isAvailable, setAvailable] = useState(false);
   const [sensors, dispatch] = useReducer(reducer, initialState);
 
-  const updateSensors = async () => {
-    let newCharacteristics = [];
+  const startUpdatingSensors = () => {
     for (const c of characteristics) {
       const uuid = c.uuid.toUpperCase();
       const sensor = SENSORS[uuid];
       if (c.isReadable && sensor) {
-        try {
-          const newCharacteristic = await c.read();
-          newCharacteristics = [...newCharacteristics, newCharacteristic];
-        } catch (err) {
-          console.log(err);
-          console.log(sensor);
-        }
+        registerCharacteristicListener(c, uuid, sensor);
       }
     }
-    // eslint-disable-next-line
-    for (const c of newCharacteristics) {
-      const value = unwrapBase64Value(c.value);
-      const uuid = c.uuid.toUpperCase();
-      const sensor = SENSORS[uuid];
-      dispatch({ type: sensor, value });
-    }
-    characteristics = newCharacteristics;
   };
 
-  const startUpdatingSensors = async () => {
-    if (characteristics) {
-      try {
-        await updateSensors();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    setTimeout(startUpdatingSensors, 0);
+  const registerCharacteristicListener = (characteristic, uuid, sensor) => {
+    subscriptions.push(
+      characteristic.monitor((error, newCharacteristic) => {
+        if (error) console.log(error);
+        else {
+          const value = unwrapBase64Value(newCharacteristic.value);
+          dispatch({ type: sensor, value })
+        }
+      })
+    );
   };
 
   const connectToDevice = async (discoveredDevice) => {
@@ -130,6 +118,8 @@ export default function useMiotag() {
       if (device !== null) {
         // close connection and destroy the manager during cleanup
         // NOTE: this return promise normally, but we don't have to deal with it
+        subscriptions.forEach(s => s.remove());
+        subscriptions = [];
         device.cancelConnection();
         device = null;
         manager.destroy();
