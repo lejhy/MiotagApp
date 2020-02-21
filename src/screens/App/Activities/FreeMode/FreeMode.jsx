@@ -73,6 +73,9 @@ export default class FreeMode extends PureComponent {
     if (this.state.loaded) {
       if (this.state.mocking) {
         this.device.mockAll();
+      } else {
+        let sensors = this.props.miotag.getSensors();
+        this.device.update(sensors);
       }
 
       this.updateFingers();

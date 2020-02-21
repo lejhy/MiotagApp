@@ -20,6 +20,15 @@ export class Device {
   gyro = new Vector3();
   mag = new Vector3(); // ignore for now...
 
+  update(sensors) {
+    for(const fingerName in this.fingers) {
+      this.fingers[fingerName] = sensors.fingers[fingerName];
+    }
+    this.acc = new Vector3(sensors.acc.x, sensors.acc.y, sensors.acc.z);
+    this.gyro = new Vector3(sensors.axes.pitch, sensors.axes.yaw, sensors.axes.roll);
+    this.mag = new Vector3(sensors.mag.x, sensors.mag.y, sensors.mag.z);
+  }
+
   mockingState = {
     fingers: new Fingers(() => MathUtils.randFloat(0.01, 0.1)),
     acc: new Vector3(MathUtils.randFloat(0,0.5), MathUtils.randFloat(0,0.5), MathUtils.randFloat(0,0.5)),
