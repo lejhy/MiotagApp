@@ -5,6 +5,7 @@ import { ActivityIndicator } from 'react-native';
 import styled, { ThemeContext } from 'styled-components';
 
 import useMiotag from '@hooks/useMiotag/hook';
+import useUser from '@hooks/useUser';
 import Text from '@core/Text';
 import { PRIMARY } from '@styles/colors';
 
@@ -15,8 +16,12 @@ const Container = styled.SafeAreaView`
 `;
 
 const withMiotag = (staticParams) => (Game) => (props) => {
+  const [{ gameDebug }] = useUser();
   const { getSensors, getFingers, isAvailable } = useMiotag();
   const theme = useContext(ThemeContext);
+
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  if (gameDebug) return <Game {...props} />;
 
   const { blockView = true } = staticParams || {};
 
@@ -30,12 +35,11 @@ const withMiotag = (staticParams) => (Game) => (props) => {
       </Container>
     );
   }
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return (
     <Game
       getSensors={getSensors}
       getFingers={getFingers}
-      {...props}
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
     />
   );
 };

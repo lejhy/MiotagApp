@@ -41,6 +41,7 @@ export default function useUser() {
     const user = {
       ...response.data,
       password,
+      gameDebug: false,
     };
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     setState(user);

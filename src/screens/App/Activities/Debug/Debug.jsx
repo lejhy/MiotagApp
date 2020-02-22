@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import type { NavigationScreenProps } from 'react-navigation';
 
+import useInterval from '@hooks/useInterval';
 import { Button, Text } from '@core';
 
 const SafeAreaView = styled.SafeAreaView`
@@ -11,20 +13,23 @@ const SafeAreaView = styled.SafeAreaView`
 
 type Props = {
   getSensors: () => Array<Number>,
+  navigation: NavigationScreenProps
 }
 
-const Debug = ({ getSensors }: Props) => {
-  const [sensors, setSensors] = useState([
-    null, // acc
-    null,
-    null,
-    null, // gyro
-    null,
-    null,
-    null, // rpy
-    null,
-    null,
-  ]);
+const INIT_STATE = [
+  null, // acc
+  null,
+  null,
+  null, // gyro
+  null,
+  null,
+  null, // rpy
+  null,
+  null,
+];
+
+const Debug = ({ getSensors, navigation }: Props) => {
+  const [sensors, setSensors] = useState(INIT_STATE);
 
   const axes = {
     roll: sensors[6],
@@ -44,16 +49,20 @@ const Debug = ({ getSensors }: Props) => {
     z: sensors[5],
   };
 
-  console.log('render triggered');
+  const goBack = () => navigation.goBack();
 
-  const logSensors = () => setSensors(getSensors());
+  useInterval(() => {
+    console.log('update');
+    const newSensors = getSensors();
+    if (newSensors === null) {
+      console.log('null value received!');
+    }
+    setSensors(newSensors === null ? INIT_STATE : newSensors);
+  }, 16);
 
   return (
     <SafeAreaView>
-      <Text>Debug screen</Text>
-      <Button onPress={logSensors}>
-        Get current values
-      </Button>
+      <Text>Debug</Text>
       <Text>Axes:</Text>
       <Text>{ `Roll: ${axes.roll === null ? 'null' : axes.roll}` }</Text>
       <Text>{ `Pitch: ${axes.pitch === null ? 'null' : axes.pitch}` }</Text>
@@ -66,6 +75,9 @@ const Debug = ({ getSensors }: Props) => {
       <Text>{ `X: ${gyro.x === null ? 'null' : gyro.x}` }</Text>
       <Text>{ `Y: ${gyro.y === null ? 'null' : gyro.y}` }</Text>
       <Text>{ `Z: ${gyro.z === null ? 'null' : gyro.z}` }</Text>
+      <Button onPress={goBack}>
+        Return
+      </Button>
     </SafeAreaView>
   );
 };
