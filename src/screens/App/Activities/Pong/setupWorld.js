@@ -13,9 +13,21 @@ const setupWorld = () => {
   const { world } = engine;
   world.gravity.y = 0.0;
 
-  const paddle = Matter.Bodies.rectangle(
+  const playerPaddle = Matter.Bodies.rectangle(
     width / 2,
-    height / 2,
+    height - PADDLE_HEIGHT,
+    PADDLE_WIDTH_FRAC * width,
+    PADDLE_HEIGHT,
+    {
+      label: 'plank',
+      width: PADDLE_WIDTH_FRAC * width,
+      height: PADDLE_HEIGHT,
+    },
+  );
+
+  const opponentPaddle = Matter.Bodies.rectangle(
+    width / 2,
+    PADDLE_HEIGHT,
     PADDLE_WIDTH_FRAC * width,
     PADDLE_HEIGHT,
     {
@@ -53,14 +65,16 @@ const setupWorld = () => {
 
 
   Matter.World.add(world, [
-    paddle,
+    playerPaddle,
+    opponentPaddle,
     wallLeft,
     wallRight,
   ]);
 
   return {
     physics: { engine, world },
-    paddle: { body: paddle, renderer: Box },
+    playerPaddle: { body: playerPaddle, renderer: Box },
+    opponentPaddle: { body: opponentPaddle, renderer: Box },
     wallLeft: { body: wallLeft, renderer: Box },
     wallRight: { body: wallRight, renderer: Box },
   };

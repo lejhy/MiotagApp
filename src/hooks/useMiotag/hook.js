@@ -1,10 +1,12 @@
 // @flow
 
-import { useEffect, useState, useReducer } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { Subscription } from 'react-native-ble-plx';
 import { BleManager, ConnectionPriority } from 'react-native-ble-plx';
 
 const BLE_NAME = 'MIOTAG';
+const IMU_UUID = '19B10001-E8F2-537E-4F6C-D104768A1214';
+const FINGERS_UUID = '19B10002-E8F2-537E-4F6C-D104768A1214';
 
 export default function useMiotag() {
   let manager = null;
@@ -12,30 +14,41 @@ export default function useMiotag() {
   let characteristics = [];
   let subscriptions: Subscription[] = [];
   const [isAvailable, setAvailable] = useState(false);
-  const [sensors, dispatch] = useReducer((state, action) => {
-    return action.value;
-  }, null);
-
-  const startUpdatingSensors = () => {
-    for (const c of characteristics) {
-      const uuid = c.uuid.toUpperCase();
-      if (uuid === '19B10001-E8F2-537E-4F6C-D104768A1214') {
-        registerIMUListener(c);
-      } else if (uuid === '19B10002-E8F2-537E-4F6C-D104768A1214') {
-        // register Finger Listener
-      }
-    }
-  };
+  const sensors = useRef(null);
+  const fingers = useRef(null);
 
   const registerIMUListener = (characteristic) => {
     subscriptions.push(
       characteristic.monitor((error, newCharacteristic) => {
-        if (error) console.log(error);
+        if (error) console.warn(error);
         else {
-          dispatch({value: new Int16Array(Buffer.from(newCharacteristic.value, 'base64').buffer)});
+          sensors.current = new Int16Array(Buffer.from(newCharacteristic.value, 'base64').buffer);
         }
-      })
+      }),
     );
+  };
+
+  const registerFingersListener = (characteristic) => {
+    subscriptions.push(
+      characteristic.monitor((error, newCharacteristic) => {
+        if (error) console.warn(error);
+        else {
+          fingers.current = new Int16Array(Buffer.from(newCharacteristic.value, 'base64').buffer);
+        }
+      }),
+    );
+  };
+
+  const startUpdatingSensors = () => {
+    // eslint-disable-next-line
+    for (const c of characteristics) {
+      const uuid = c.uuid.toUpperCase();
+      if (uuid === IMU_UUID) {
+        registerIMUListener(c);
+      } else if (uuid === FINGERS_UUID) {
+        registerFingersListener(c);
+      }
+    }
   };
 
   const connectToDevice = async (discoveredDevice) => {
@@ -115,7 +128,7 @@ export default function useMiotag() {
       if (device !== null) {
         // close connection and destroy the manager during cleanup
         // NOTE: this return promise normally, but we don't have to deal with it
-        subscriptions.forEach(s => s.remove());
+        subscriptions.forEach((s) => s.remove());
         subscriptions = [];
         device.cancelConnection();
         device = null;
@@ -126,11 +139,12 @@ export default function useMiotag() {
     };
   }, []);
 
-  const getSensors = () => sensors;
+  const getSensors = () => sensors.current;
+  const getFingers = () => fingers.current;
 
   return {
-    sensors,
     getSensors,
+    getFingers,
     isAvailable,
   };
 }

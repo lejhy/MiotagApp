@@ -15,12 +15,12 @@ const Container = styled.SafeAreaView`
 `;
 
 const withMiotag = (staticParams) => (Game) => (props) => {
-  const miotag = useMiotag();
+  const { getSensors, getFingers, isAvailable } = useMiotag();
   const theme = useContext(ThemeContext);
 
   const { blockView = true } = staticParams || {};
 
-  if (!miotag.isAvailable && blockView) {
+  if (!isAvailable && blockView) {
     return (
       <Container>
         <ActivityIndicator size="large" color={theme.colors[PRIMARY]} />
@@ -31,7 +31,13 @@ const withMiotag = (staticParams) => (Game) => (props) => {
     );
   }
   // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Game miotag={miotag} {...props} />;
+  return (
+    <Game
+      getSensors={getSensors}
+      getFingers={getFingers}
+      {...props}
+    />
+  );
 };
 
 export default withMiotag;
