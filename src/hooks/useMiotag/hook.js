@@ -14,8 +14,8 @@ export default function useMiotag() {
   let characteristics = [];
   let subscriptions: Subscription[] = [];
   const [isAvailable, setAvailable] = useState(false);
-  const sensors = useRef(null);
-  const fingers = useRef(null);
+  const sensors = useRef(new Int16Array(9));
+  const fingers = useRef(new Int16Array(5));
 
   const registerIMUListener = (characteristic) => {
     subscriptions.push(
