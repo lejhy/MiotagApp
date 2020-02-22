@@ -74,13 +74,12 @@ export default class FreeMode extends PureComponent {
       if (this.state.mocking) {
         this.device.mockAll();
       } else {
-        let sensors = this.props.miotag.getSensors();
-        this.device.update(sensors);
+        this.device.updateIMU(this.props.miotag.getSensors());
       }
 
       this.updateFingers();
       this.updateAcc();
-      this.updateGyro();
+      this.updateAxes();
 
       this.camera.lookAt(this.cameraTarget.lerp(this.hand.scene.position, 0.1));
     }
@@ -96,14 +95,14 @@ export default class FreeMode extends PureComponent {
   }
 
   updateAcc() {
-    this.hand.scene.position.copy(this.device.acc).clampLength(0, 10);
-    this.hand.scene.position.multiplyScalar(0.1);
+    this.hand.scene.position.copy(this.device.acc).clampLength(0, 100);
+    this.hand.scene.position.multiplyScalar(0.01);
   }
 
-  updateGyro() {
-    let alpha = MathUtils.degToRad( this.device.gyro.x );
-    let beta = MathUtils.degToRad( this.device.gyro.y );
-    let gamma = MathUtils.degToRad( this.device.gyro.z );
+  updateAxes() {
+    let alpha = MathUtils.degToRad( this.device.axes.x );
+    let beta = MathUtils.degToRad( this.device.axes.y );
+    let gamma = MathUtils.degToRad( this.device.axes.z );
     let euler = new Euler();
     euler.set(alpha, beta, gamma);
     this.hand.scene.quaternion.setFromEuler(euler);

@@ -18,27 +18,26 @@ export class Device {
   fingers = new Fingers(() => 0);
   acc = new Vector3();
   gyro = new Vector3();
-  mag = new Vector3(); // ignore for now...
+  axes = new Vector3(); // ignore for now...
 
-  update(sensors) {
-    for(const fingerName in this.fingers) {
-      this.fingers[fingerName] = sensors.fingers[fingerName];
+  updateIMU(state) {
+    if (state) {
+      this.acc = new Vector3(state[1], state[2], -state[0]);
+      this.gyro = new Vector3(state[4], state[5], -state[3]);
+      this.axes = new Vector3(state[7], state[8], -state[6]);
     }
-    this.acc = new Vector3(sensors.acc.x, sensors.acc.y, sensors.acc.z);
-    this.gyro = new Vector3(sensors.axes.pitch, sensors.axes.yaw, sensors.axes.roll);
-    this.mag = new Vector3(sensors.mag.x, sensors.mag.y, sensors.mag.z);
   }
 
   mockingState = {
     fingers: new Fingers(() => MathUtils.randFloat(0.01, 0.1)),
-    acc: new Vector3(MathUtils.randFloat(0,0.5), MathUtils.randFloat(0,0.5), MathUtils.randFloat(0,0.5)),
-    gyro: new Vector3(MathUtils.randFloat(0,1), MathUtils.randFloat(0,1), MathUtils.randFloat(0,1))
+    acc: new Vector3(MathUtils.randFloat(0,5), MathUtils.randFloat(0,5), MathUtils.randFloat(0,5)),
+    axes: new Vector3(MathUtils.randFloat(0,1), MathUtils.randFloat(0,1), MathUtils.randFloat(0,1))
   };
 
   mockAll() {
     this.mockFingers();
-    this.mockGyro();
     this.mockAcc();
+    this.mockAxes();
   }
 
   mockFingers() {
@@ -50,13 +49,13 @@ export class Device {
     }
   }
 
-  mockGyro() {
-    this.gyro.add(this.mockingState.gyro);
+  mockAxes() {
+    this.axes.add(this.mockingState.axes);
   }
 
   mockAcc() {
     this.acc.add(this.mockingState.acc);
-    if(this.acc.length() > 10) {
+    if(this.acc.length() > 100) {
       this.mockingState.acc.multiplyScalar(-1);
     }
   }

@@ -1,13 +1,8 @@
 // @flow
 
-import { useState, useReducer, useEffect } from 'react';
-import { BleManager, ConnectionPriority } from 'react-native-ble-plx';
-// import { throttleTime } from 'rxjs/operators';
-// import { Subject } from 'rxjs';
-
-import { SENSORS, reducer, initialState } from './sensors';
-import { unwrapBase64Value } from './utils';
+import { useEffect, useState, useReducer } from 'react';
 import type { Subscription } from 'react-native-ble-plx';
+import { BleManager, ConnectionPriority } from 'react-native-ble-plx';
 
 const BLE_NAME = 'MIOTAG';
 
@@ -17,25 +12,27 @@ export default function useMiotag() {
   let characteristics = [];
   let subscriptions: Subscription[] = [];
   const [isAvailable, setAvailable] = useState(false);
-  const [sensors, dispatch] = useReducer(reducer, initialState);
+  const [sensors, dispatch] = useReducer((state, action) => {
+    return action.value;
+  }, null);
 
   const startUpdatingSensors = () => {
     for (const c of characteristics) {
       const uuid = c.uuid.toUpperCase();
-      const sensor = SENSORS[uuid];
-      if (c.isReadable && sensor) {
-        registerCharacteristicListener(c, uuid, sensor);
+      if (uuid === '19B10001-E8F2-537E-4F6C-D104768A1214') {
+        registerIMUListener(c);
+      } else if (uuid === '19B10002-E8F2-537E-4F6C-D104768A1214') {
+        // register Finger Listener
       }
     }
   };
 
-  const registerCharacteristicListener = (characteristic, uuid, sensor) => {
+  const registerIMUListener = (characteristic) => {
     subscriptions.push(
       characteristic.monitor((error, newCharacteristic) => {
         if (error) console.log(error);
         else {
-          const value = unwrapBase64Value(newCharacteristic.value);
-          dispatch({ type: sensor, value })
+          dispatch({value: new Int16Array(Buffer.from(newCharacteristic.value, 'base64').buffer)});
         }
       })
     );
