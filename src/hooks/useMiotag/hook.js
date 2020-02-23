@@ -25,9 +25,7 @@ export default function useMiotag() {
         else {
           let buffer = Buffer.from(newCharacteristic.value, 'base64').buffer;
             imu.current = new Int16Array(buffer, 0, 6);
-            console.log(imu.current);
             fingers.current = new Uint8Array(buffer, 12, 5);
-            console.log(fingers.current);
         }
       }),
     );

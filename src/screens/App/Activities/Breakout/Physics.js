@@ -35,6 +35,7 @@ export function Physics() {
         ball.position.x -= normalisedVelocityX * penetrationDepth;
         ball.position.y -= normalisedVelocityY * penetrationDepth;
         // TODO update velocity based on all colitions combined
+        // TODO Increase velocity id collided with moving paddle
         const dot = ball.velocity.x * normalisedDistanceX + ball.velocity.y * normalisedDistanceY;
 
         ball.velocity.x -= 2 * dot * normalisedDistanceX;
