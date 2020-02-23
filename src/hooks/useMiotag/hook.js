@@ -15,7 +15,7 @@ export default function useMiotag() {
   let subscriptions: Subscription[] = [];
   const [isAvailable, setAvailable] = useState(false);
   const sensors = useRef(new Int16Array(9));
-  const fingers = useRef(new Int16Array(5));
+  const quaternions = useRef(new Float32Array(4));
 
   const registerIMUListener = (characteristic) => {
     subscriptions.push(
@@ -28,12 +28,12 @@ export default function useMiotag() {
     );
   };
 
-  const registerFingersListener = (characteristic) => {
+  const registerQuaternionsListener = (characteristic) => {
     subscriptions.push(
       characteristic.monitor((error, newCharacteristic) => {
         if (error) console.warn(error);
         else {
-          fingers.current = new Int16Array(Buffer.from(newCharacteristic.value, 'base64').buffer);
+          quaternions.current = new Float32Array(Buffer.from(newCharacteristic.value, 'base64').buffer);
         }
       }),
     );
@@ -46,7 +46,7 @@ export default function useMiotag() {
       if (uuid === IMU_UUID) {
         registerIMUListener(c);
       } else if (uuid === FINGERS_UUID) {
-        registerFingersListener(c);
+        registerQuaternionsListener(c);
       }
     }
   };
@@ -140,11 +140,11 @@ export default function useMiotag() {
   }, []);
 
   const getSensors = () => sensors.current;
-  const getFingers = () => fingers.current;
+  const getQuaternions = () => quaternions.current;
 
   return {
     getSensors,
-    getFingers,
+    getQuaternions,
     isAvailable,
   };
 }

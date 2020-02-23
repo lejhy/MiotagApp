@@ -11,7 +11,7 @@ import {
   GridHelper,
   MathUtils,
   MeshPhongMaterial,
-  PerspectiveCamera,
+  PerspectiveCamera, Quaternion,
   Raycaster,
   Scene,
   SkinnedMesh,
@@ -74,7 +74,7 @@ export default class FreeMode extends PureComponent {
       if (this.state.mocking) {
         this.device.mockAll();
       } else {
-        this.device.updateIMU(this.props.miotag.getSensors());
+        this.device.updateIMU(this.props.getSensors());
       }
 
       this.updateFingers();
@@ -95,17 +95,24 @@ export default class FreeMode extends PureComponent {
   }
 
   updateAcc() {
-    this.hand.scene.position.copy(this.device.acc).clampLength(0, 100);
-    this.hand.scene.position.multiplyScalar(0.01);
+    let newPosition = this.device.acc.multiplyScalar(-0.01).clampLength(0, 1).applyQuaternion(new Quaternion(
+      this.props.getQuaternions()[0],
+      this.props.getQuaternions()[1],
+      this.props.getQuaternions()[2],
+      this.props.getQuaternions()[3]
+    ));
+    this.hand.scene.position.lerp(newPosition, 0.5);
   }
 
   updateAxes() {
-    let alpha = MathUtils.degToRad( this.device.axes.x );
-    let beta = MathUtils.degToRad( this.device.axes.y );
-    let gamma = MathUtils.degToRad( this.device.axes.z );
-    let euler = new Euler();
-    euler.set(alpha, beta, gamma);
-    this.hand.scene.quaternion.setFromEuler(euler);
+    let newQuaternion = new Quaternion(
+      this.props.getQuaternions()[0],
+      this.props.getQuaternions()[1],
+      this.props.getQuaternions()[2],
+      this.props.getQuaternions()[3]
+    );
+    newQuaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -0.5*Math.PI));
+    this.hand.scene.quaternion.slerp(newQuaternion, 0.5);
   }
 
   onContextCreate = async gl => {
