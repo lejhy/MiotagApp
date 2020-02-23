@@ -38,11 +38,11 @@ const Debug = ({ getImu, getFingers, getQuaternions, navigation }: Props) => {
   };
 
   const fingers = {
-    thumb: sensors[0],
-    index: sensors[1],
-    middle: sensors[2],
-    ring: sensors[4],
-    pinkie: sensors[5],
+    thumb: sensors.fingers[0],
+    index: sensors.fingers[1],
+    middle: sensors.fingers[2],
+    ring: sensors.fingers[4],
+    pinkie: sensors.fingers[5],
   };
 
   const quaternions = {
@@ -57,15 +57,15 @@ const Debug = ({ getImu, getFingers, getQuaternions, navigation }: Props) => {
   useInterval(() => {
     console.log('update');
     const newImu = getImu();
-    const newFingers = getImu();
-    const newQuaternions = getImu();
+    const newFingers = getFingers();
+    const newQuaternions = getQuaternions();
 
     setSensors(newImu === null || newFingers === null || newQuaternions === null ? INIT_STATE : {
       imu: newImu,
       fingers: newFingers,
       quaternions: newQuaternions
     });
-  }, 16);
+  }, 33);
 
   return (
     <SafeAreaView>
