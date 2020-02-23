@@ -51,7 +51,8 @@ export default class FreeMode extends PureComponent {
   hand = {
     scene: (null: any),
     mesh: (null: SkinnedMesh),
-    fingers: new Fingers(() => [])
+    fingers: new Fingers(() => []),
+    deviceRotationOffset: new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -0.5*Math.PI)
   };
 
   constructor(props) {
@@ -75,6 +76,7 @@ export default class FreeMode extends PureComponent {
         this.device.mockAll();
       } else {
         this.device.updateIMU(this.props.getSensors());
+        this.device.updateQuaternions(this.props.getQuaternions());
       }
 
       this.updateFingers();
@@ -95,24 +97,15 @@ export default class FreeMode extends PureComponent {
   }
 
   updateAcc() {
-    let newPosition = this.device.acc.multiplyScalar(-0.01).clampLength(0, 1).applyQuaternion(new Quaternion(
-      this.props.getQuaternions()[0],
-      this.props.getQuaternions()[1],
-      this.props.getQuaternions()[2],
-      this.props.getQuaternions()[3]
-    ));
-    this.hand.scene.position.lerp(newPosition, 0.5);
+    let targetPosition = this.device.acc.clone();
+    targetPosition.multiplyScalar(-0.01).clampLength(0, 1).applyQuaternion(this.device.quaternions);
+    this.hand.scene.position.lerp(targetPosition, 0.5);
   }
 
   updateAxes() {
-    let newQuaternion = new Quaternion(
-      this.props.getQuaternions()[0],
-      this.props.getQuaternions()[1],
-      this.props.getQuaternions()[2],
-      this.props.getQuaternions()[3]
-    );
-    newQuaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -0.5*Math.PI));
-    this.hand.scene.quaternion.slerp(newQuaternion, 0.5);
+    let targetRotation = this.device.quaternions.clone();
+    targetRotation.multiply(this.hand.deviceRotationOffset);
+    this.hand.scene.quaternion.slerp(targetRotation, 0.5);
   }
 
   onContextCreate = async gl => {
