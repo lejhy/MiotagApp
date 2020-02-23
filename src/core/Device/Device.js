@@ -27,10 +27,18 @@ export class Device {
   quaternions = new Quaternion(); // Standard 0-1
 
   updateIMU(imuState) {
-    if (state) {
+    if (imuState) {
       this.acc = new Vector3(imuState[0], imuState[1], imuState[2]);
       this.axes = new Vector3(imuState[3], imuState[4], imuState[5]);
     }
+  }
+
+  updateFingers(fingerState) {
+    this.fingers.thumb = fingerState[0];
+    this.fingers.index = fingerState[1];
+    this.fingers.middle = fingerState[2];
+    this.fingers.ring = fingerState[3];
+    this.fingers.pinkie = fingerState[4];
   }
 
   updateQuaternions(quaternionState) {
@@ -40,7 +48,7 @@ export class Device {
   }
 
   mockingState = {
-    fingers: new Fingers(() => MathUtils.randFloat(0.01, 0.1)),
+    fingers: new Fingers(() => MathUtils.randFloat(1, 10)),
     acc: new Vector3(MathUtils.randFloat(0,5), MathUtils.randFloat(0,5), MathUtils.randFloat(0,5)),
     axes: new Vector3(MathUtils.randFloat(0,1), MathUtils.randFloat(0,1), MathUtils.randFloat(0,1))
   };
@@ -54,8 +62,8 @@ export class Device {
   mockFingers() {
     for(const fingerName in this.fingers) {
       let oldValue = this.fingers[fingerName];
-      let newValue = MathUtils.clamp(oldValue + this.mockingState.fingers[fingerName], 0, 1);
-      if (newValue === 0 || newValue === 1) this.mockingState.fingers[fingerName] *= -1;
+      let newValue = MathUtils.clamp(oldValue + this.mockingState.fingers[fingerName], 0, 100);
+      if (newValue === 0 || newValue === 100) this.mockingState.fingers[fingerName] *= -1;
       this.fingers[fingerName] = newValue;
     }
   }

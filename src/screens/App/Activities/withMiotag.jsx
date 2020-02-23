@@ -17,7 +17,7 @@ const Container = styled.SafeAreaView`
 
 const withMiotag = (staticParams) => (Game) => (props) => {
   const [{ gameDebug }] = useUser();
-  const { getSensors, getQuaternions, isAvailable } = useMiotag();
+  const { getImu, getFingers, getQuaternions, isAvailable } = useMiotag();
   const theme = useContext(ThemeContext);
 
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -37,7 +37,8 @@ const withMiotag = (staticParams) => (Game) => (props) => {
   }
   return (
     <Game
-      getSensors={getSensors}
+      getImu={getImu}
+      getFingers={getFingers}
       getQuaternions={getQuaternions}
       {...props} // eslint-disable-line react/jsx-props-no-spreading
     />

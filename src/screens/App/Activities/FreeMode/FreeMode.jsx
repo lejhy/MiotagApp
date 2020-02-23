@@ -28,7 +28,7 @@ import { FileSystem } from 'react-native-unimodules';
 import { decode } from 'base64-arraybuffer';
 import ActivitiesService from '@services/api/ActivitiesService';
 
-const maxFingerRotation = MathUtils.degToRad(-90);
+const fingerRotationMultiplier = MathUtils.degToRad(-90) / 200;
 const pixelRatio = PixelRatio.get();
 
 export default class FreeMode extends PureComponent {
@@ -75,7 +75,8 @@ export default class FreeMode extends PureComponent {
       if (this.state.mocking) {
         this.device.mockAll();
       } else {
-        this.device.updateIMU(this.props.getSensors());
+        this.device.updateIMU(this.props.getImu());
+        this.device.updateFingers(this.props.getFingers());
         this.device.updateQuaternions(this.props.getQuaternions());
       }
 
@@ -89,7 +90,7 @@ export default class FreeMode extends PureComponent {
 
   updateFingers() {
     for(const fingerName in this.device.fingers) {
-      let rotation = this.device.fingers[fingerName] * maxFingerRotation;
+      let rotation = this.device.fingers[fingerName] * fingerRotationMultiplier;
       let finger = this.hand.fingers[fingerName];
       finger[1].rotation.z = rotation;
       finger[2].rotation.z = rotation;
