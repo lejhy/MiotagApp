@@ -16,65 +16,80 @@ type Props = {
   navigation: NavigationScreenProps
 }
 
-const INIT_STATE = [
-  null, // acc
-  null,
-  null,
-  null, // gyro
-  null,
-  null,
-  null, // rpy
-  null,
-  null,
-];
+const INIT_STATE = {
+  imu: new Int16Array(6),
+  fingers: new Uint8Array(5),
+  quaternions: new Float32Array(4)
+};
 
-const Debug = ({ getSensors, navigation }: Props) => {
+const Debug = ({ getImu, getFingers, getQuaternions, navigation }: Props) => {
   const [sensors, setSensors] = useState(INIT_STATE);
 
-  const axes = {
-    roll: sensors[6],
-    pitch: sensors[7],
-    yaw: sensors[8],
-  };
-
   const acc = {
-    x: sensors[0],
-    y: sensors[1],
-    z: sensors[2],
+    x: sensors.imu[0],
+    y: sensors.imu[1],
+    z: sensors.imu[2],
   };
 
-  const gyro = {
-    x: sensors[3],
-    y: sensors[4],
-    z: sensors[5],
+  const axes = {
+    roll: sensors.imu[3],
+    pitch: sensors.imu[4],
+    yaw: sensors.imu[5],
+  };
+
+  const fingers = {
+    thumb: sensors[0],
+    index: sensors[1],
+    middle: sensors[2],
+    ring: sensors[4],
+    pinkie: sensors[5],
+  };
+
+  const quaternions = {
+    x: sensors.quaternions[0],
+    y: sensors.quaternions[1],
+    z: sensors.quaternions[2],
+    w: sensors.quaternions[3],
   };
 
   const goBack = () => navigation.goBack();
 
   useInterval(() => {
     console.log('update');
-    const newSensors = getSensors();
-    if (newSensors === null) {
-      console.log('null value received!');
-    }
-    setSensors(newSensors === null ? INIT_STATE : newSensors);
+    const newImu = getImu();
+    const newFingers = getImu();
+    const newQuaternions = getImu();
+
+    setSensors(newImu === null || newFingers === null || newQuaternions === null ? INIT_STATE : {
+      imu: newImu,
+      fingers: newFingers,
+      quaternions: newQuaternions
+    });
   }, 16);
 
   return (
     <SafeAreaView>
       <Text>Debug</Text>
-      <Text>Axes:</Text>
-      <Text>{ `Roll: ${axes.roll === null ? 'null' : axes.roll}` }</Text>
-      <Text>{ `Pitch: ${axes.pitch === null ? 'null' : axes.pitch}` }</Text>
-      <Text>{ `Yaw: ${axes.yaw === null ? 'null' : axes.yaw}` }</Text>
       <Text>Acc:</Text>
-      <Text>{ `X: ${acc.x === null ? 'null' : acc.x}` }</Text>
-      <Text>{ `Y: ${acc.y === null ? 'null' : acc.y}` }</Text>
-      <Text>{ `Z: ${acc.z === null ? 'null' : acc.z}` }</Text>
-      <Text>Gyro:</Text>
-      <Text>{ `X: ${gyro.x === null ? 'null' : gyro.x}` }</Text>
-      <Text>{ `Y: ${gyro.y === null ? 'null' : gyro.y}` }</Text>
-      <Text>{ `Z: ${gyro.z === null ? 'null' : gyro.z}` }</Text>
+      <Text>{ `X: ${acc.x}` }</Text>
+      <Text>{ `Y: ${acc.y}` }</Text>
+      <Text>{ `Z: ${acc.z}` }</Text>
+      <Text>Axes:</Text>
+      <Text>{ `Roll: ${axes.roll}` }</Text>
+      <Text>{ `Pitch: ${axes.pitch}` }</Text>
+      <Text>{ `Yaw: ${axes.yaw}` }</Text>
+      <Text>Fingers:</Text>
+      <Text>{ `Thumb: ${fingers.thumb}` }</Text>
+      <Text>{ `Index: ${fingers.index}` }</Text>
+      <Text>{ `Middle: ${fingers.middle}` }</Text>
+      <Text>{ `Ring: ${fingers.ring}` }</Text>
+      <Text>{ `Pinkie: ${fingers.pinkie}` }</Text>
+      <Text>Quaternions:</Text>
+      <Text>{ `X: ${quaternions.x}` }</Text>
+      <Text>{ `Y: ${quaternions.y}` }</Text>
+      <Text>{ `Z: ${quaternions.z}` }</Text>
+      <Text>{ `W: ${quaternions.w}` }</Text>
+
       <Button onPress={goBack}>
         Return
       </Button>
