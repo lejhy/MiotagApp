@@ -47,8 +47,7 @@ export default class Breakout extends PureComponent {
   };
 
   getTilt() {
-    const sensors = this.props.miotag.getSensors();
-    return sensors.axes.roll;
+    return this.props.getImu()[3];
   }
 
   addHeader(text) {
