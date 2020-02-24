@@ -98,7 +98,7 @@ export default class FreeMode extends PureComponent {
   }
 
   updateAcc() {
-    let targetPosition = this.device.acc.clone();
+    let targetPosition = new Vector3(this.device.acc.y, this.device.acc.z, -this.device.acc.x);
     targetPosition.multiplyScalar(-0.01).clampLength(0, 1).applyQuaternion(this.device.quaternions);
     this.hand.scene.position.lerp(targetPosition, 0.5);
   }
