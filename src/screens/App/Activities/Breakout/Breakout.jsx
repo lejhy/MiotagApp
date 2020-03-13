@@ -54,6 +54,7 @@ export default class Breakout extends PureComponent {
     this.setState((prev) => ({
       menu: prev.menu.concat([
         <Text
+          numberOfLines={1}
           style={styles.header}
         >
           {text}
@@ -94,7 +95,11 @@ export default class Breakout extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.menu}>
+        <View style={
+          this.state.menu.length > 0
+            ? styles.menu
+            : styles.hiddenMenu
+        }>
           {
             this.state.menu
           }
@@ -125,12 +130,16 @@ const styles = StyleSheet.create({
   menu: {
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     height: '100%',
     position: 'absolute',
     zIndex: 300,
+  },
+  hiddenMenu: {
+    display: 'none'
   },
   game: {
     width: '100%',
@@ -149,11 +158,13 @@ const styles = StyleSheet.create({
     margin: '10%',
   },
   header: {
-    fontSize: 30,
+    fontSize: 40,
+    fontWeight: '500',
+    color: '#FFFFFF',
     margin: '10%',
   },
   paragraph: {
-
+    color: '#FFFFFF',
   },
 });
 
