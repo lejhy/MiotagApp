@@ -24,25 +24,28 @@ export function Physics() {
       const distanceMagnitude = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
 
       if (distanceMagnitude <= ball.radius) {
-        const normalisedDistanceX = distanceX / distanceMagnitude;
-        const normalisedDistanceY = distanceY / distanceMagnitude;
+        if(distanceMagnitude === 0) {
+          console.log("Pass-through collision detected!"); //TODO handle
+        } else {
+          const normalisedDistanceX = distanceX / distanceMagnitude;
+          const normalisedDistanceY = distanceY / distanceMagnitude;
 
-        const velocityMagnitude = Math.sqrt((ball.velocity.x * ball.velocity.x) + (ball.velocity.y * ball.velocity.y));
-        const normalisedVelocityX = ball.velocity.x / velocityMagnitude;
-        const normalisedVelocityY = ball.velocity.y / velocityMagnitude;
+          const velocityMagnitude = Math.sqrt((ball.velocity.x * ball.velocity.x) + (ball.velocity.y * ball.velocity.y));
+          const normalisedVelocityX = ball.velocity.x / velocityMagnitude;
+          const normalisedVelocityY = ball.velocity.y / velocityMagnitude;
 
-        const penetrationDepth = ball.radius - distanceMagnitude;
-        ball.position.x -= normalisedVelocityX * penetrationDepth;
-        ball.position.y -= normalisedVelocityY * penetrationDepth;
-        // TODO update velocity based on all colitions combined
-        // TODO Increase velocity id collided with moving paddle
-        // TODO sometimes balls just dissapppear...
-        const dot = ball.velocity.x * normalisedDistanceX + ball.velocity.y * normalisedDistanceY;
+          const penetrationDepth = ball.radius - distanceMagnitude;
+          ball.position.x -= normalisedVelocityX * penetrationDepth;
+          ball.position.y -= normalisedVelocityY * penetrationDepth;
+          // TODO update velocity based on all colitions combined
+          // TODO Increase velocity id collided with moving paddle
+          const dot = ball.velocity.x * normalisedDistanceX + ball.velocity.y * normalisedDistanceY;
 
-        ball.velocity.x -= 2 * dot * normalisedDistanceX;
-        ball.velocity.y -= 2 * dot * normalisedDistanceY;
+          ball.velocity.x -= 2 * dot * normalisedDistanceX;
+          ball.velocity.y -= 2 * dot * normalisedDistanceY;
 
-        collisions.push(new Collision(ball, obstacle));
+          collisions.push(new Collision(ball, obstacle));
+        }
       }
     });
     return collisions;
