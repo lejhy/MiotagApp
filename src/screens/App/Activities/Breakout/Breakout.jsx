@@ -7,6 +7,7 @@ import { PIXI } from 'expo-pixi';
 import Svg, {
   Defs, LinearGradient, Rect, Stop,
 } from 'react-native-svg';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
 import Button from '@core/Button/Button';
 import Text from '@core/Text/Text';
@@ -28,7 +29,12 @@ export default class Breakout extends PureComponent {
 
   scene = new PIXI.Container();
 
+  componentDidMount() {
+    activateKeepAwake();
+  }
+
   componentWillUnmount() {
+    deactivateKeepAwake();
     this.app.destroy();
     ActivitiesService.newLog({
       activity: {

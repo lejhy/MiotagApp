@@ -27,6 +27,7 @@ import { readAsStringAsync } from 'expo-file-system';
 import { FileSystem } from 'react-native-unimodules';
 import { decode } from 'base64-arraybuffer';
 import ActivitiesService from '@services/api/ActivitiesService';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
 const fingerRotationMultiplier = MathUtils.degToRad(-90) / 200;
 const pixelRatio = PixelRatio.get();
@@ -59,7 +60,12 @@ export default class FreeMode extends PureComponent {
     super(props);
   }
 
+  componentDidMount() {
+    activateKeepAwake();
+  }
+
   componentWillUnmount() {
+    deactivateKeepAwake();
     clearTimeout(this.renderTimeout);
     ActivitiesService.newLog({
       activity: {
