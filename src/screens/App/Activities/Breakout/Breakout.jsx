@@ -22,11 +22,8 @@ export default class Breakout extends PureComponent {
   };
 
   app: PIXI.Application;
-
-  tilt = 0;
-
+  fingersSqueezed = false;
   menu = null;
-
   scene = new PIXI.Container();
 
   componentDidMount() {
@@ -54,6 +51,23 @@ export default class Breakout extends PureComponent {
 
   getTilt() {
     return this.props.getImu()[3];
+  }
+
+  getSqueeze() {
+    let fingers = this.props.getFingers();
+    if (this.fingersSqueezed) {
+      let max = Math.max(...fingers);
+      if (max < 100) {
+        this.fingersSqueezed = false;
+      }
+    } else {
+      let min = Math.min(...fingers);
+      if (min > 100) {
+        this.fingersSqueezed = true;
+        return true;
+      }
+    }
+    return false;
   }
 
   addHeader(text) {

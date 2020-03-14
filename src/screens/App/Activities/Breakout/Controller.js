@@ -84,7 +84,9 @@ export default function Controller(model, view) {
   function init() {
     model.addObserver(this);
     state.onEnter();
-    view.app.ticker.add((deltaTime) => model.tick(deltaTime, view.getTilt()));
+    view.app.ticker.add((deltaTime) => {
+      model.tick(deltaTime, view.getTilt(), view.getSqueeze());
+    });
   }
 
   function transition(nextState) {

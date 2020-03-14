@@ -146,7 +146,7 @@ export default class Model {
 
   createBalls() {
     this.balls = new PIXI.Container();
-    this.createBall(0.5 * this.width, 0.75 * this.height, new Vector2(-0.002 * this.height, -0.002 * this.height));
+    this.createBall(0.5 * this.width, 0.75 * this.height, new Vector2(-0.00283 * this.height, -0.00283 * this.height));
     this.scene.addChild(this.balls);
   }
 
@@ -202,13 +202,18 @@ export default class Model {
     return this.levels;
   }
 
-  tick(dTime: number, tilt: number) {
+  tick(dTime: number, tilt: number, squeezed: boolean) {
     if (this.running) {
       let scaledInput = tilt * dTime;
       scaledInput *= 0.0004 * this.width;
       this.paddle.move(scaledInput);
       const collisions = this.physics.resolve(dTime, this.balls.children, this.getObstacles());
       this.resolveCollisions(collisions);
+      if (squeezed) {
+        let x = this.paddle.x + ((this.paddle.width - this.ballTexture.width) / 2);
+        let y = this.paddle.y - this.ballTexture.height;
+        this.createBall(x, y, new Vector2(0, 0.005 * this.height));
+      }
     }
   }
 
@@ -226,15 +231,11 @@ export default class Model {
       }
       const removed = this.bricks.removeChild(target);
       if (removed) {
+        removed.destroy();
         if (this.bricks.children.length === 0) {
           this.nextLevel();
           return;
-        } else {
-          if (Math.random() < 0.1) {
-            this.createBall(removed.position.x, removed.position.y, new Vector2(0, 0.005 * this.height));
-          }
         }
-        removed.destroy();
       }
     }
   }
