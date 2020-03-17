@@ -23,6 +23,7 @@
     "expo-font": "^8.0.0",
     "expo-gl": "^8.0.0",
     "expo-gl-cpp": "^8.0.0",
+    "expo-keep-awake": "^8.0.0",
     "expo-pixi": "^1.2.0",
     "expo-three": "^5.3.0",
     "matter-js": "^0.14.2",

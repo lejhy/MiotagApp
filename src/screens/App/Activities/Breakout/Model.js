@@ -3,7 +3,7 @@
 import { PIXI } from 'expo-pixi';
 import Ball from './Ball';
 import Paddle from './Paddle';
-import { Physics, Vector2 } from './Physics';
+import {Collision, Physics, Vector2} from './Physics';
 import SumoWrestler from './SumoWrestler.json';
 import GameBug from './GameBug.json';
 import MarioMushroom from './MarioMushroom.json';
@@ -146,13 +146,17 @@ export default class Model {
 
   createBalls() {
     this.balls = new PIXI.Container();
+    this.createBall(0.5 * this.width, 0.75 * this.height, new Vector2(-0.00283 * this.height, -0.00283 * this.height));
+    this.scene.addChild(this.balls);
+  }
+
+  createBall(x, y, v) {
     this.balls.addChild(new Ball(
-      0.5 * this.width,
-      0.75 * this.height,
-      new Vector2(-0.002 * this.height, -0.002 * this.height),
+      x,
+      y,
+      v,
       this.ballTexture
     ));
-    this.scene.addChild(this.balls);
   }
 
   loadBasicLevel() {
@@ -198,23 +202,32 @@ export default class Model {
     return this.levels;
   }
 
-  tick(dTime: number, tilt: number) {
+  tick(dTime: number, tilt: number, squeezed: boolean) {
     if (this.running) {
       let scaledInput = tilt * dTime;
       scaledInput *= 0.0004 * this.width;
       this.paddle.move(scaledInput);
       const collisions = this.physics.resolve(dTime, this.balls.children, this.getObstacles());
       this.resolveCollisions(collisions);
+      if (squeezed) {
+        let x = this.paddle.x + ((this.paddle.width - this.ballTexture.width) / 2);
+        let y = this.paddle.y - this.ballTexture.height;
+        this.createBall(x, y, new Vector2(0, 0.005 * this.height));
+      }
     }
   }
 
-  resolveCollisions(collisions: PIXI.Graphics[]) {
+  resolveCollisions(collisions) {
     for (let i = 0; i < collisions.length; i++) {
       const target = collisions[i].getTarget();
       // Check for bottom wall collision and game over
       if (target === this.bottomWall) {
-        this.gameOver();
-        return;
+        const source = collisions[i].getSource();
+        this.balls.removeChild(source).destroy();
+        if (this.balls.children.length === 0) {
+          this.gameOver();
+          return;
+        }
       }
       const removed = this.bricks.removeChild(target);
       if (removed) {

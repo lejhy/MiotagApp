@@ -11,7 +11,7 @@ import {
   GridHelper,
   MathUtils,
   MeshPhongMaterial,
-  PerspectiveCamera,
+  PerspectiveCamera, Quaternion,
   Raycaster,
   Scene,
   SkinnedMesh,
@@ -27,8 +27,9 @@ import { readAsStringAsync } from 'expo-file-system';
 import { FileSystem } from 'react-native-unimodules';
 import { decode } from 'base64-arraybuffer';
 import ActivitiesService from '@services/api/ActivitiesService';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
-const maxFingerRotation = MathUtils.degToRad(-90);
+const fingerRotationMultiplier = MathUtils.degToRad(-90) / 200;
 const pixelRatio = PixelRatio.get();
 
 export default class FreeMode extends PureComponent {
@@ -51,14 +52,20 @@ export default class FreeMode extends PureComponent {
   hand = {
     scene: (null: any),
     mesh: (null: SkinnedMesh),
-    fingers: new Fingers(() => [])
+    fingers: new Fingers(() => []),
+    deviceRotationOffset: new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -0.5*Math.PI)
   };
 
   constructor(props) {
     super(props);
   }
 
+  componentDidMount() {
+    activateKeepAwake();
+  }
+
   componentWillUnmount() {
+    deactivateKeepAwake();
     clearTimeout(this.renderTimeout);
     ActivitiesService.newLog({
       activity: {
@@ -74,7 +81,9 @@ export default class FreeMode extends PureComponent {
       if (this.state.mocking) {
         this.device.mockAll();
       } else {
-        this.device.updateIMU(this.props.miotag.getSensors());
+        this.device.updateIMU(this.props.getImu());
+        this.device.updateFingers(this.props.getFingers());
+        this.device.updateQuaternions(this.props.getQuaternions());
       }
 
       this.updateFingers();
@@ -87,7 +96,7 @@ export default class FreeMode extends PureComponent {
 
   updateFingers() {
     for(const fingerName in this.device.fingers) {
-      let rotation = this.device.fingers[fingerName] * maxFingerRotation;
+      let rotation = this.device.fingers[fingerName] * fingerRotationMultiplier;
       let finger = this.hand.fingers[fingerName];
       finger[1].rotation.z = rotation;
       finger[2].rotation.z = rotation;
@@ -95,17 +104,15 @@ export default class FreeMode extends PureComponent {
   }
 
   updateAcc() {
-    this.hand.scene.position.copy(this.device.acc).clampLength(0, 100);
-    this.hand.scene.position.multiplyScalar(0.01);
+    let targetPosition = new Vector3(-this.device.acc.y, -this.device.acc.z, this.device.acc.x);
+    targetPosition.multiplyScalar(-0.01).clampLength(0, 1).applyQuaternion(this.device.quaternions);
+    this.hand.scene.position.lerp(targetPosition, 0.5);
   }
 
   updateAxes() {
-    let alpha = MathUtils.degToRad( this.device.axes.x );
-    let beta = MathUtils.degToRad( this.device.axes.y );
-    let gamma = MathUtils.degToRad( this.device.axes.z );
-    let euler = new Euler();
-    euler.set(alpha, beta, gamma);
-    this.hand.scene.quaternion.setFromEuler(euler);
+    let targetRotation = this.device.quaternions.clone();
+    targetRotation.multiply(this.hand.deviceRotationOffset);
+    this.hand.scene.quaternion.slerp(targetRotation, 0.5);
   }
 
   onContextCreate = async gl => {
