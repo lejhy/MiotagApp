@@ -12,6 +12,8 @@ import { Button, Text } from '@core';
 
 const Container = styled.SafeAreaView`
   flex: 1;
+  justify-content: flex-start;
+  align-items: flex-start;
   position: relative;
   background-color: ${({ theme }) => theme.colors.backgroundWhite};
 `;
@@ -26,15 +28,16 @@ const BackgroundVectorContainer = styled.View`
 
 const RunnerVectorContainer = styled.View`
   position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
+  top: 5%;
+  left: 5%;
+  right: 5%;
   bottom: 65%;
 `;
 
 const ContentContainer = styled.View`
+  display: flex;
   position: absolute;
-  top: 48%;
+  top: 55%;
   left: 5%;
   right: 5%;
   bottom: 0;
@@ -56,9 +59,7 @@ export default function Welcome({ navigation }: Props) {
 
   return (
     <Container>
-      <BackgroundVectorContainer>
-        <BackgroundVector width="100%" height="100%" />
-      </BackgroundVectorContainer>
+      <BackgroundVector width="100%" />
       <RunnerVectorContainer>
         <RunnerVector width="100%" height="100%" />
       </RunnerVectorContainer>
