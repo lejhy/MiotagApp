@@ -6,6 +6,7 @@ import styled, { ThemeContext } from 'styled-components';
 
 import useMiotag from '@hooks/useMiotag/hook';
 import useUser from '@hooks/useUser';
+import usePhoneSensors from '@hooks/usePhoneSensors';
 import Text from '@core/Text';
 import { PRIMARY } from '@styles/colors';
 
@@ -17,11 +18,12 @@ const Container = styled.SafeAreaView`
 
 const withMiotag = (staticParams) => (Game) => (props) => {
   const [{ gameDebug }] = useUser();
-  const { getSensors, getFingers, isAvailable } = useMiotag();
+  const { getSensors: getMiotagSensors, getFingers, isAvailable } = useMiotag();
+  const { getSensors: getPhoneSensors } = usePhoneSensors(gameDebug);
   const theme = useContext(ThemeContext);
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  if (gameDebug) return <Game {...props} />;
+  if (gameDebug) return <Game getSensors={getPhoneSensors} {...props} />;
 
   const { blockView = true } = staticParams || {};
 
@@ -37,7 +39,7 @@ const withMiotag = (staticParams) => (Game) => (props) => {
   }
   return (
     <Game
-      getSensors={getSensors}
+      getSensors={getMiotagSensors}
       getFingers={getFingers}
       {...props} // eslint-disable-line react/jsx-props-no-spreading
     />
