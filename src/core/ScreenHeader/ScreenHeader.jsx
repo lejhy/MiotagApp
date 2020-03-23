@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import type { NavigationScreenProps } from 'react-navigation';
 
 import { PRIMARY_LIGHT } from '@styles/colors';
@@ -9,15 +10,14 @@ import { Button, Text } from '@core';
 
 import ScreenHeaderSvg from './screen-header.svg';
 
-const BackButtonWrapper = styled.View`
-  padding: 10px 25%;
-  background-color: ${({ theme }) => theme.colors[PRIMARY_LIGHT]};
-`;
-
 const Container = styled.View`
   position: relative;
   width: 100%;
   height: 75px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SvgContainer = styled.View`
@@ -32,17 +32,23 @@ const SvgContainer = styled.View`
   height: 100%;
 `;
 
-const TextContainer = styled(SvgContainer)`
+const BackButtonWrapper = styled.TouchableOpacity`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
+  padding-left: 10%;
+  padding-bottom: 10px;
 `;
 
 
 type Props = {
   title: string,
-  includeBackButton?: () => any,
   navigation: NavigationScreenProps,
+  includeBackButton?: Boolean,
 };
 
 export default function ScreenHeader({ title, includeBackButton, navigation }: Props) {
@@ -50,22 +56,23 @@ export default function ScreenHeader({ title, includeBackButton, navigation }: P
 
   return (
     <>
-      { includeBackButton && (
-        <BackButtonWrapper>
-          <Button icon="arrow-left" onPress={handleBackPress}>
-            Back
-          </Button>
-        </BackButtonWrapper>
-      )}
       <Container>
         <SvgContainer>
           <ScreenHeaderSvg width="100%" height="100%" />
         </SvgContainer>
-        <TextContainer>
-          <Text size="header" align="center" color="textInverted" bold>
-            { title }
-          </Text>
-        </TextContainer>
+        {
+          includeBackButton && (
+            <BackButtonWrapper onPress={handleBackPress}>
+              <Icon name="chevron-left" color="#fff" size={24} />
+              <Text size="large" color="textInverted">
+                Back
+              </Text>
+            </BackButtonWrapper>
+          )
+        }
+        <Text size="header" align="center" color="textInverted" bold pb="10px">
+          { title }
+        </Text>
       </Container>
     </>
   );
