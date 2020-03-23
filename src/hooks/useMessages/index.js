@@ -27,7 +27,14 @@ export default function useMessages(userFilter) {
 
   const refresh = async () => {
     setLoading(true);
-    const response = await MessagesService.getAll();
+    let response = null;
+    try {
+      response = await MessagesService.getAll();
+    } catch (err) {
+      console.warn(err.response);
+      setLoading(false);
+      return;
+    }
     const messages = response.data;
     const newThreads = Object.values(messages.reduce((acc, msg) => {
       const user = msg.to.id === id ? msg.from : msg.to;
@@ -64,10 +71,46 @@ export default function useMessages(userFilter) {
     setLoading(false);
   };
 
+  const addMessage = async (message, to) => {
+    const newThreads = threads.map((t) => {
+      if (t.id === to) {
+        return {
+          ...t,
+          messages: [...t.messages, {
+            id: -1,
+            body: message,
+            isIncoming: false,
+            date: new Date(),
+          }],
+        };
+      }
+      return t;
+    });
+    if (userFilter) {
+      setThreads(newThreads.filter((t) => t.id === userFilter));
+    } else {
+      setThreads(newThreads);
+    }
+    try {
+      const response = await MessagesService.send({
+        from: { id },
+        to: { id: to },
+        subject: '(No subject)',
+        content: message,
+      });
+      console.log(response);
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.response);
+      console.log(err.response.data);
+    }
+    await refresh();
+  };
+
 
   useEffect(() => {
     refresh();
   }, []);
 
-  return [{ threads, loading }, { refresh }];
+  return [{ threads, loading }, { refresh, addMessage }];
 }
