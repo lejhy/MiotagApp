@@ -16,8 +16,12 @@ const Tile = styled.TouchableOpacity`
   width: 100%;
   background-color: #fff;
   border-radius: 5px;
-  border: 1px solid ${({ theme }) => theme.colors[GRAY]};
   padding: 20px 0;
+  shadow-color: #000;
+  shadow-offset: 2px 2px;
+  shadow-opacity: 0.2;
+  shadow-radius: 2px;
+  elevation: 2;
 `;
 
 type IconTileProps = {

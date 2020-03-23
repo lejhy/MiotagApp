@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
 
-import { BACKGROUND_WHITE } from '@styles/colors';
+import { PRIMARY_VERY_LIGHT } from '@styles/colors';
 
 import UserInfo from './UserInfo';
 import TilesNavigation from './TilesNavigation';
@@ -14,7 +14,7 @@ const ScreenContainer = styled.View`
   height: 100%;
 `;
 const Content = styled.ScrollView`
-  background: ${({ theme }) => theme.colors[BACKGROUND_WHITE]};
+  background: ${({ theme }) => theme.colors[PRIMARY_VERY_LIGHT]};
 `;
 
 type Props = {
