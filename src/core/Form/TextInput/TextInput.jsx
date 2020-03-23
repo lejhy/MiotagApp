@@ -50,7 +50,9 @@ export default function TextInput({
 
   return (
     <Container mt={mt} ml={ml} mr={mr}>
-      <Text color="primary" bold mb="3px" ml="5px">{ label }</Text>
+      { !!label && (
+        <Text color="primary" bold mb="3px" ml="5px">{ label }</Text>
+      )}
       <StyledTextInput
         value={value}
         onChangeText={onChange}
