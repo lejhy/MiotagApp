@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import type { NavigationScreenProps } from 'react-navigation';
 
-import { PRIMARY_LIGHT } from '@styles/colors';
-import { Button, Text } from '@core';
+import { Text } from '@core';
 
 import ScreenHeaderSvg from './screen-header.svg';
 

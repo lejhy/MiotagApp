@@ -4,12 +4,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import useUser from '@hooks/useUser';
-import { PRIMARY } from '@styles/colors';
+import { BACKGROUND_WHITE } from '@styles/colors';
 import DefaultImage from '@assets/img/default-img.svg';
 import { Text } from '@core';
 
 const Container = styled.View`
-  background-color: ${({ theme }) => theme.colors[PRIMARY]};
+  background-color: ${({ theme }) => theme.colors[BACKGROUND_WHITE]};
   flex-direction: row;
 `;
 
@@ -18,7 +18,6 @@ const ImageContainer = styled.View`
   width: 75px;
   border-radius: 37.5px;
   margin: 10px;
-  background-color: #fff;
   justify-content: center;
   align-items: center;
 `;
@@ -39,7 +38,7 @@ export default function UserInfo() {
         <DefaultImage width="90%" height="90%" />
       </ImageContainer>
       <ContentContainer>
-        <Text color="textInverted" size="large">{ getFullName() }</Text>
+        <Text size="large">{ getFullName() }</Text>
       </ContentContainer>
     </Container>
   );

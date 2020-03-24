@@ -15,9 +15,13 @@ const Container = styled.View`
   flex-direction: column;
   background-color: #fff;
   border-radius: 5px;
-  border: 1px solid ${({ theme }) => theme.colors[GRAY]};
   padding: 5%;
   margin-bottom: 30px;
+  shadow-color: #000;
+  shadow-offset: 2px 2px;
+  shadow-opacity: 0.2;
+  shadow-radius: 2px;
+  elevation: 2;
 `;
 
 const TitleContainer = styled.View`
@@ -34,7 +38,7 @@ const BottomContainer = styled.View`
 
 const LastPlayedContainer = styled.View`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex: 1;
   align-items: center;
 `;
@@ -67,7 +71,7 @@ function ActivityItem({ activity, navigation }: Props) {
       </TitleContainer>
       <BottomContainer>
         <LastPlayedContainer>
-          <Text>Last played:</Text>
+          <Text>Last played: </Text>
           <Text bold>
             { activity.lastPlayed }
           </Text>

@@ -1,11 +1,8 @@
 // @flow
 
 import React from 'react';
-import { View } from 'react-native';
 import styled from 'styled-components';
 
-import { GRAY, LIGHT_GRAY } from '@styles/colors';
-import { SUB_HEADER } from '@styles/fonts';
 import DefaultImage from '@assets/img/default-img.svg';
 import { Button, Text } from '@core';
 
@@ -15,9 +12,13 @@ const TouchableContainer = styled.TouchableOpacity`
   flex-direction: row;
   background-color: #fff;
   border-radius: 5px;
-  border: 1px solid ${({ theme }) => theme.colors[GRAY]};
   padding: 15px;
   margin-bottom: 15px;
+  shadow-color: #000;
+  shadow-offset: 2px 2px;
+  shadow-opacity: 0.2;
+  shadow-radius: 2px;
+  elevation: 2;
 `;
 
 const ProfileImageContainer = styled.View`

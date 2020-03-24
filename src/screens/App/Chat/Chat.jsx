@@ -7,13 +7,9 @@ import type { NavigationScreenProps } from 'react-navigation';
 
 import { BACKGROUND_WHITE, PRIMARY } from '@styles/colors';
 import useMessages from '@hooks/useMessages';
-import { ScreenHeader, Text, Form } from '@core';
+import { Form } from '@core';
 
 import ChatBubble from './ChatBubble';
-
-const SafeAreaView = styled.SafeAreaView`
-  flex: 1;
-`;
 
 const Content = styled.KeyboardAvoidingView`
   flex: 1;
@@ -62,34 +58,31 @@ export default function Chat({ navigation: { state } }: Props) {
   };
 
   return (
-    <SafeAreaView>
-      <Content behavior="padding">
-        <ScreenHeader title="Chat" includeBackButton />
-        <MessagesList>
-          { !loading && threads && threads[0] && threads[0].messages.map((msg, idx) => (
-            <ChatBubble
-              key={msg.id}
-              message={msg}
-              hasNext={threads[0].messages[idx + 1] !== undefined}
-            />
-          ))}
-        </MessagesList>
-        <ChatInputContainer>
-          <TextInputContainer>
-            <Form.TextInput
-              label=""
-              placeholder="Type your message..."
-              value={input}
-              returnKeyType="send"
-              onChange={setInput}
-              onSubmitEditing={onSubmit}
-            />
-          </TextInputContainer>
-          <Button onPress={onSubmit}>
-            <Icon name="paper-plane" color="#fff" size={24} />
-          </Button>
-        </ChatInputContainer>
-      </Content>
-    </SafeAreaView>
+    <Content behavior="padding">
+      <MessagesList>
+        { !loading && threads && threads[0] && threads[0].messages.map((msg, idx) => (
+          <ChatBubble
+            key={msg.id}
+            message={msg}
+            hasNext={threads[0].messages[idx + 1] !== undefined}
+          />
+        ))}
+      </MessagesList>
+      <ChatInputContainer>
+        <TextInputContainer>
+          <Form.TextInput
+            label=""
+            placeholder="Type your message..."
+            value={input}
+            returnKeyType="send"
+            onChange={setInput}
+            onSubmitEditing={onSubmit}
+          />
+        </TextInputContainer>
+        <Button onPress={onSubmit}>
+          <Icon name="paper-plane" color="#fff" size={24} />
+        </Button>
+      </ChatInputContainer>
+    </Content>
   );
 }
