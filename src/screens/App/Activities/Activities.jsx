@@ -35,23 +35,20 @@ export default function Activities() {
   }, []);
 
   return (
-    <SafeAreaView>
-      <ScreenHeader title="Activities" includeBackButton />
-      <ScrollView
-        refreshControl={(
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={refreshActivities}
-          />
+    <ScrollView
+      refreshControl={(
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={refreshActivities}
+        />
         )}
-      >
-        { (!activities || activities.length === 0) && (
-          <Text align="center">No activities to show</Text>
-        ) }
-        { (activities && activities.length > 0) && activities.map((a) => (
-          <ActivityItem activity={a} key={a.id} />
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+    >
+      { (!activities || activities.length === 0) && (
+      <Text align="center">No activities to show</Text>
+      ) }
+      { (activities && activities.length > 0) && activities.map((a) => (
+        <ActivityItem activity={a} key={a.id} />
+      ))}
+    </ScrollView>
   );
 }

@@ -6,11 +6,11 @@ import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
 
 import useFriends from '@hooks/useFriends';
-import { Button, Text, ScreenHeader } from '@core';
+import { Button, Text } from '@core';
 
 import FriendItem from './FriendItem';
 
-const SafeAreaView = styled.SafeAreaView`
+const Content = styled.View`
   position: relative;
   flex: 1;
 `;
@@ -57,8 +57,7 @@ export default function Friends({ navigation }: Props) {
   const navigateToSearchUser = () => navigation.navigate('UserSearch');
 
   return (
-    <SafeAreaView>
-      <ScreenHeader title="Friends" includeBackButton />
+    <Content>
       <Container>
         <ScrollContainer
           refreshControl={(
@@ -86,6 +85,6 @@ export default function Friends({ navigation }: Props) {
           Add new friend
         </Button>
       </AddButtonContainer>
-    </SafeAreaView>
+    </Content>
   );
 }

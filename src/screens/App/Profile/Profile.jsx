@@ -7,6 +7,7 @@ import type { NavigationScreenProps } from 'react-navigation';
 
 import useProfile from '@hooks/useProfile';
 import DefaultImage from '@assets/img/default-img.svg';
+import { BACKGROUND_WHITE } from '@styles/colors';
 import { Button, ScreenHeader, Text } from '@core';
 
 import ProgressView from '../Progress/ProgressView';
@@ -14,6 +15,7 @@ import ProgressView from '../Progress/ProgressView';
 const SafeAreaView = styled.SafeAreaView`
   flex: 1;
   position: relative;
+  background-color: ${({ theme }) => theme.colors[BACKGROUND_WHITE]};
 `;
 
 const ScrollContainer = styled.ScrollView`
@@ -34,7 +36,6 @@ const ActionsContainer = styled.View`
   right: 0;
   bottom: 0;
   padding-bottom: 30px;
-  background-color: white;
   z-index: 100;
 `;
 
@@ -48,7 +49,6 @@ const ImageContainer = styled.View`
   width: 100px;
   border-radius: 50px;
   margin: 10px;
-  background-color: #fff;
   justify-content: center;
   align-items: center;
 `;

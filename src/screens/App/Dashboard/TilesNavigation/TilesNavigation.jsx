@@ -14,8 +14,8 @@ const Container = styled.View`
 `;
 
 const TileContainer = styled.View`
-  padding: 2.5%;
-  width: 50%;
+  padding: 10px 16px;
+  width: 100%;
 `;
 
 type Props = {

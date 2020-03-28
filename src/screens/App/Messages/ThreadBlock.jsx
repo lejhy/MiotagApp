@@ -9,7 +9,7 @@ import { GRAY, LIGHT_GRAY } from '@styles/colors';
 import { SMALL } from '@styles/fonts';
 import DefaultImage from '@assets/img/default-img.svg';
 import type { Thread } from '@hooks/useMessages';
-import { Button, Text } from '@core';
+import { Text } from '@core';
 
 
 const TouchableContainer = styled.TouchableOpacity`
@@ -19,6 +19,11 @@ const TouchableContainer = styled.TouchableOpacity`
   border-radius: 5px;
   padding: 15px;
   margin-bottom: 15px;
+  shadow-color: #000;
+  shadow-offset: 2px 2px;
+  shadow-opacity: 0.2;
+  shadow-radius: 2px;
+  elevation: 2;
 `;
 
 const ProfileImageContainer = styled.View`

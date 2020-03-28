@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import type { NavigationScreenProps } from 'react-navigation';
 
-import { PRIMARY_LIGHT } from '@styles/colors';
-import { Button, Text } from '@core';
+import { PRIMARY_LIGHTER, SECONDARY } from '@styles/colors';
+import { Text } from '@core';
 
 import ScreenHeaderSvg from './screen-header.svg';
 
@@ -40,8 +40,39 @@ const BackButtonWrapper = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-left: 10%;
+  padding-left: 10px;
   padding-bottom: 10px;
+`;
+
+const AlertsWrapper = styled.TouchableOpacity`
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  bottom: 0px;
+`;
+
+const AlertsInner = styled.View`
+  position: relative;
+  width: 55px;
+  height: 55px;
+  border-radius: 27.5px;
+  background-color: ${({ theme }) => theme.colors[PRIMARY_LIGHTER]};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AlertsCountWrapper = styled.View`
+  position: absolute;
+  right: 1px;
+  top: 1%;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background-color: ${({ theme }) => theme.colors[SECONDARY]};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 
@@ -73,6 +104,14 @@ export default function ScreenHeader({ title, includeBackButton, navigation }: P
         <Text size="header" align="center" color="textInverted" bold pb="10px">
           { title }
         </Text>
+        <AlertsWrapper>
+          <AlertsInner>
+            <Icon name="bell" color="#fff" size={28} />
+            <AlertsCountWrapper>
+              <Text color="#fff" size="12px" bold>5</Text>
+            </AlertsCountWrapper>
+          </AlertsInner>
+        </AlertsWrapper>
       </Container>
     </>
   );

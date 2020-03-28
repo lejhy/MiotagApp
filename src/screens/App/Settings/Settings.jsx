@@ -8,6 +8,8 @@ import type { NavigationScreenProps } from 'react-navigation';
 import useUser from '@hooks/useUser';
 import { ScreenHeader, Text, Button } from '@core';
 
+import UserInfo from './UserInfo';
+
 const SafeAreaContainer = styled.SafeAreaView`
   flex: 1;
   flex-direction: column;
@@ -60,45 +62,43 @@ export default function Settings({ navigation }: Props) {
   const toggleDebug = (debugValue) => update({ gameDebug: debugValue });
 
   return (
-    <SafeAreaContainer>
-      <ScreenHeader title="Settings" includeBackButton />
-      <Container>
-        <Content>
-          <Row>
-            <RowDescription>
-              <Text bold>Profile Visibility</Text>
-            </RowDescription>
-            <RowSwitch>
-              <Text mr="10px">
-                { `${profilePrivate ? 'Private' : 'Public'}` }
-              </Text>
-              <Switch
-                value={profilePrivate}
-                onValueChange={toggleProfileVisibility}
-              />
-            </RowSwitch>
-          </Row>
-          <Row>
-            <RowDescription>
-              <Text bold>Run games without miotag</Text>
-            </RowDescription>
-            <RowSwitch>
-              <Text mr="10px">
-                { `${gameDebug ? 'On' : 'Off'}` }
-              </Text>
-              <Switch
-                value={gameDebug}
-                onValueChange={toggleDebug}
-              />
-            </RowSwitch>
-          </Row>
-        </Content>
-        <ButtonContainer>
-          <Button onPress={handleLogoutButton}>
+    <Container>
+      <UserInfo />
+      <Content>
+        <Row>
+          <RowDescription>
+            <Text bold>Profile Visibility</Text>
+          </RowDescription>
+          <RowSwitch>
+            <Text mr="10px">
+              { `${profilePrivate ? 'Private' : 'Public'}` }
+            </Text>
+            <Switch
+              value={profilePrivate}
+              onValueChange={toggleProfileVisibility}
+            />
+          </RowSwitch>
+        </Row>
+        <Row>
+          <RowDescription>
+            <Text bold>Run games without miotag</Text>
+          </RowDescription>
+          <RowSwitch>
+            <Text mr="10px">
+              { `${gameDebug ? 'On' : 'Off'}` }
+            </Text>
+            <Switch
+              value={gameDebug}
+              onValueChange={toggleDebug}
+            />
+          </RowSwitch>
+        </Row>
+      </Content>
+      <ButtonContainer>
+        <Button onPress={handleLogoutButton}>
             Logout
-          </Button>
-        </ButtonContainer>
-      </Container>
-    </SafeAreaContainer>
+        </Button>
+      </ButtonContainer>
+    </Container>
   );
 }
