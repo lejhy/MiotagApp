@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useContext } from 'react';
+import React, {useContext, useRef} from 'react';
 import { ActivityIndicator } from 'react-native';
 import styled, { ThemeContext } from 'styled-components';
 
@@ -21,10 +21,18 @@ const withMiotag = (staticParams) => (Game) => (props) => {
   const {
     getImu, getFingers, getQuaternions, isAvailable,
   } = useMiotag();
+  const {getPhoneImu} = usePhoneSensors();
   const theme = useContext(ThemeContext);
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  if (gameDebug) return <Game getSensors={getPhoneSensors} {...props} />;
+  if (gameDebug) return (
+    <Game
+      getImu={getPhoneImu }
+      getFingers={() => new Uint8Array(5)}
+      getQuaternions={() => new Float32Array(4)}
+      {...props}
+    />
+  );
 
   const { blockView = true } = staticParams || {};
 

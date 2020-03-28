@@ -87,8 +87,8 @@ export default class FreeMode extends PureComponent {
       }
 
       this.updateFingers();
-      this.updateAcc();
-      this.updateAxes();
+      this.updateMovement();
+      this.updateRotation();
 
       this.camera.lookAt(this.cameraTarget.lerp(this.hand.scene.position, 0.1));
     }
@@ -103,13 +103,13 @@ export default class FreeMode extends PureComponent {
     }
   }
 
-  updateAcc() {
+  updateMovement() {
     let targetPosition = new Vector3(-this.device.acc.y, -this.device.acc.z, this.device.acc.x);
     targetPosition.multiplyScalar(-0.01).clampLength(0, 1).applyQuaternion(this.device.quaternions);
     this.hand.scene.position.lerp(targetPosition, 0.5);
   }
 
-  updateAxes() {
+  updateRotation() {
     let targetRotation = this.device.quaternions.clone();
     targetRotation.multiply(this.hand.deviceRotationOffset);
     this.hand.scene.quaternion.slerp(targetRotation, 0.5);

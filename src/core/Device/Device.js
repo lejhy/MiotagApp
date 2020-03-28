@@ -1,4 +1,4 @@
-import {MathUtils, Quaternion, Vector3} from 'three';
+import {Euler, MathUtils, Quaternion, Vector3} from 'three';
 
 export class Fingers {
   thumb = undefined;
@@ -26,19 +26,19 @@ export class Device {
   // THREE JS Coordinate System where X-axis points to the right, Y-axis upward and Z-axis backward
   quaternions = new Quaternion(); // Standard 0-1
 
-  updateIMU(imuState) {
-    if (imuState) {
-      this.acc = new Vector3(imuState[0], imuState[1], imuState[2]);
-      this.axes = new Vector3(imuState[3], imuState[4], imuState[5]);
-    }
-  }
-
   updateFingers(fingerState) {
     this.fingers.thumb = fingerState[0];
     this.fingers.index = fingerState[1];
     this.fingers.middle = fingerState[2];
     this.fingers.ring = fingerState[3];
     this.fingers.pinkie = fingerState[4];
+  }
+
+  updateIMU(imuState) {
+    if (imuState) {
+      this.acc = new Vector3(imuState[0], imuState[1], imuState[2]);
+      this.axes = new Vector3(imuState[3], imuState[4], imuState[5]);
+    }
   }
 
   updateQuaternions(quaternionState) {
@@ -50,26 +50,23 @@ export class Device {
   mockingState = {
     fingers: new Fingers(() => MathUtils.randFloat(1, 10)),
     acc: new Vector3(MathUtils.randFloat(0,5), MathUtils.randFloat(0,5), MathUtils.randFloat(0,5)),
-    axes: new Vector3(MathUtils.randFloat(0,1), MathUtils.randFloat(0,1), MathUtils.randFloat(0,1))
+    axes: new Vector3(MathUtils.randFloat(0,0.01), MathUtils.randFloat(0,0.01), MathUtils.randFloat(0,0.01))
   };
 
   mockAll() {
     this.mockFingers();
     this.mockAcc();
     this.mockAxes();
+    this.mockQuaternions();
   }
 
   mockFingers() {
     for(const fingerName in this.fingers) {
       let oldValue = this.fingers[fingerName];
-      let newValue = MathUtils.clamp(oldValue + this.mockingState.fingers[fingerName], 0, 100);
-      if (newValue === 0 || newValue === 100) this.mockingState.fingers[fingerName] *= -1;
+      let newValue = MathUtils.clamp(oldValue + this.mockingState.fingers[fingerName], 0, 200);
+      if (newValue === 0 || newValue === 200) this.mockingState.fingers[fingerName] *= -1;
       this.fingers[fingerName] = newValue;
     }
-  }
-
-  mockAxes() {
-    this.axes.add(this.mockingState.axes);
   }
 
   mockAcc() {
@@ -77,5 +74,13 @@ export class Device {
     if(this.acc.length() > 100) {
       this.mockingState.acc.multiplyScalar(-1);
     }
+  }
+
+  mockAxes() {
+    this.axes.add(this.mockingState.axes);
+  }
+
+  mockQuaternions() {
+    this.quaternions.setFromEuler(new Euler(this.axes.x, this.axes.y, this.axes.z)).multiply(new Quaternion().setFromEuler(new Euler(Math.PI/2, 0, 0)));
   }
 }

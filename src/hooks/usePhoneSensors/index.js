@@ -14,22 +14,14 @@ const usePhoneSensors = (active) => {
         const roll = (180 * Math.atan2(y, Math.sqrt(x * x + z * z))) / Math.PI;
         sensors.current = [
           x, y, z,
-          ...sensors.current.slice(3, 6),
           roll,
           pitch,
-          sensors.current[8],
-        ];
-      }));
-      subscriptions.push(gyroscope.subscribe(({ x, y, z }) => {
-        sensors.current = [
-          ...sensors.current.slice(0, 3),
-          x, y, z,
-          ...sensors.current.slice(6),
+          sensors.current[5],
         ];
       }));
       subscriptions.push(magnetometer.subscribe(({ x, y, z }) => {
-        const roll = sensors.current[6];
-        const pitch = sensors.current[7];
+        const roll = sensors.current[3];
+        const pitch = sensors.current[4];
         const magX = x * Math.cos(pitch)
           + y * Math.sin(roll) * Math.sin(pitch)
           + z * Math.cos(roll) * Math.sin(pitch);
@@ -37,7 +29,7 @@ const usePhoneSensors = (active) => {
         const yaw = (180 * Math.atan2(-magY, magX)) / Math.PI;
 
         sensors.current = [
-          ...sensors.current.slice(0, 8),
+          ...sensors.current.slice(0, 5),
           yaw,
         ];
       }));
@@ -47,10 +39,10 @@ const usePhoneSensors = (active) => {
     }
   }, [active]);
 
-  const getSensors = () => sensors.current;
+  const getPhoneImu = () => sensors.current;
 
   return {
-    getSensors,
+    getPhoneImu
   };
 };
 
