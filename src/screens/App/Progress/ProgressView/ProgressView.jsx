@@ -19,11 +19,6 @@ const TopContainer = styled.View`
   flex-direction: column;
 `;
 
-const Dropdown = styled.TouchableOpacity`
-  align-items: center;
-  flex-direction: row;
-`;
-
 type Log = {
   date: String,
   length: Number,
@@ -40,11 +35,15 @@ type Props = {
 };
 
 const pickerSelectStyles = StyleSheet.create({
+  fontSize: 32,
+  borderWidth: 1,
   inputIOS: {
-    height: 0,
+    fontSize: 32,
   },
   inputAndroid: {
-    height: 0,
+    fontSize: 32,
+    borderWidth: 1,
+    borderColor: 'gray',
   },
 });
 
@@ -84,13 +83,25 @@ export default function ProgressView({ logs, theme }: Props) {
           score: l.score,
           time: l.length,
         }));
-        // sort data by date
-      graphData.sort((a, b) => a.date - b.date);
-      setGraphData(newGraphData);
+      // group by date
+      let groupedGraphData = [];
+      newGraphData.forEach((d) => {
+        if (groupedGraphData.length === 0) {
+          groupedGraphData.push(d);
+        } else {
+          if (groupedGraphData[groupedGraphData.length - 1].date === d.date) {
+            groupedGraphData[groupedGraphData.length - 1].score += d.score;
+            groupedGraphData[groupedGraphData.length - 1].time += d.time;
+          } else {
+            groupedGraphData.push(d)
+          }
+        }
+      });
+      // Only show latest 7 entries
+      setGraphData(groupedGraphData.splice(groupedGraphData.length - 7));
     }
   }, [activity]);
   // activities to pick
-  let activityPicker = null;
   const activityItems = activities.map((a) => ({
     label: a.name,
     value: a.id,
@@ -99,12 +110,6 @@ export default function ProgressView({ logs, theme }: Props) {
   const onActivityPickerChange = (id) => {
     setActivity(activities.find((a) => a.id === id));
   };
-  // handle toggle
-  const togglePicker = () => {
-    if (activities.length > 1) {
-      activityPicker.togglePicker();
-    }
-  };
   // set chart size
   const chartSize = Dimensions.get('window').width - 40;
 
@@ -112,30 +117,43 @@ export default function ProgressView({ logs, theme }: Props) {
     <Container>
       { activity && (
         <TopContainer>
-          <Text bold size="subHeader">
-            Activity:
-          </Text>
-          <Dropdown onPress={togglePicker}>
-            <Text pt="10px" pb="10px" mr="10px">
-              { activity.name }
-            </Text>
-            { activities.length > 1 && (
-              <Icon name="chevron-down" color={theme.colors.primary} size={24} />
-            )}
-          </Dropdown>
           <SelectPicker
-            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false}
+            style={{
+              borderWidth: 1,
+              borderRadius: 0,
+              color: theme.colors.primary,
+              iconContainer: {
+                top: 8,
+                right: 12,
+              },
+              inputAndroid: {
+                height: 48,
+                fontSize: 24,
+                fontWeight: '700',
+                color: 'white',
+                borderWidth: 1,
+                borderRadius: 8,
+                borderColor: theme.colors.primary,
+                backgroundColor: theme.colors.primary,
+                paddingHorizontal: 10,
+                paddingVertical: 0,
+              }
+            }}
+            placeholder={{}}
             onValueChange={onActivityPickerChange}
             items={activityItems}
             value={activity.id}
-            ref={(selectPicker) => { activityPicker = selectPicker; }}
+            Icon={() => {
+              return <Icon name="chevron-down" size={32} color={'white'} />;
+            }}
           />
         </TopContainer>
       )}
       { graphData.length > 0 && (
         <>
-          <Text size="subHeader" align="center">
-            Score
+          <Text size="subHeader" align="center" style={{marginTop: 16}}>
+            Highest Score
           </Text>
           <LineChart
             width={chartSize}
@@ -143,8 +161,8 @@ export default function ProgressView({ logs, theme }: Props) {
             xField="date"
             yField="score"
           />
-          <Text size="subHeader" align="center">
-            Time
+          <Text size="subHeader" align="center" style={{marginTop: 12}}>
+            Minutes in Activity
           </Text>
           <LineChart
             width={chartSize}

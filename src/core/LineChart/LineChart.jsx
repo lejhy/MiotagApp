@@ -31,7 +31,8 @@ export default function LineChart({
         datasets: [{ data: data.map((d) => d[yField]) }],
       }}
       width={width}
-      height={220}
+      height={180}
+      fromZero={true}
       chartConfig={{
         backgroundGradientFrom: theme.colors[SECONDARY_LIGHT],
         backgroundGradientTo: theme.colors[SECONDARY],
@@ -39,18 +40,18 @@ export default function LineChart({
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         style: {
-          borderRadius: 16,
+          borderRadius: 8,
         },
         propsForDots: {
           r: '6',
           strokeWidth: '2',
           stroke: theme.colors[SECONDARY],
-        },
+        }
       }}
       bezier
       style={{
         marginVertical: 8,
-        borderRadius: 16,
+        borderRadius: 8,
       }}
     />
   );
