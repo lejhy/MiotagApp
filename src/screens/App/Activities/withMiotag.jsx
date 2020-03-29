@@ -27,7 +27,7 @@ const withMiotag = (staticParams) => (Game) => (props) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
   if (gameDebug) return (
     <Game
-      getImu={getPhoneImu }
+      getImu={getPhoneImu}
       getFingers={() => new Uint8Array(5)}
       getQuaternions={() => new Float32Array(4)}
       {...props}
