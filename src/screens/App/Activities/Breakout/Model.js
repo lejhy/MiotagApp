@@ -18,9 +18,9 @@ export default class Model {
   observers = [];
   colours = [0xFFFF00, 0x00FF00, 0x0000FF, 0xFF0000];
   levels = [
-    [SumoWrestler, 'Sumo Wrestler', 'IvoryMalinov', 'piq.codeus.net', 'http://piq.codeus.net/picture/70010/sumo_wrestler', 'Creative Commons'],
     [GameBug, 'Game bug', 'mrskittens2003', 'piq.codeus.net', 'http://piq.codeus.net/picture/306960/game_bug', 'Creative Commons'],
     [MarioMushroom, 'Mario Mushroom', 'mrskittens2003', 'piq.codeus.net', 'http://piq.codeus.net/picture/307048/mario_mushroom', 'Creative Commons'],
+    [SumoWrestler, 'Sumo Wrestler', 'IvoryMalinov', 'piq.codeus.net', 'http://piq.codeus.net/picture/70010/sumo_wrestler', 'Creative Commons'],
   ];
 
   running = false;
