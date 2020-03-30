@@ -35,16 +35,37 @@ type Props = {
 };
 
 const pickerSelectStyles = StyleSheet.create({
-  fontSize: 32,
-  borderWidth: 1,
+  iconContainer: {
+    top: 14,
+    right: 15,
+    elevation: 4,
+  },
   inputIOS: {
-    fontSize: 32,
+    height: 52,
+    fontSize: 24,
+    color: 'black',
+    borderRadius: 5,
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
   inputAndroid: {
-    fontSize: 32,
-    borderWidth: 1,
-    borderColor: 'gray',
-  },
+    height: 52,
+    fontSize: 24,
+    color: 'black',
+    borderRadius: 5,
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  }
 });
 
 const buildActivityFilter = (activityId) => (el) => {
@@ -132,33 +153,13 @@ export default function ProgressView({ logs, theme }: Props) {
         <TopContainer>
           <SelectPicker
             useNativeAndroidPickerStyle={false}
-            style={{
-              borderWidth: 1,
-              borderRadius: 0,
-              color: theme.colors.primary,
-              iconContainer: {
-                top: 8,
-                right: 12,
-              },
-              inputAndroid: {
-                height: 48,
-                fontSize: 24,
-                fontWeight: '700',
-                color: 'white',
-                borderWidth: 1,
-                borderRadius: 8,
-                borderColor: theme.colors.primary,
-                backgroundColor: theme.colors.primary,
-                paddingHorizontal: 10,
-                paddingVertical: 0,
-              }
-            }}
+            style={pickerSelectStyles}
             placeholder={{}}
             onValueChange={onActivityPickerChange}
             items={activityItems}
             value={activity.id}
             Icon={() => {
-              return <Icon name="chevron-down" size={32} color={'white'} />;
+              return <Icon name="chevron-down" size={24} color={theme.colors.primary} />;
             }}
           />
         </TopContainer>
