@@ -1,11 +1,12 @@
 // @flow
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import type { NavigationScreenProps } from 'react-navigation';
 
 import { PRIMARY_LIGHTER, SECONDARY } from '@styles/colors';
+import useAlerts from '@hooks/useAlerts';
 import { Text } from '@core';
 
 import ScreenHeaderSvg from './screen-header.svg';
@@ -80,10 +81,20 @@ type Props = {
   title: string,
   navigation: NavigationScreenProps,
   includeBackButton?: Boolean,
+  includeAlerts?: Boolean,
 };
 
-export default function ScreenHeader({ title, includeBackButton, navigation }: Props) {
+export default function ScreenHeader({
+  title, includeBackButton, includeAlerts, navigation,
+}: Props) {
   const handleBackPress = () => navigation.goBack();
+  const handleAlertPress = () => navigation.navigate('Notifications');
+
+  const [_, { refresh, count }] = useAlerts();
+  useEffect(() => {
+    refresh();
+  }, []);
+  const alertsCount = count();
 
   return (
     <>
@@ -104,14 +115,22 @@ export default function ScreenHeader({ title, includeBackButton, navigation }: P
         <Text size="header" align="center" color="textInverted" bold pb="10px">
           { title }
         </Text>
-        <AlertsWrapper>
-          <AlertsInner>
-            <Icon name="bell" color="#fff" size={28} />
-            <AlertsCountWrapper>
-              <Text color="#fff" size="12px" bold>5</Text>
-            </AlertsCountWrapper>
-          </AlertsInner>
-        </AlertsWrapper>
+        {
+          includeAlerts && (
+            <AlertsWrapper onPress={handleAlertPress}>
+              <AlertsInner>
+                <Icon name="bell" color="#fff" size={28} />
+                { alertsCount !== 0 && (
+                  <AlertsCountWrapper>
+                    <Text color="#fff" size="12px" bold>
+                      { alertsCount }
+                    </Text>
+                  </AlertsCountWrapper>
+                )}
+              </AlertsInner>
+            </AlertsWrapper>
+          )
+        }
       </Container>
     </>
   );
@@ -119,4 +138,5 @@ export default function ScreenHeader({ title, includeBackButton, navigation }: P
 
 ScreenHeader.defaultProps = {
   includeBackButton: false,
+  includeAlerts: false,
 };

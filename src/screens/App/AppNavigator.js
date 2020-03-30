@@ -1,6 +1,6 @@
 // @flow
 
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
 
 import Dashboard from './Dashboard';
 import Activities from './Activities';
@@ -15,6 +15,7 @@ import Friends from './Friends';
 import Profile from './Profile';
 import UserSearch from './UserSearch';
 import Chat from './Chat';
+import Notifications from './Notifications';
 
 const AppNavigator = createStackNavigator({
   // games
@@ -69,6 +70,12 @@ const AppNavigator = createStackNavigator({
   },
   Chat: {
     screen: Chat,
+  },
+  Notifications: {
+    screen: Notifications,
+    navigationOptions: {
+      ...TransitionPresets.ModalTransition,
+    },
   },
 }, {
   initialRouteName: 'Dashboard',
