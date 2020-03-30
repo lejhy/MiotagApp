@@ -24,8 +24,7 @@ export default function useActivities() {
       return null;
     }
     const logsFiltered = logs.filter((l) => l.activity.id === id);
-    logsFiltered.sort((a, b) => new Date(b.date) - new Date(a.date));
-    return logsFiltered[0];
+    return logsFiltered[logsFiltered.length - 1];
   };
 
   const refresh = async () => {
