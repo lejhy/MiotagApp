@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { Buffer } from 'buffer';
 
 import { UserProvider } from '@hooks/useUser/provider';
+import { AlertsProvider } from '@hooks/useAlerts/provider';
 import { theme } from '@styles';
 import AppContainer from './AppContainer';
 
@@ -19,8 +20,10 @@ const App = () => (
   <>
     <ThemeProvider theme={theme}>
       <UserProvider>
-        <StatusBar barStyle="dark-content" />
-        <AppContainer />
+        <AlertsProvider>
+          <StatusBar barStyle="dark-content" />
+          <AppContainer />
+        </AlertsProvider>
       </UserProvider>
     </ThemeProvider>
   </>

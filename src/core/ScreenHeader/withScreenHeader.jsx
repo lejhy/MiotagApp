@@ -12,11 +12,12 @@ const SafeArea = styled.SafeAreaView`
   background-color: ${({ theme }) => theme.colors[BACKGROUND_WHITE]};
 `;
 
-const withScreenHeader = ({ title = '', includeBackButton = true }) => (Screen) => (props) => (
+const withScreenHeader = ({ title = '', includeBackButton = true, includeAlerts = true }) => (Screen) => (props) => (
   <SafeArea>
     <ScreenHeader
       title={title}
       includeBackButton={includeBackButton}
+      includeAlerts={includeAlerts}
     />
     <Screen {...props} />
   </SafeArea>

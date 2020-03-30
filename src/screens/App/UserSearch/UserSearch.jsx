@@ -13,7 +13,7 @@ import UserItem from './UserItem';
 
 
 const ScrollContainer = styled.ScrollView`
-  height: 100%;
+  flex: 1;
   padding: 5%;
 `;
 
@@ -34,8 +34,7 @@ export default function UserSearch({ navigation }: Props) {
   const getOnPressHandler = (id) => () => navigation.navigate('Profile', { id });
 
   return (
-    <SafeAreaView>
-      <ScreenHeader title="Find users" includeBackButton />
+    <>
       <Form.TextInput
         value={query}
         onChange={setQuery}
@@ -62,6 +61,6 @@ export default function UserSearch({ navigation }: Props) {
           />
         ))}
       </ScrollContainer>
-    </SafeAreaView>
+    </>
   );
 }
