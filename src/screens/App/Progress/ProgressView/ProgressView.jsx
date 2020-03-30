@@ -79,26 +79,36 @@ export default function ProgressView({ logs, theme }: Props) {
       const newGraphData = logs
         .filter(buildActivityFilter(activity.id))
         .map((l) => ({
-          date: moment(l.date).format('DD/MM'),
+          date: moment(l.date),
           score: l.score,
           time: l.length,
         }));
-      // group by date
+      // group by date aggregate into max 7 groups
+      let deltaTime = newGraphData[newGraphData.length - 1].date.diff(newGraphData[0].date, 'days');
+      let daySpan = Math.ceil(deltaTime/7);
+      console.log(daySpan);
       let groupedGraphData = [];
       newGraphData.forEach((d) => {
         if (groupedGraphData.length === 0) {
           groupedGraphData.push(d);
         } else {
-          if (groupedGraphData[groupedGraphData.length - 1].date === d.date) {
+          if (d.date.diff(groupedGraphData[groupedGraphData.length - 1].date, 'day') < daySpan) {
             groupedGraphData[groupedGraphData.length - 1].score += d.score;
             groupedGraphData[groupedGraphData.length - 1].time += d.time;
           } else {
-            groupedGraphData.push(d)
+            do {
+              groupedGraphData.push({
+                date: groupedGraphData[groupedGraphData.length - 1].date.clone().add(daySpan, 'days'),
+                score: 0,
+                time: 0
+              });
+            } while(d.date.diff(groupedGraphData[groupedGraphData.length - 1].date, 'day') > daySpan);
+            groupedGraphData[groupedGraphData.length - 1].score += d.score;
+            groupedGraphData[groupedGraphData.length - 1].time += d.time;
           }
         }
       });
-      // Only show latest 7 entries
-      setGraphData(groupedGraphData.splice(groupedGraphData.length - 7));
+      setGraphData(groupedGraphData);
     }
   }, [activity]);
   // activities to pick

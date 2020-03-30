@@ -33,6 +33,8 @@ export default function LineChart({
       width={width}
       height={180}
       fromZero={true}
+      formatXLabel={(l) => l.format('DD/MM')}
+      formatYLabel={(l) => Math.round(l / 60000)}
       chartConfig={{
         backgroundGradientFrom: theme.colors[SECONDARY_LIGHT],
         backgroundGradientTo: theme.colors[SECONDARY],
@@ -50,7 +52,7 @@ export default function LineChart({
       }}
       bezier
       style={{
-        marginVertical: 8,
+        marginVertical: 4,
         borderRadius: 8,
       }}
     />
