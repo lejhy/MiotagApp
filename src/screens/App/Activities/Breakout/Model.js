@@ -24,6 +24,8 @@ export default class Model {
   ];
 
   running = false;
+  score = 0;
+  highScore = 0;
   currentLevel = 0;
   physics = new Physics();
   ballTexture: PIXI.Texture;
@@ -171,6 +173,8 @@ export default class Model {
   }
 
   newGame() {
+    this.highScore = Math.max(this.highScore, this.score);
+    this.score = 0;
     this.currentLevel = 0;
     this.restart();
   }
@@ -231,6 +235,7 @@ export default class Model {
       }
       const removed = this.bricks.removeChild(target);
       if (removed) {
+        this.score++;
         removed.destroy();
         if (this.bricks.children.length === 0) {
           this.nextLevel();
@@ -243,6 +248,10 @@ export default class Model {
   getObstacles(): PIXI.Graphics[]  {
     let obstacles = [this.paddle];
     return obstacles.concat(this.bricks.children, this.walls.children);
+  }
+
+  getHighScore(): number {
+    return Math.max(this.highScore, this.score);
   }
 
   addObserver(observer: any) {

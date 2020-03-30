@@ -34,7 +34,6 @@ export default function LineChart({
       height={180}
       fromZero={true}
       formatXLabel={(l) => l.format('DD/MM')}
-      formatYLabel={(l) => Math.round(l / 60000)}
       chartConfig={{
         backgroundGradientFrom: theme.colors[SECONDARY_LIGHT],
         backgroundGradientTo: theme.colors[SECONDARY],

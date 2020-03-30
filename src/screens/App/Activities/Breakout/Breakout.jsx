@@ -21,6 +21,9 @@ export default class Breakout extends PureComponent {
     menu: [],
   };
 
+  createdAt = new Date();
+  model: Model;
+  controller: Controller;
   app: PIXI.Application;
   fingersSqueezed = false;
   menu = null;
@@ -38,15 +41,15 @@ export default class Breakout extends PureComponent {
         id: this.props.navigation.getParam('id'),
       },
       length: new Date() - this.createdAt,
-      score: 0,
+      score: this.model.getHighScore(),
     });
   }
 
   onContextCreate = async (context) => {
     this.app = new PIXI.Application({ context, transparent: true });
-    const model = new Model(this.app);
-    const controller = new Controller(model, this);
-    controller.init();
+    this.model = new Model(this.app);
+    this.controller = new Controller(this.model, this);
+    this.controller.init();
   };
 
   getTilt() {

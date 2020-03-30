@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -81,7 +81,7 @@ export default function ProgressView({ logs, theme }: Props) {
         .map((l) => ({
           date: moment(l.date),
           score: l.score,
-          time: l.length,
+          time: Math.round(l.length / 60000),
         }));
       // group by date aggregate into max 7 groups
       let deltaTime = newGraphData[newGraphData.length - 1].date.diff(newGraphData[0].date, 'days');
@@ -93,7 +93,10 @@ export default function ProgressView({ logs, theme }: Props) {
           groupedGraphData.push(d);
         } else {
           if (d.date.diff(groupedGraphData[groupedGraphData.length - 1].date, 'day') < daySpan) {
-            groupedGraphData[groupedGraphData.length - 1].score += d.score;
+            groupedGraphData[groupedGraphData.length - 1].score = Math.max(
+              groupedGraphData[groupedGraphData.length - 1].score,
+              d.score
+            );
             groupedGraphData[groupedGraphData.length - 1].time += d.time;
           } else {
             do {
@@ -103,8 +106,8 @@ export default function ProgressView({ logs, theme }: Props) {
                 time: 0
               });
             } while(d.date.diff(groupedGraphData[groupedGraphData.length - 1].date, 'day') > daySpan);
-            groupedGraphData[groupedGraphData.length - 1].score += d.score;
-            groupedGraphData[groupedGraphData.length - 1].time += d.time;
+            groupedGraphData[groupedGraphData.length - 1].score = d.score;
+            groupedGraphData[groupedGraphData.length - 1].time = d.time;
           }
         }
       });
