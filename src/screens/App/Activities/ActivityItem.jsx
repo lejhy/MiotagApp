@@ -29,6 +29,8 @@ const TitleContainer = styled.View`
   margin-bottom: 10px;
   border: 1px solid transparent;
   border-bottom-color: ${({ theme }) => theme.colors[LIGHT_GRAY]};
+  display: flex;
+  flex-direction: row;
 `;
 
 const BottomContainer = styled.View`
@@ -65,17 +67,9 @@ function ActivityItem({ activity, navigation }: Props) {
   return (
     <Container>
       <TitleContainer>
-        <Text bold size={SUB_HEADER}>
+        <Text bold size={SUB_HEADER} style={{flex: 1}}>
           { activity.name }
         </Text>
-      </TitleContainer>
-      <BottomContainer>
-        <LastPlayedContainer>
-          <Text>Last played: </Text>
-          <Text bold>
-            { activity.lastPlayed }
-          </Text>
-        </LastPlayedContainer>
         <ButtonContainer>
           <View>
             <Button
@@ -86,6 +80,14 @@ function ActivityItem({ activity, navigation }: Props) {
             </Button>
           </View>
         </ButtonContainer>
+      </TitleContainer>
+      <BottomContainer>
+        <LastPlayedContainer>
+          <Text>Last played: </Text>
+          <Text bold>
+            { activity.lastPlayed }
+          </Text>
+        </LastPlayedContainer>
       </BottomContainer>
     </Container>
   );
