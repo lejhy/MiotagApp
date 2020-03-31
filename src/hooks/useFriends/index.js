@@ -22,6 +22,7 @@ export default function useFriends() {
     const followResponse = await RelationService.getUsersFollowed();
 
     const newState = followResponse.data;
+    newState.sort((f1, f2) => f1.firstName > f2.firstName);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
     setState(newState);
     return newState;
