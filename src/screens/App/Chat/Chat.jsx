@@ -71,7 +71,7 @@ export default function Chat({ navigation: { state, navigate, push } }: Props) {
   const goToProfile = () => navigate('Profile', { id: receiver });
 
   return (
-    <Content behavior="padding">
+    <Content behavior={Platform.OS === "ios" ? "padding" : "height"}>
       { !receiver && (
         <FriendPicker
           onSelect={goToChat}
