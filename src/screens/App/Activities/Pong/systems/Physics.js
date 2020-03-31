@@ -2,25 +2,35 @@
 
 import Matter from 'matter-js';
 
+const MAX_PADDLE_SPEED = 10;
+const ROLL_MIN = 5;
+const ROLL_MAX = 75;
 
-const Physics = (getSensors) => (entities, { time }) => {
+const Physics = (getImu) => (entities, { time }) => {
   const { engine } = entities.physics;
 
-  const sensors = getSensors();
-  console.log(sensors[6], sensors[7], sensors[8]);
-  /*
-  const paddle = entities.paddle.body;
-  const sensors = getSensors();
-  const { roll } = sensors.axes;
-  // console.log(roll);
+  const imu = getImu();
 
-  const paddleSpeed = Math.abs(roll) < 10 ? 0 : 1;
+  const roll = imu[3];
 
-  Matter.Body.setVelocity(paddle, {
-    x: roll > 0 ? paddleSpeed : -paddleSpeed,
+  let speed = 0;
+  const rollAbs = Math.abs(roll);
+  if (rollAbs > ROLL_MIN) {
+    const multiplier = rollAbs >= ROLL_MAX ? 1 : rollAbs / ROLL_MAX;
+    speed = MAX_PADDLE_SPEED * multiplier;
+    if (roll < 0) {
+      speed *= -1;
+    }
+  }
+
+  const playerPaddle = entities.playerPaddle.body;
+
+  Matter.Body.setVelocity(playerPaddle, {
+    x: speed,
     y: 0,
   });
-  */
+
+  // Matter.Body.rotate(playerPaddle, roll);
 
   Matter.Engine.update(engine, time.delta);
 

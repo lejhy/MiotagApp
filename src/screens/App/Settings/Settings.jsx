@@ -6,14 +6,9 @@ import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
 
 import useUser from '@hooks/useUser';
-import { ScreenHeader, Text, Button } from '@core';
-
-import UserInfo from './UserInfo';
-
-const SafeAreaContainer = styled.SafeAreaView`
-  flex: 1;
-  flex-direction: column;
-`;
+import {
+  Text, Button, UserInfo,
+} from '@core';
 
 const Container = styled.View`
   flex: 1;

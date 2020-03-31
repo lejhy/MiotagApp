@@ -16,7 +16,7 @@ const Tile = styled.TouchableOpacity`
   width: 100%;
   background: #fff;
   border-radius: 5px;
-  padding: 10px;
+  padding: 25px 16px;
   shadow-color: #000;
   shadow-offset: 2px 2px;
   shadow-opacity: 0.2;

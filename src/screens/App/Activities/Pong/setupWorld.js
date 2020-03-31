@@ -71,6 +71,8 @@ const setupWorld = () => {
     wallRight,
   ]);
 
+  Matter.Resolver._restingThresh = 0.001;
+
   return {
     physics: { engine, world },
     playerPaddle: { body: playerPaddle, renderer: Box },

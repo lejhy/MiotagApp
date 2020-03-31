@@ -18,11 +18,13 @@ export default function useProfile(id: Number) {
   const [friends, { refresh: refreshFriends }] = useFriends();
 
   const init = async () => {
-    const userResponse = await UserService.getById(id);
-    const logsResponse = await ActivitiesService.getUserLogs(id);
-    setUser(userResponse.data);
-    setLogs(logsResponse.data);
-    await refreshFriends();
+    if (id) {
+      const userResponse = await UserService.getById(id);
+      const logsResponse = await ActivitiesService.getUserLogs(id);
+      setUser(userResponse.data);
+      setLogs(logsResponse.data);
+      await refreshFriends();
+    }
     setLoading(false);
   };
 
@@ -36,13 +38,15 @@ export default function useProfile(id: Number) {
     await refreshFriends();
   };
 
+  const getFullName = () => (user ? `${user.firstName} ${user.lastName}` : '');
+
   useEffect(() => {
     setFriend(friends.some((f) => f.id === id));
   }, [friends]);
 
   useEffect(() => {
     init();
-  }, []);
+  }, [id]);
 
 
   return [{
@@ -53,5 +57,6 @@ export default function useProfile(id: Number) {
   }, {
     init,
     toggleFriend,
+    getFullName,
   }];
 }

@@ -5,6 +5,7 @@ import Form from './Form';
 import LineChart from './LineChart';
 import ScreenHeader from './ScreenHeader';
 import Text from './Text';
+import UserInfo from './UserInfo';
 
 export {
   Button,
@@ -12,6 +13,7 @@ export {
   LineChart,
   ScreenHeader,
   Text,
+  UserInfo,
 };
 
 const Core = {
@@ -20,6 +22,7 @@ const Core = {
   LineChart,
   ScreenHeader,
   Text,
+  UserInfo,
 };
 
 export default Core;

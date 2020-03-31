@@ -29,7 +29,11 @@ const ContentContainer = styled.View`
   padding-right: 10%;
 `;
 
-export default function UserInfo() {
+type Props = {
+  fullName?: String,
+};
+
+export default function UserInfo({ fullName }: Props) {
   const [, { getFullName }] = useUser();
 
   return (
@@ -38,8 +42,12 @@ export default function UserInfo() {
         <DefaultImage width="90%" height="90%" />
       </ImageContainer>
       <ContentContainer>
-        <Text size="large">{ getFullName() }</Text>
+        <Text size="large">{ fullName === undefined ? getFullName() : fullName }</Text>
       </ContentContainer>
     </Container>
   );
 }
+
+UserInfo.defaultProps = {
+  fullName: undefined,
+};

@@ -35,11 +35,12 @@ const AddButtonContainer = styled.View`
 
 type Props = {
   navigation: NavigationScreenProps,
+  isFocused: Boolean
 };
 
-export default function Friends({ navigation }: Props) {
+export default function Friends({ navigation, isFocused }: Props) {
   const [refreshing, setRefreshing] = useState(true);
-  const [friends, { refresh }] = useFriends();
+  const [friends, { refresh, unfollow }] = useFriends();
 
   const refreshActivities = async () => {
     setRefreshing(true);
@@ -48,12 +49,13 @@ export default function Friends({ navigation }: Props) {
   };
 
   useEffect(() => {
-    refreshActivities();
-  }, []);
+    if (isFocused) {
+      refreshActivities();
+    }
+  }, [isFocused]);
 
   const getOnPressHandler = (id) => () => navigation.navigate('Profile', { id });
-  // TODO: Implement in the hook method
-  const getOnDeleteHandler = (id) => () => null;
+  const getOnDeleteHandler = (id) => () => unfollow(id);
   const navigateToSearchUser = () => navigation.navigate('UserSearch');
 
   return (

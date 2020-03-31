@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import type { ThemeProps } from 'styled-components';
 
 import { PRIMARY as PRIMARY_FONT, REGULAR as REGULAR_SIZE } from '@styles/fonts';
-import { PRIMARY as PRIMARY_COLOR, GRAY } from '@styles/colors';
+import { PRIMARY as PRIMARY_COLOR, GRAY, TEXT } from '@styles/colors';
 import { Text } from '@core';
 
 const Container = styled.View`
@@ -23,7 +23,7 @@ const Container = styled.View`
 const StyledTextInput = styled.TextInput`
   font-family: ${({ theme }) => theme.fonts[PRIMARY_FONT]};
   font-size: ${({ theme }) => theme.fonts.size[REGULAR_SIZE]};
-  color: ${({ theme, isFocused }) => (isFocused ? theme.colors[PRIMARY_COLOR] : theme.colors[GRAY])};
+  color: ${({ theme, isFocused }) => (isFocused ? theme.colors[TEXT] : theme.colors[GRAY])};
   border: 1px solid ${({ theme, isFocused }) => (isFocused ? theme.colors[PRIMARY_COLOR] : theme.colors[GRAY])};
   border-radius: 7px;
   height: 45px;
@@ -34,6 +34,7 @@ type Props = {
   value: string,
   onChange: (text) => void,
   label: string,
+  inputRef: any,
   mt?: string,
   ml?: string,
   mr?: string,
@@ -41,7 +42,7 @@ type Props = {
 };
 
 export default function TextInput({
-  value, onChange, label, mt, ml, mr, theme, ...rest
+  value, onChange, inputRef, label, mt, ml, mr, theme, ...rest
 }: Props) {
   const [isFocused, setFocus] = useState(false);
 
@@ -54,6 +55,7 @@ export default function TextInput({
         <Text color="primary" bold mb="3px" ml="5px">{ label }</Text>
       )}
       <StyledTextInput
+        ref={inputRef}
         value={value}
         onChangeText={onChange}
         placeholderTextColor={theme.colors[GRAY]}
