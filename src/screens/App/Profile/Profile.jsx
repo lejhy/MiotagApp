@@ -6,24 +6,12 @@ import styled from 'styled-components';
 import type { NavigationScreenProps } from 'react-navigation';
 
 import useProfile from '@hooks/useProfile';
-import DefaultImage from '@assets/img/default-img.svg';
-import { BACKGROUND_WHITE } from '@styles/colors';
-import { Button, ScreenHeader, Text } from '@core';
+import { Button, UserInfo } from '@core';
 
 import ProgressView from '../Progress/ProgressView';
 
-const SafeAreaView = styled.SafeAreaView`
-  flex: 1;
-  position: relative;
-  background-color: ${({ theme }) => theme.colors[BACKGROUND_WHITE]};
-`;
-
 const ScrollContainer = styled.ScrollView`
   height: 100%;
-`;
-
-const TopContainer = styled.View`
-  flex-direction: row;
 `;
 
 const ActionsContainer = styled.View`
@@ -44,36 +32,6 @@ const ButtonContainer = styled.View`
   padding: 10px;
 `;
 
-const ImageContainer = styled.View`
-  height: 100px;
-  width: 100px;
-  border-radius: 50px;
-  margin: 10px;
-  justify-content: center;
-  align-items: center;
-`;
-
-const UserInfoContainer = styled.View`
-  flex-direction: column;
-  flex: 1;
-  justify-content: center;
-`;
-
-const UserInfoRow = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const UserInfoLeft = styled.View`
-  justify-content: flex-end;
-  min-width: 100px;
-`;
-
-const UserInfoRight = styled.View`
-  flex: 1;
-  flex-basis: auto;
-`;
-
 const ScrollContent = styled.View`
   padding-bottom: 100px;
 `;
@@ -88,16 +46,12 @@ export default function Profile({ navigation: { navigate, state } }: Props) {
     {
       user, loading, isFriend, logs,
     },
-    { init, toggleFriend },
+    { init, toggleFriend, getFullName },
   ] = useProfile(id);
-  const name = (user && user.firstName && user.lastName)
-    ? `${user.firstName} ${user.lastName}`
-    : 'Profile';
   const openChat = () => navigate('Chat', { id });
 
   return (
-    <SafeAreaView>
-      <ScreenHeader title={name} includeBackButton />
+    <>
       <ActionsContainer>
         <ButtonContainer>
           <Button
@@ -130,41 +84,11 @@ export default function Profile({ navigation: { navigate, state } }: Props) {
       >
         { !loading && user && (
           <ScrollContent>
-            <TopContainer>
-              <ImageContainer>
-                <DefaultImage width="90%" height="90%" />
-              </ImageContainer>
-              <UserInfoContainer>
-                <UserInfoRow>
-                  <UserInfoLeft>
-                    <Text>Age:</Text>
-                  </UserInfoLeft>
-                  <UserInfoRight>
-                    <Text bold>50</Text>
-                  </UserInfoRight>
-                </UserInfoRow>
-                <UserInfoRow>
-                  <UserInfoLeft>
-                    <Text>Phone:</Text>
-                  </UserInfoLeft>
-                  <UserInfoRight>
-                    <Text bold>123456789</Text>
-                  </UserInfoRight>
-                </UserInfoRow>
-                <UserInfoRow>
-                  <UserInfoLeft>
-                    <Text>Address:</Text>
-                  </UserInfoLeft>
-                  <UserInfoRight>
-                    <Text bold>G1 1SJ</Text>
-                  </UserInfoRight>
-                </UserInfoRow>
-              </UserInfoContainer>
-            </TopContainer>
+            <UserInfo fullName={getFullName()} />
             <ProgressView logs={logs} />
           </ScrollContent>
         )}
       </ScrollContainer>
-    </SafeAreaView>
+    </>
   );
 }
