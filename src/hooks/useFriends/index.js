@@ -27,6 +27,13 @@ export default function useFriends() {
     return newState;
   };
 
+  const unfollow = async (id) => {
+    const newState = state.filter((u) => u.id !== id);
+    setState(newState);
+    await RelationService.unfollowUser(id);
+    await refresh();
+  };
+
   useEffect(() => {
     init();
   }, []);
@@ -35,6 +42,7 @@ export default function useFriends() {
   const methods = {
     init,
     refresh,
+    unfollow,
   };
   return [state, methods];
 }
