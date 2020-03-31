@@ -44,7 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
             new ModuleRegistryAdapter(mModuleRegistryProvider)
           );
           packages.addAll(unimodules);
-          packages.add(new OrientationPackage())
+          packages.add(new OrientationPackage());
 
           return packages;
         }
