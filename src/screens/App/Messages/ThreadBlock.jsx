@@ -1,11 +1,10 @@
 // @flow
 
 import React from 'react';
-import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import { GRAY, LIGHT_GRAY } from '@styles/colors';
+import { GRAY } from '@styles/colors';
 import { SMALL } from '@styles/fonts';
 import DefaultImage from '@assets/img/default-img.svg';
 import type { Thread } from '@hooks/useMessages';

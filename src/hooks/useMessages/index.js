@@ -63,6 +63,11 @@ export default function useMessages(userFilter) {
         },
       };
     }, {}));
+    newThreads.sort((t1, t2) => {
+      const t1LastMsg = t1.messages[t1.messages.length - 1];
+      const t2LastMsg = t2.messages[t2.messages.length - 1];
+      return t1LastMsg.date < t2LastMsg.date;
+    });
     if (userFilter) {
       setThreads(newThreads.filter((t) => t.id === userFilter));
     } else {
