@@ -3,4 +3,4 @@
 import Debug from './Debug';
 import withMiotag from '../withMiotag';
 
-export default withMiotag()(Debug);
+export default withMiotag({ lockToPortrait: true })(Debug);

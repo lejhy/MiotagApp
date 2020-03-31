@@ -1,19 +1,19 @@
 // @flow
 
 import { useEffect, useRef } from 'react';
-import { accelerometer, gyroscope, magnetometer } from 'react-native-sensors';
+import { accelerometer, magnetometer } from 'react-native-sensors';
 
 export default function usePhoneSensors() {
   const sensors = useRef([]);
   let subscriptions = [];
 
   useEffect(() => {
-    //TODO Accelerometer should not be used for rotation calculation, but merely for correction
+    // TODO Accelerometer should not be used for rotation calculation, but merely for correction
     subscriptions.push(accelerometer.subscribe(({ x, y, z }) => {
-      const pitch = (180 * Math.atan2(x, Math.sqrt(y * y + z * z))) / Math.PI;
-      const roll = (180 * Math.atan2(y, Math.sqrt(x * x + z * z))) / Math.PI;
+      const pitch = (180 * Math.atan2(y, Math.sqrt(x * x + z * z))) / Math.PI;
+      const roll = (180 * Math.atan2(x, Math.sqrt(y * y + z * z))) / Math.PI;
       sensors.current = [
-        x, y, z,
+        x * 100, y * 100, z * 100,
         roll,
         pitch,
         sensors.current[5],
@@ -36,12 +36,12 @@ export default function usePhoneSensors() {
     return () => {
       subscriptions.forEach((s) => s.remove());
       subscriptions = [];
-    }
+    };
   });
 
   const getPhoneImu = () => sensors.current;
 
   return {
-    getPhoneImu
+    getPhoneImu,
   };
-};
+}

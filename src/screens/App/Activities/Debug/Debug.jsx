@@ -19,10 +19,12 @@ type Props = {
 const INIT_STATE = {
   imu: new Int16Array(6),
   fingers: new Uint8Array(5),
-  quaternions: new Float32Array(4)
+  quaternions: new Float32Array(4),
 };
 
-const Debug = ({ getImu, getFingers, getQuaternions, navigation }: Props) => {
+const Debug = ({
+  getImu, getFingers, getQuaternions, navigation,
+}: Props) => {
   const [sensors, setSensors] = useState(INIT_STATE);
 
   const acc = {
@@ -55,7 +57,6 @@ const Debug = ({ getImu, getFingers, getQuaternions, navigation }: Props) => {
   const goBack = () => navigation.goBack();
 
   useInterval(() => {
-    console.log('update');
     const newImu = getImu();
     const newFingers = getFingers();
     const newQuaternions = getQuaternions();
@@ -63,7 +64,7 @@ const Debug = ({ getImu, getFingers, getQuaternions, navigation }: Props) => {
     setSensors(newImu === null || newFingers === null || newQuaternions === null ? INIT_STATE : {
       imu: newImu,
       fingers: newFingers,
-      quaternions: newQuaternions
+      quaternions: newQuaternions,
     });
   }, 33);
 

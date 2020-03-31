@@ -8,7 +8,7 @@ const BLE_NAME = 'MIOTAG';
 const IMU_UUID = '19B10001-E8F2-537E-4F6C-D104768A1214';
 const FINGERS_UUID = '19B10002-E8F2-537E-4F6C-D104768A1214';
 
-export default function useMiotag() {
+export default function useMiotag(enabled = true) {
   let manager = null;
   let device = null;
   let characteristics = [];
@@ -23,9 +23,9 @@ export default function useMiotag() {
       characteristic.monitor((error, newCharacteristic) => {
         if (error) console.warn(error);
         else {
-          let buffer = Buffer.from(newCharacteristic.value, 'base64').buffer;
-            imu.current = new Int16Array(buffer, 0, 6);
-            fingers.current = new Uint8Array(buffer, 12, 5);
+          const { buffer } = Buffer.from(newCharacteristic.value, 'base64');
+          imu.current = new Int16Array(buffer, 0, 6);
+          fingers.current = new Uint8Array(buffer, 12, 5);
         }
       }),
     );
@@ -126,9 +126,11 @@ export default function useMiotag() {
   };
 
   useEffect(() => {
-    init();
+    if (enabled) {
+      init();
+    }
     return () => {
-      if (device !== null) {
+      if (device !== null && enabled) {
         // close connection and destroy the manager during cleanup
         // NOTE: this return promise normally, but we don't have to deal with it
         subscriptions.forEach((s) => s.remove());
@@ -141,6 +143,12 @@ export default function useMiotag() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (enabled) {
+      init();
+    }
+  }, [enabled]);
 
   const getImu = () => imu.current;
   const getFingers = () => fingers.current;
