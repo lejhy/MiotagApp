@@ -14,7 +14,7 @@ import ScreenHeaderSvg from './screen-header.svg';
 const Container = styled.View`
   position: relative;
   width: 100%;
-  height: 75px;
+  height: 90px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -35,14 +35,20 @@ const SvgContainer = styled.View`
 
 const BackButtonWrapper = styled.TouchableOpacity`
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 6px;
+  left: 6px;
   bottom: 0;
+`;
+
+const BackButtonInner = styled.View`
+  position: relative;
+  width: 55px;
+  height: 55px;
+  border-radius: 27.5px;
+  background-color: ${({ theme }) => theme.colors[PRIMARY_LIGHTER]};
   display: flex;
-  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  padding-left: 10px;
-  padding-bottom: 10px;
 `;
 
 const AlertsWrapper = styled.TouchableOpacity`
@@ -105,14 +111,13 @@ export default function ScreenHeader({
         {
           includeBackButton && (
             <BackButtonWrapper onPress={handleBackPress}>
-              <Icon name="chevron-left" color="#fff" size={24} />
-              <Text size="large" color="textInverted">
-                Back
-              </Text>
+              <BackButtonInner>
+                <Icon name="chevron-left" color="#fff" size={28} />
+              </BackButtonInner>
             </BackButtonWrapper>
           )
         }
-        <Text size="header" align="center" color="textInverted" bold pb="10px">
+        <Text size="header" align="center" color="textInverted" bold pb="22px">
           { title }
         </Text>
         {
