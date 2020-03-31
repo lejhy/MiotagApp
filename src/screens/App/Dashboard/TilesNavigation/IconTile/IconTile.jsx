@@ -16,7 +16,7 @@ const Tile = styled.TouchableOpacity`
   width: 100%;
   background: #fff;
   border-radius: 5px;
-  padding: 25px 16px;
+  padding: 16px 16px;
   shadow-color: #000;
   shadow-offset: 2px 2px;
   shadow-opacity: 0.2;
@@ -39,7 +39,7 @@ export default function IconTile({
   return (
     <Tile onPress={onPress}>
       <Text pb="2px" size={SUB_HEADER}>{ label }</Text>
-      <Icon name={icon} size={32} color={theme.colors[PRIMARY]} />
+      <Icon name={icon} size={48} color={theme.colors[PRIMARY]} />
     </Tile>
   );
 }
