@@ -30,6 +30,7 @@ export default function useAlerts() {
       read: false,
       ...cachedAlerts[idx],
     }));
+    alerts.sort((a1, a2) => a1.date < a2.date);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(alerts));
     setState(alerts);
     return alerts;
