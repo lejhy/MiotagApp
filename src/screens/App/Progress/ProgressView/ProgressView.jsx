@@ -1,13 +1,14 @@
 // @flow
 
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import SelectPicker from 'react-native-picker-select';
 
-import { LineChart, Text } from '@core';
+import { Text } from '@core';
+import ProgressViewItem from './ProgressViewItem';
 
 const Container = styled.View`
   display: flex;
@@ -15,12 +16,8 @@ const Container = styled.View`
   padding: 20px;
 `;
 
-const TopContainer = styled.View`
-  flex-direction: column;
-`;
-
-type Log = {
-  date: String,
+export type Log = {
+  date: moment,
   length: Number,
   score: Number,
 }
@@ -104,85 +101,47 @@ export default function ProgressView({ logs, theme }: Props) {
           score: l.score,
           time: Math.round(l.length / 60000),
         }));
-      // group by date aggregate into max 7 groups
-      let deltaTime = newGraphData[newGraphData.length - 1].date.diff(newGraphData[0].date, 'days');
-      let daySpan = Math.ceil(deltaTime/7);
-      console.log(daySpan);
-      let groupedGraphData = [];
-      newGraphData.forEach((d) => {
-        if (groupedGraphData.length === 0) {
-          groupedGraphData.push(d);
-        } else {
-          if (d.date.diff(groupedGraphData[groupedGraphData.length - 1].date, 'day') < daySpan) {
-            groupedGraphData[groupedGraphData.length - 1].score = Math.max(
-              groupedGraphData[groupedGraphData.length - 1].score,
-              d.score
-            );
-            groupedGraphData[groupedGraphData.length - 1].time += d.time;
-          } else {
-            do {
-              groupedGraphData.push({
-                date: groupedGraphData[groupedGraphData.length - 1].date.clone().add(daySpan, 'days'),
-                score: 0,
-                time: 0
-              });
-            } while(d.date.diff(groupedGraphData[groupedGraphData.length - 1].date, 'day') > daySpan);
-            groupedGraphData[groupedGraphData.length - 1].score = d.score;
-            groupedGraphData[groupedGraphData.length - 1].time = d.time;
-          }
-        }
-      });
-      setGraphData(groupedGraphData);
+      setGraphData(newGraphData);
     }
   }, [activity]);
+
   // activities to pick
   const activityItems = activities.map((a) => ({
     label: a.name,
     value: a.id,
   }));
+
   // handle change
   const onActivityPickerChange = (id) => {
     setActivity(activities.find((a) => a.id === id));
   };
-  // set chart size
-  const chartSize = Dimensions.get('window').width - 40;
 
   return (
     <Container>
       { activity && (
-        <TopContainer>
-          <SelectPicker
-            useNativeAndroidPickerStyle={false}
-            style={pickerSelectStyles}
-            placeholder={{}}
-            onValueChange={onActivityPickerChange}
-            items={activityItems}
-            value={activity.id}
-            Icon={() => {
-              return <Icon name="chevron-down" size={24} color={theme.colors.primary} />;
-            }}
-          />
-        </TopContainer>
+        <SelectPicker
+          useNativeAndroidPickerStyle={false}
+          style={pickerSelectStyles}
+          placeholder={{}}
+          onValueChange={onActivityPickerChange}
+          items={activityItems}
+          value={activity.id}
+          Icon={() => {
+            return <Icon name="chevron-down" size={24} color={theme.colors.primary} />;
+          }}
+        />
       )}
       { graphData.length > 0 && (
         <>
-          <Text size="subHeader" align="center" style={{marginTop: 16}}>
-            Highest Score
-          </Text>
-          <LineChart
-            width={chartSize}
-            data={graphData}
-            xField="date"
-            yField="score"
+          <ProgressViewItem
+            title="Highest Score"
+            graphData={graphData}
+            valueKey="score"
           />
-          <Text size="subHeader" align="center" style={{marginTop: 12}}>
-            Minutes in Activity
-          </Text>
-          <LineChart
-            width={chartSize}
-            data={graphData}
-            xField="date"
-            yField="time"
+          <ProgressViewItem
+            title="Minutes Played"
+            graphData={graphData}
+            valueKey="time"
           />
         </>
       )}

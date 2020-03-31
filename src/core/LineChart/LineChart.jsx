@@ -33,26 +33,22 @@ export default function LineChart({
       width={width}
       height={180}
       fromZero={true}
-      formatXLabel={(l) => l.format('DD/MM')}
       chartConfig={{
-        backgroundGradientFrom: theme.colors[SECONDARY_LIGHT],
-        backgroundGradientTo: theme.colors[SECONDARY],
+        backgroundGradientFrom: '#fff',
+        backgroundGradientTo: '#fff',
         decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 8,
-        },
+        color: (opacity = 1) => theme.colors.primary,
+        labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
         propsForDots: {
           r: '6',
           strokeWidth: '2',
-          stroke: theme.colors[SECONDARY],
+          stroke: theme.colors.primary,
+          fill: theme.colors.primary,
         }
       }}
       bezier
       style={{
         marginVertical: 4,
-        borderRadius: 8,
       }}
     />
   );

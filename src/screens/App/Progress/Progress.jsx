@@ -47,7 +47,7 @@ export default function Progress() {
         <Text size="subHeader" align="center">
           Summary
         </Text>
-        <Text mr="20px" ml="20px">
+        <Text mr="20px" ml="20px" mb="16px">
           { getSummary(logs) }
         </Text>
       </ScrollContainer>
