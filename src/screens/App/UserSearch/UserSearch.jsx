@@ -14,7 +14,8 @@ import UserItem from './UserItem';
 
 const ScrollContainer = styled.ScrollView`
   flex: 1;
-  padding: 5%;
+  padding: 0 5%;
+  margin-top: 16px;
 `;
 
 
