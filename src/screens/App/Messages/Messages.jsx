@@ -20,7 +20,8 @@ const Container = styled.View`
 
 const ScrollContainer = styled.ScrollView`
   flex: 1;
-  padding: 20px;
+  padding: 0 20px;
+  margin-top: 20px;
 `;
 
 const Fab = styled.TouchableOpacity`
