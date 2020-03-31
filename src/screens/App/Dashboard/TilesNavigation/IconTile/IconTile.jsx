@@ -39,7 +39,7 @@ export default function IconTile({
   return (
     <Tile onPress={onPress}>
       <Text pb="2px" size={SUB_HEADER}>{ label }</Text>
-      <Icon name={icon} size={24} color={theme.colors[PRIMARY]} />
+      <Icon name={icon} size={32} color={theme.colors[PRIMARY]} />
     </Tile>
   );
 }
