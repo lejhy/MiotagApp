@@ -26,7 +26,7 @@ const ScrollContainer = styled.ScrollView`
 `;
 
 const AddButtonContainer = styled.View`
-  margin-bottom: 20px;
+  margin: 20px 0 25px 0;
   left: 0;
   right: 0;
   width: 100%;
