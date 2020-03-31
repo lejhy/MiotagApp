@@ -21,12 +21,12 @@ const Container = styled.View`
 
 const ScrollContainer = styled.ScrollView`
   flex: 1;
-  padding: 20px;
+  padding: 0 20px;
+  margin-top: 20px;
 `;
 
 const AddButtonContainer = styled.View`
-  position: absolute;
-  bottom: 5%;
+  margin-bottom: 20px;
   left: 0;
   right: 0;
   width: 100%;
