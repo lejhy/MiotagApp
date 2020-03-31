@@ -35,9 +35,10 @@ const AddButtonContainer = styled.View`
 
 type Props = {
   navigation: NavigationScreenProps,
+  isFocused: Boolean
 };
 
-export default function Friends({ navigation }: Props) {
+export default function Friends({ navigation, isFocused }: Props) {
   const [refreshing, setRefreshing] = useState(true);
   const [friends, { refresh }] = useFriends();
 
@@ -48,8 +49,10 @@ export default function Friends({ navigation }: Props) {
   };
 
   useEffect(() => {
-    refreshActivities();
-  }, []);
+    if (isFocused) {
+      refreshActivities();
+    }
+  }, [isFocused]);
 
   const getOnPressHandler = (id) => () => navigation.navigate('Profile', { id });
   // TODO: Implement in the hook method
