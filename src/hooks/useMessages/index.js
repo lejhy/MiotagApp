@@ -72,6 +72,7 @@ export default function useMessages(userFilter) {
   };
 
   const addMessage = async (message, to) => {
+    if (!message || !to) return;
     const newThreads = threads.map((t) => {
       if (t.id === to) {
         return {
@@ -92,17 +93,14 @@ export default function useMessages(userFilter) {
       setThreads(newThreads);
     }
     try {
-      const response = await MessagesService.send({
+      await MessagesService.send({
         from: { id },
         to: { id: to },
         subject: '(No subject)',
         content: message,
       });
-      console.log(response);
-      console.log(response.data);
     } catch (err) {
-      console.log(err.response);
-      console.log(err.response.data);
+      console.warn(err);
     }
     await refresh();
   };
@@ -110,7 +108,7 @@ export default function useMessages(userFilter) {
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [userFilter]);
 
   return [{ threads, loading }, { refresh, addMessage }];
 }

@@ -34,6 +34,7 @@ type Props = {
   value: string,
   onChange: (text) => void,
   label: string,
+  inputRef: any,
   mt?: string,
   ml?: string,
   mr?: string,
@@ -41,7 +42,7 @@ type Props = {
 };
 
 export default function TextInput({
-  value, onChange, label, mt, ml, mr, theme, ...rest
+  value, onChange, inputRef, label, mt, ml, mr, theme, ...rest
 }: Props) {
   const [isFocused, setFocus] = useState(false);
 
@@ -54,6 +55,7 @@ export default function TextInput({
         <Text color="primary" bold mb="3px" ml="5px">{ label }</Text>
       )}
       <StyledTextInput
+        ref={inputRef}
         value={value}
         onChangeText={onChange}
         placeholderTextColor={theme.colors[GRAY]}
