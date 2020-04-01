@@ -56,9 +56,11 @@ export default function FriendPicker({ onSelect }: Props) {
       return;
     }
     setVisibleFriends(friends.filter((f) => {
-      const { firstName, lastName } = f;
-      return firstName.toLowerCase().includes(input.toLowerCase())
-        || lastName.toLowerCase().includes(input.toLowerCase());
+      const { firstName, lastName, email } = f;
+      const lowerCaseInput = input.toLowerCase();
+      return firstName.toLowerCase().includes(lowerCaseInput)
+        || lastName.toLowerCase().includes(lowerCaseInput)
+        || email.toLowerCase().includes(lowerCaseInput);
     }).slice(0, DROPDOWN_SIZE));
   }, [input]);
 
