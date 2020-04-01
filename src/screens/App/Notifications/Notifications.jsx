@@ -13,9 +13,8 @@ const Container = styled.View`
 
 
 export default function Notifications() {
-  const [alerts, { refresh, markAllAsRead }] = useAlerts();
+  const [alerts, { markAllAsRead }] = useAlerts();
   const init = async () => {
-    await refresh();
     await markAllAsRead();
   };
   useEffect(() => {

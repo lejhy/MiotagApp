@@ -96,10 +96,7 @@ export default function ScreenHeader({
   const handleBackPress = () => navigation.goBack();
   const handleAlertPress = () => navigation.navigate('Notifications');
 
-  const [_, { refresh, count }] = useAlerts();
-  useEffect(() => {
-    refresh();
-  }, []);
+  const [_, { count }] = useAlerts();
   const alertsCount = count();
 
   return (
