@@ -26,7 +26,9 @@ type Props = {
 
 export default function Dashboard({ navigation }: Props) {
   const navigateToGenerator = (location) => () => navigation.navigate(location);
-  const navigationItems = [
+  const [{ firstName, therapist }] = useUser();
+
+  const navigationItemsPatient = [
     {
       label: 'Activities', icon: 'child', onPress: navigateToGenerator('Activities'),
     },
@@ -43,7 +45,17 @@ export default function Dashboard({ navigation }: Props) {
       label: 'Profile settings', icon: 'cog', onPress: navigateToGenerator('Settings'),
     },
   ];
-  const [{ firstName }] = useUser();
+  const navigationItemsTherapist = [
+    {
+      label: 'Patients', icon: 'user-friends', onPress: navigateToGenerator('Patients'),
+    },
+    {
+      label: 'Messages', icon: 'envelope', onPress: navigateToGenerator('Messages'),
+    },
+    {
+      label: 'Profile settings', icon: 'cog', onPress: navigateToGenerator('Settings'),
+    },
+  ];
 
   return (
     <ScreenContainer>
@@ -51,7 +63,7 @@ export default function Dashboard({ navigation }: Props) {
         { `Hello ${firstName}!` }
       </Text>
       <Content>
-        <TilesNavigation items={navigationItems} />
+        <TilesNavigation items={therapist ? navigationItemsTherapist : navigationItemsPatient} />
       </Content>
     </ScreenContainer>
   );

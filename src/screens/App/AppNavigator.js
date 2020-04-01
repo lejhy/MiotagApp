@@ -12,8 +12,10 @@ import Progress from './Progress';
 import Settings from './Settings';
 import Messages from './Messages';
 import Friends from './Friends';
+import Patients from './Patients';
 import Profile from './Profile';
 import UserSearch from './UserSearch';
+import PatientSearch from './PatientSearch';
 import Chat from './Chat';
 import Notifications from './Notifications';
 
@@ -62,11 +64,17 @@ const AppNavigator = createStackNavigator({
   Friends: {
     screen: Friends,
   },
+  Patients: {
+    screen: Patients,
+  },
   Profile: {
     screen: Profile,
   },
   UserSearch: {
     screen: UserSearch,
+  },
+  PatientSearch: {
+    screen: PatientSearch,
   },
   Chat: {
     screen: Chat,

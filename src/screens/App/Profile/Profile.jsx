@@ -61,7 +61,7 @@ export default function Profile({ navigation: { navigate, state } }: Props) {
             loading={isFriend === undefined}
             onPress={toggleFriend}
           >
-            { isFriend ? 'Unfollow' : 'Add Friend' }
+            { isFriend ? 'Unfollow' : 'Follow' }
           </Button>
         </ButtonContainer>
         <ButtonContainer>
