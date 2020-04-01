@@ -6,7 +6,8 @@ const MAX_PADDLE_SPEED = 10;
 const ROLL_MIN = 5;
 const ROLL_MAX = 75;
 
-const Physics = (getImu) => (entities, { time }) => {
+const Physics = (getImu, isPaused) => (entities, { time }) => {
+  if (isPaused()) return entities;
   const { engine } = entities.physics;
 
   const imu = getImu();

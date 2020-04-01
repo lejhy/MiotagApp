@@ -1,22 +1,15 @@
 // @flow
 
-import React, { useContext, useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
-import styled, { ThemeContext } from 'styled-components';
+import React, { useEffect, useRef } from 'react';
 import { useKeepAwake } from 'expo-keep-awake';
 import Orientation from 'react-native-orientation-locker';
 
 import useMiotag from '@hooks/useMiotag/hook';
 import useUser from '@hooks/useUser';
 import usePhoneSensors from '@hooks/usePhoneSensors';
-import Text from '@core/Text';
-import { PRIMARY } from '@styles/colors';
 
-const Container = styled.SafeAreaView`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+import MiotagLoader from './MiotagLoader';
+import PauseContainer from './PauseContainer';
 
 const withMiotag = (staticParams) => (Game) => (props) => {
   const [{ gameDebug }] = useUser();
@@ -24,10 +17,14 @@ const withMiotag = (staticParams) => (Game) => (props) => {
     getImu, getFingers, getQuaternions, isAvailable,
   } = useMiotag(!gameDebug);
   const { getPhoneImu } = usePhoneSensors();
-  const theme = useContext(ThemeContext);
   useKeepAwake();
+  const isPaused = useRef(false);
 
-  const { blockView = true, lockToPortrait = false } = staticParams || {};
+  const {
+    blockView = true,
+    lockToPortrait = false,
+    includePauseMenu = true,
+  } = staticParams || {};
 
   useEffect(() => {
     if (lockToPortrait) {
@@ -35,34 +32,40 @@ const withMiotag = (staticParams) => (Game) => (props) => {
     }
   }, []);
 
-  if (gameDebug) {
-    return (
+  const GameView = (getImuParam, getFingersParam, getQuaternionsParam) => (
+    <PauseContainer
+      enabled={includePauseMenu}
+      onPause={() => { isPaused.current = true; }}
+      onResume={() => { isPaused.current = false; }}
+    >
       <Game
-        getImu={getPhoneImu}
-        getFingers={() => new Uint8Array(5)}
-        getQuaternions={() => new Float32Array(4)}
+        getImu={getImuParam}
+        getFingers={getFingersParam}
+        getQuaternions={getQuaternionsParam}
+        isPaused={() => isPaused.current}
         {...props}
       />
+    </PauseContainer>
+  );
+
+  if (gameDebug) {
+    return GameView(
+      getPhoneImu,
+      () => new Uint8Array(5),
+      () => new Float32Array(4),
     );
   }
 
   if (!isAvailable && blockView) {
     return (
-      <Container>
-        <ActivityIndicator size="large" color={theme.colors[PRIMARY]} />
-        <Text>
-          Connecting to Miotag...
-        </Text>
-      </Container>
+      <MiotagLoader />
     );
   }
-  return (
-    <Game
-      getImu={getImu}
-      getFingers={getFingers}
-      getQuaternions={getQuaternions}
-      {...props} // eslint-disable-line react/jsx-props-no-spreading
-    />
+
+  return GameView(
+    getImu,
+    getFingers,
+    getQuaternions,
   );
 };
 

@@ -22,11 +22,17 @@ export default class Breakout extends PureComponent {
   };
 
   createdAt = new Date();
+
   model: Model;
+
   controller: Controller;
+
   app: PIXI.Application;
+
   fingersSqueezed = false;
+
   menu = null;
+
   scene = new PIXI.Container();
 
   componentDidMount() {
@@ -52,19 +58,21 @@ export default class Breakout extends PureComponent {
     this.controller.init();
   };
 
+  isPaused = () => this.props.isPaused()
+
   getTilt() {
     return this.props.getImu()[3];
   }
 
   getSqueeze() {
-    let fingers = this.props.getFingers();
+    const fingers = this.props.getFingers();
     if (this.fingersSqueezed) {
-      let max = Math.max(...fingers);
+      const max = Math.max(...fingers);
       if (max < 100) {
         this.fingersSqueezed = false;
       }
     } else {
-      let min = Math.min(...fingers);
+      const min = Math.min(...fingers);
       if (min > 100) {
         this.fingersSqueezed = true;
         return true;
@@ -122,7 +130,8 @@ export default class Breakout extends PureComponent {
           this.state.menu.length > 0
             ? styles.menu
             : styles.hiddenMenu
-        }>
+        }
+        >
           {
             this.state.menu
           }
@@ -162,7 +171,7 @@ const styles = StyleSheet.create({
     zIndex: 300,
   },
   hiddenMenu: {
-    display: 'none'
+    display: 'none',
   },
   game: {
     width: '100%',
