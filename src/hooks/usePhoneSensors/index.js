@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { accelerometer, magnetometer } from 'react-native-sensors';
 
 export default function usePhoneSensors() {
-  const sensors = useRef([]);
+  const sensors = useRef([0, 0, 0, 0, 0, 0]);
   let subscriptions = [];
 
   useEffect(() => {
@@ -18,6 +18,8 @@ export default function usePhoneSensors() {
         pitch,
         sensors.current[5],
       ];
+    }, (err) => {
+      console.warn(err);
     }));
     subscriptions.push(magnetometer.subscribe(({ x, y, z }) => {
       const roll = sensors.current[3];
@@ -32,12 +34,14 @@ export default function usePhoneSensors() {
         ...sensors.current.slice(0, 5),
         yaw,
       ];
+    }, (err) => {
+      console.warn(err);
     }));
     return () => {
       subscriptions.forEach((s) => s.remove());
       subscriptions = [];
     };
-  });
+  }, []);
 
   const getPhoneImu = () => sensors.current;
 
