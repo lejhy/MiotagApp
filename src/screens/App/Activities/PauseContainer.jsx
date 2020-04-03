@@ -14,7 +14,6 @@ const Container = styled.SafeAreaView`
   position: relative;
   display: flex;
   flex: 1;
-  background-color: orange;
 `;
 
 const PauseButtonContainer = styled.TouchableOpacity`
@@ -25,6 +24,7 @@ const PauseButtonContainer = styled.TouchableOpacity`
   right: 0px;
   justify-content: center;
   align-items: center;
+  z-index: 900;
 `;
 
 const PauseMenuContainer = styled.View`
@@ -37,6 +37,7 @@ const PauseMenuContainer = styled.View`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
+  z-index: 900;
 `;
 
 type Props = {
