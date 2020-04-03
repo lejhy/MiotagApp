@@ -3,4 +3,4 @@
 import FreeMode from './FreeMode';
 import withMiotag from '../withMiotag';
 
-export default withMiotag()(FreeMode);
+export default withMiotag({ lockToPortrait: true })(FreeMode);

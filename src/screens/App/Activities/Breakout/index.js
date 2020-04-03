@@ -3,4 +3,4 @@
 import Breakout from './Breakout';
 import withMiotag from '../withMiotag';
 
-export default withMiotag()(Breakout);
+export default withMiotag({ lockToPortrait: true })(Breakout);
