@@ -7,8 +7,8 @@ import useAlerts from '@hooks/useAlerts';
 
 import NotificationItem from './NotificationItem';
 
-const Container = styled.View`
-  padding: 16px;
+const Container = styled.ScrollView`
+  margin-top: 20px;
 `;
 
 

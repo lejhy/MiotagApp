@@ -10,7 +10,7 @@ import { PRIMARY } from '@styles/colors';
 import { Text } from '@core';
 
 const Container = styled.View`
-  margin-bottom: 16px;
+  margin: 0 20px 16px 20px;
   padding: 16px;
   background-color: #fff;
   display: flex;
