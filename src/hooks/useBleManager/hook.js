@@ -18,7 +18,6 @@ export default function useBleManager() {
   const quaternions = useRef(new Float32Array(4));
 
   const init = async () => {
-    console.log('init', manager.current, device.current);
     if (manager.current === null) {
       manager.current = new BleManager();
       manager.current.setLogLevel(LogLevel.Verbose);

@@ -1,5 +1,5 @@
 // @flow
 
-import withMiotag from './MiotagLoader';
+import withMiotag from './withMiotag';
 
 export default withMiotag;
