@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 import AlertsService from '@services/api/AlertsService';
+import useUser from '@hooks/useUser';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -26,13 +27,17 @@ function useInterval(callback, delay) {
 
 export default function useAlerts() {
   const [state, setState] = useState([]);
+  const [user] = useUser();
 
   const refresh = async () => {
-    const alertsResponse = await AlertsService.getAll();
-    const alerts = alertsResponse.data;
-    alerts.sort((a1, a2) => a1.date < a2.date);
-    setState(alerts);
-    return alerts;
+    if (user !== null) {
+      const alertsResponse = await AlertsService.getAll();
+      const alerts = alertsResponse.data;
+      alerts.sort((a1, a2) => a1.date < a2.date);
+      setState(alerts);
+      return alerts;
+    }
+    return null;
   };
 
   const count = () => state.reduce((value, alert) => {

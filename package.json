@@ -33,6 +33,7 @@
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-ble-plx": "^1.1.1",
+    "react-native-bootsplash": "^2.1.0",
     "react-native-chart-kit": "^4.4.1",
     "react-native-dotenv": "^0.2.0",
     "react-native-game-engine": "^1.1.1",
