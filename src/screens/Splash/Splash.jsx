@@ -2,13 +2,11 @@
 
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import RNBootSplash from 'react-native-bootsplash';
 
 import useUser from '@hooks/useUser';
-import { Text } from '@core';
 
-const Container = styled.View`
-
-`;
+const Container = styled.View``;
 
 type Props = {
   navigation: NavigationScreenProps
@@ -34,12 +32,12 @@ const Splash = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    initializeApp();
+    initializeApp().finally(() => {
+      RNBootSplash.hide({ duration: 250 });
+    });
   }, []);
   return (
-    <Container>
-      <Text>Initializing</Text>
-    </Container>
+    <Container />
   );
 };
 
