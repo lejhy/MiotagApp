@@ -1,6 +1,6 @@
 {
-  "name": "miotag",
-  "displayName": "miotag",
+  "name": "Miotag",
+  "displayName": "Miotag",
   "expo": {
     "packagerOpts": {
       "config": "metro.config.js"
