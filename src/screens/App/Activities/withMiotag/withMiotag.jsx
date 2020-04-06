@@ -46,7 +46,7 @@ const withMiotag = (staticParams) => (Game) => (props) => {
           getImu={gameDebug ? getPhoneImu : getImu}
           getFingers={gameDebug ? () => new Uint8Array(5) : getFingers}
           getQuaternions={gameDebug ? () => new Float32Array(4) : getQuaternions}
-          isPaused={() => isPaused.current || isAvailable}
+          isPaused={() => isPaused.current || !isAvailable}
           {...props}
         />
       </PauseContainer>
